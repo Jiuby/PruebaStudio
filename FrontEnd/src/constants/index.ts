@@ -8,6 +8,12 @@ export const PRODUCTS: Product[] = [
     price: 118000,
     category: 'Bottoms',
     image: 'https://picsum.photos/id/445/800/1000',
+    images: [
+      'https://picsum.photos/id/445/800/1000',
+      'https://picsum.photos/id/449/800/1000',
+      'https://picsum.photos/id/450/800/1000',
+      'https://picsum.photos/id/451/800/1000'
+    ],
     isNew: true,
     description: 'Heavyweight denim with signature lightning embroidery. Oversized fit.'
   },
@@ -17,6 +23,10 @@ export const PRODUCTS: Product[] = [
     price: 45000,
     category: 'Accessories',
     image: 'https://picsum.photos/id/338/800/1000',
+    images: [
+      'https://picsum.photos/id/338/800/1000',
+      'https://picsum.photos/id/339/800/1000'
+    ],
     isNew: true,
     description: 'Futuristic wrap-around frames with mirror finish. UV400 protection.'
   },
@@ -26,6 +36,11 @@ export const PRODUCTS: Product[] = [
     price: 105000,
     category: 'Hoodies',
     image: 'https://picsum.photos/id/621/800/1000',
+    images: [
+      'https://picsum.photos/id/621/800/1000',
+      'https://picsum.photos/id/622/800/1000',
+      'https://picsum.photos/id/623/800/1000'
+    ],
     description: 'Vintage wash process. Drop shoulder silhouette. Ultra-soft cotton blend.'
   },
   {
@@ -34,6 +49,13 @@ export const PRODUCTS: Product[] = [
     price: 98000,
     category: 'Bottoms',
     image: 'https://picsum.photos/id/64/800/1000',
+    images: [
+      'https://picsum.photos/id/64/800/1000',
+      'https://picsum.photos/id/65/800/1000',
+      'https://picsum.photos/id/66/800/1000',
+      'https://picsum.photos/id/67/800/1000',
+      'https://picsum.photos/id/68/800/1000'
+    ],
     description: 'Tech-wear inspired nylon fabric. Adjustable drawstrings at hem.'
   },
   {
@@ -42,6 +64,9 @@ export const PRODUCTS: Product[] = [
     price: 35000,
     category: 'Accessories',
     image: 'https://picsum.photos/id/823/800/1000',
+    images: [
+      'https://picsum.photos/id/823/800/1000'
+    ],
     description: 'Hand-distressed detailing. One size fits all. Grunge aesthetic.'
   },
   {
@@ -50,6 +75,11 @@ export const PRODUCTS: Product[] = [
     price: 65000,
     category: 'Tees',
     image: 'https://picsum.photos/id/177/800/1000',
+    images: [
+      'https://picsum.photos/id/177/800/1000',
+      'https://picsum.photos/id/178/800/1000',
+      'https://picsum.photos/id/179/800/1000'
+    ],
     isNew: true,
     description: 'Heavyweight 240gsm cotton. Puff print graphic on back.'
   },
@@ -59,6 +89,10 @@ export const PRODUCTS: Product[] = [
     price: 125000,
     category: 'Hoodies',
     image: 'https://picsum.photos/id/91/800/1000',
+    images: [
+      'https://picsum.photos/id/91/800/1000',
+      'https://picsum.photos/id/92/800/1000'
+    ],
     description: 'Full zip hoodie with skeletal structural piping details.'
   },
   {
@@ -67,6 +101,10 @@ export const PRODUCTS: Product[] = [
     price: 85000,
     category: 'Accessories',
     image: 'https://picsum.photos/id/433/800/1000',
+    images: [
+      'https://picsum.photos/id/433/800/1000',
+      'https://picsum.photos/id/434/800/1000'
+    ],
     description: 'Multi-pocket utility vest. Layering essential.'
   }
 ];
