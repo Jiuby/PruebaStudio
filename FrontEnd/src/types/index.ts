@@ -5,8 +5,11 @@ export interface Product {
   price: number;
   category: 'Hoodies' | 'Bottoms' | 'Accessories' | 'Tees';
   image: string;
+  images?: string[];
   isNew?: boolean;
   description: string;
+  colors?: string[];
+  sizes?: string[];
 }
 
 export interface CartItem extends Product {

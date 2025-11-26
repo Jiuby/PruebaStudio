@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Menu, X, Search, User } from 'lucide-react';
+import { ShoppingBag, Menu, X, User } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
@@ -36,8 +36,8 @@ export const Navbar: React.FC = () => {
     <>
       <nav
         className={`fixed w-full top-0 z-30 transition-all duration-300 border-b ${scrolled || mobileMenuOpen
-            ? 'bg-brand-black/90 backdrop-blur-md border-brand-dark py-4'
-            : 'bg-transparent border-transparent py-6'
+          ? 'bg-brand-black/90 backdrop-blur-md border-brand-dark py-4'
+          : 'bg-transparent border-transparent py-6'
           }`}
       >
         <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
@@ -64,9 +64,7 @@ export const Navbar: React.FC = () => {
 
           {/* Icons */}
           <div className="flex items-center space-x-6">
-            <button className="text-white hover:text-brand-bone transition-colors hidden md:block">
-              <Search size={20} />
-            </button>
+
 
             <button
               onClick={handleUserClick}

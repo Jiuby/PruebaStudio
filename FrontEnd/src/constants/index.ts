@@ -15,7 +15,9 @@ export const PRODUCTS: Product[] = [
       'https://picsum.photos/id/451/800/1000'
     ],
     isNew: true,
-    description: 'Heavyweight denim with signature lightning embroidery. Oversized fit.'
+    description: 'Heavyweight denim with signature lightning embroidery. Oversized fit.',
+    colors: ['Blue'],
+    sizes: ['S', 'M', 'L', 'XL']
   },
   {
     id: '2',
@@ -28,7 +30,9 @@ export const PRODUCTS: Product[] = [
       'https://picsum.photos/id/339/800/1000'
     ],
     isNew: true,
-    description: 'Futuristic wrap-around frames with mirror finish. UV400 protection.'
+    description: 'Futuristic wrap-around frames with mirror finish. UV400 protection.',
+    colors: ['Silver'],
+    sizes: ['One Size']
   },
   {
     id: '3',
@@ -41,7 +45,9 @@ export const PRODUCTS: Product[] = [
       'https://picsum.photos/id/622/800/1000',
       'https://picsum.photos/id/623/800/1000'
     ],
-    description: 'Vintage wash process. Drop shoulder silhouette. Ultra-soft cotton blend.'
+    description: 'Vintage wash process. Drop shoulder silhouette. Ultra-soft cotton blend.',
+    colors: ['Grey'],
+    sizes: ['S', 'M', 'L', 'XL']
   },
   {
     id: '4',
@@ -56,7 +62,9 @@ export const PRODUCTS: Product[] = [
       'https://picsum.photos/id/67/800/1000',
       'https://picsum.photos/id/68/800/1000'
     ],
-    description: 'Tech-wear inspired nylon fabric. Adjustable drawstrings at hem.'
+    description: 'Tech-wear inspired nylon fabric. Adjustable drawstrings at hem.',
+    colors: ['Green'],
+    sizes: ['S', 'M', 'L', 'XL']
   },
   {
     id: '5',
@@ -67,7 +75,9 @@ export const PRODUCTS: Product[] = [
     images: [
       'https://picsum.photos/id/823/800/1000'
     ],
-    description: 'Hand-distressed detailing. One size fits all. Grunge aesthetic.'
+    description: 'Hand-distressed detailing. One size fits all. Grunge aesthetic.',
+    colors: ['Black'],
+    sizes: ['One Size']
   },
   {
     id: '6',
@@ -81,7 +91,9 @@ export const PRODUCTS: Product[] = [
       'https://picsum.photos/id/179/800/1000'
     ],
     isNew: true,
-    description: 'Heavyweight 240gsm cotton. Puff print graphic on back.'
+    description: 'Heavyweight 240gsm cotton. Puff print graphic on back.',
+    colors: ['Black'],
+    sizes: ['S', 'M', 'L', 'XL']
   },
   {
     id: '7',
@@ -93,7 +105,9 @@ export const PRODUCTS: Product[] = [
       'https://picsum.photos/id/91/800/1000',
       'https://picsum.photos/id/92/800/1000'
     ],
-    description: 'Full zip hoodie with skeletal structural piping details.'
+    description: 'Full zip hoodie with skeletal structural piping details.',
+    colors: ['Black'],
+    sizes: ['S', 'M', 'L', 'XL']
   },
   {
     id: '8',
@@ -105,7 +119,111 @@ export const PRODUCTS: Product[] = [
       'https://picsum.photos/id/433/800/1000',
       'https://picsum.photos/id/434/800/1000'
     ],
-    description: 'Multi-pocket utility vest. Layering essential.'
+    description: 'Multi-pocket utility vest. Layering essential.',
+    colors: ['Black'],
+    sizes: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: '9',
+    name: 'VINTAGE WASH TEE',
+    price: 55000,
+    category: 'Tees',
+    image: 'https://picsum.photos/id/325/800/1000',
+    description: 'Faded grey oversized tee with distressed edges.',
+    colors: ['Grey'],
+    sizes: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: '10',
+    name: 'NYLON TRACK JACKET',
+    price: 135000,
+    category: 'Hoodies',
+    image: 'https://picsum.photos/id/334/800/1000',
+    description: 'Sporty oversized jacket with reflective piping.',
+    colors: ['Blue'],
+    sizes: ['M', 'L', 'XL']
+  },
+  {
+    id: '11',
+    name: 'PATCHWORK DENIM',
+    price: 145000,
+    category: 'Bottoms',
+    image: 'https://picsum.photos/id/342/800/1000',
+    isNew: true,
+    description: 'Deconstructed denim with contrasting patches.',
+    colors: ['Blue'],
+    sizes: ['30', '32', '34', '36']
+  },
+  {
+    id: '12',
+    name: 'SILVER CHAIN CHOKER',
+    price: 40000,
+    category: 'Accessories',
+    image: 'https://picsum.photos/id/349/800/1000',
+    description: 'Chunky stainless steel link chain.',
+    colors: ['Silver'],
+    sizes: ['One Size']
+  },
+  {
+    id: '13',
+    name: 'MOTO RACING JACKET',
+    price: 180000,
+    category: 'Hoodies',
+    image: 'https://picsum.photos/id/352/800/1000',
+    isNew: true,
+    description: 'Faux leather racing jacket with embroidered patches.',
+    colors: ['Black'],
+    sizes: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: '14',
+    name: 'OVERSIZED SWEATPANTS',
+    price: 85000,
+    category: 'Bottoms',
+    image: 'https://picsum.photos/id/355/800/1000',
+    description: 'Ultra heavyweight fleece sweatpants.',
+    colors: ['Grey'],
+    sizes: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: '15',
+    name: 'GRAFFITI PRINT TEE',
+    price: 60000,
+    category: 'Tees',
+    image: 'https://picsum.photos/id/364/800/1000',
+    description: 'All-over chaotic print on white cotton base.',
+    colors: ['White'],
+    sizes: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: '16',
+    name: 'BUCKET HAT',
+    price: 45000,
+    category: 'Accessories',
+    image: 'https://picsum.photos/id/366/800/1000',
+    description: 'Deep fitting bucket hat with raw hem.',
+    colors: ['Black'],
+    sizes: ['One Size']
+  },
+  {
+    id: '17',
+    name: 'MESH TANK TOP',
+    price: 35000,
+    category: 'Tees',
+    image: 'https://picsum.photos/id/399/800/1000',
+    description: 'Layering mesh tank for summer fits.',
+    colors: ['White'],
+    sizes: ['S', 'M', 'L']
+  },
+  {
+    id: '18',
+    name: 'LEATHER CROSSBODY',
+    price: 95000,
+    category: 'Accessories',
+    image: 'https://picsum.photos/id/403/800/1000',
+    description: 'Compact daily carry bag with metal hardware.',
+    colors: ['Black'],
+    sizes: ['One Size']
   }
 ];
 
