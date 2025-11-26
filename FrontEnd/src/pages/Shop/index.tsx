@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ProductCard } from './ProductCard';
-import { PRODUCTS, CATEGORIES } from '../constants';
-import { SortOption } from '../types';
+import { ProductCard } from '../../components/ui/ProductCard';
+import { PRODUCTS, CATEGORIES } from '../../constants';
+import { SortOption } from '../../types';
 import { Filter, X } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -37,7 +37,7 @@ export const Shop: React.FC = () => {
 
   const filteredProducts = useMemo(() => {
     let result = [...PRODUCTS];
-    
+
     if (selectedCategory !== 'All') {
       result = result.filter(p => p.category === selectedCategory);
     }
@@ -58,7 +58,7 @@ export const Shop: React.FC = () => {
   return (
     <div className="bg-brand-black min-h-screen pt-24 pb-20 px-4 md:px-8">
       <div className="container mx-auto">
-        
+
         {/* Header */}
         <div className="mb-12 border-b border-brand-dark pb-8">
           <h1 className="text-5xl md:text-7xl font-black uppercase text-white italic tracking-tighter mb-4">
@@ -70,7 +70,7 @@ export const Shop: React.FC = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12">
-          
+
           {/* Sidebar Filters (Desktop) */}
           <div className="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-fit">
             <div className="mb-8">
@@ -80,18 +80,17 @@ export const Shop: React.FC = () => {
                   <button
                     key={cat}
                     onClick={() => handleCategoryChange(cat)}
-                    className={`block text-sm uppercase font-bold tracking-wide transition-colors ${
-                      selectedCategory === cat 
-                        ? 'text-brand-bone translate-x-2' 
+                    className={`block text-sm uppercase font-bold tracking-wide transition-colors ${selectedCategory === cat
+                        ? 'text-brand-bone translate-x-2'
                         : 'text-neutral-500 hover:text-white'
-                    }`}
+                      }`}
                   >
                     {cat}
                   </button>
                 ))}
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Sort By</h3>
               <div className="space-y-3">
@@ -103,11 +102,10 @@ export const Shop: React.FC = () => {
                   <button
                     key={opt.value}
                     onClick={() => setSortBy(opt.value as SortOption)}
-                    className={`block text-sm uppercase font-bold tracking-wide transition-colors text-left ${
-                      sortBy === opt.value 
-                        ? 'text-brand-bone' 
+                    className={`block text-sm uppercase font-bold tracking-wide transition-colors text-left ${sortBy === opt.value
+                        ? 'text-brand-bone'
                         : 'text-neutral-500 hover:text-white'
-                    }`}
+                      }`}
                   >
                     {opt.label}
                   </button>
@@ -118,7 +116,7 @@ export const Shop: React.FC = () => {
 
           {/* Mobile Filters Bar */}
           <div className="lg:hidden flex justify-between items-center mb-6">
-            <button 
+            <button
               onClick={() => setShowMobileFilters(true)}
               className="flex items-center gap-2 text-white font-bold uppercase text-xs tracking-widest border border-brand-dark px-4 py-3"
             >
@@ -136,7 +134,7 @@ export const Shop: React.FC = () => {
                   <X size={24} />
                 </button>
               </div>
-              
+
               <div className="space-y-8 flex-1 overflow-y-auto">
                 <div>
                   <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Category</h3>
@@ -145,11 +143,10 @@ export const Shop: React.FC = () => {
                       <button
                         key={cat}
                         onClick={() => handleCategoryChange(cat)}
-                        className={`p-3 text-xs font-bold uppercase border ${
-                          selectedCategory === cat 
-                            ? 'bg-brand-bone text-brand-black border-brand-bone' 
+                        className={`p-3 text-xs font-bold uppercase border ${selectedCategory === cat
+                            ? 'bg-brand-bone text-brand-black border-brand-bone'
                             : 'text-neutral-400 border-brand-dark'
-                        }`}
+                          }`}
                       >
                         {cat}
                       </button>
@@ -168,9 +165,8 @@ export const Shop: React.FC = () => {
                       <button
                         key={opt.value}
                         onClick={() => { setSortBy(opt.value as SortOption); setShowMobileFilters(false); }}
-                        className={`block w-full text-left p-2 text-sm uppercase font-bold ${
-                          sortBy === opt.value ? 'text-white' : 'text-neutral-500'
-                        }`}
+                        className={`block w-full text-left p-2 text-sm uppercase font-bold ${sortBy === opt.value ? 'text-white' : 'text-neutral-500'
+                          }`}
                       >
                         {opt.label}
                       </button>
@@ -178,8 +174,8 @@ export const Shop: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
-              <button 
+
+              <button
                 onClick={() => setShowMobileFilters(false)}
                 className="w-full bg-white text-black py-4 font-bold uppercase tracking-widest mt-4"
               >
@@ -199,7 +195,7 @@ export const Shop: React.FC = () => {
             {filteredProducts.length === 0 && (
               <div className="text-center py-20 border border-dashed border-brand-dark">
                 <p className="text-neutral-500 uppercase tracking-widest">No products found.</p>
-                <button 
+                <button
                   onClick={() => handleCategoryChange('All')}
                   className="mt-4 text-brand-bone underline uppercase text-xs font-bold"
                 >

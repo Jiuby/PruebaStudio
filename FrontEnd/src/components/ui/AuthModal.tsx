@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { X, ArrowRight } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface AuthModalProps {
@@ -12,7 +12,7 @@ interface AuthModalProps {
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const { login, register } = useAuth();
   const [view, setView] = useState<'login' | 'register'>('login');
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,14 +40,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             onClick={onClose}
             className="absolute inset-0 bg-brand-black/90 backdrop-blur-sm"
           />
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative w-full max-w-md bg-brand-black border border-brand-dark p-8 shadow-2xl"
           >
-            <button 
+            <button
               onClick={onClose}
               className="absolute top-4 right-4 text-neutral-500 hover:text-white transition-colors"
             >
@@ -71,20 +71,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     type="text"
                     required
                     value={formData.name}
-                    onChange={e => setFormData({...formData, name: e.target.value})}
+                    onChange={e => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
                     placeholder="ENTER NAME"
                   />
                 </div>
               )}
-              
+
               <div>
                 <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Email</label>
                 <input
                   type="email"
                   required
                   value={formData.email}
-                  onChange={e => setFormData({...formData, email: e.target.value})}
+                  onChange={e => setFormData({ ...formData, email: e.target.value })}
                   className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
                   placeholder="ENTER EMAIL"
                 />
@@ -96,13 +96,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   type="password"
                   required
                   value={formData.password}
-                  onChange={e => setFormData({...formData, password: e.target.value})}
+                  onChange={e => setFormData({ ...formData, password: e.target.value })}
                   className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
                   placeholder="••••••••"
                 />
               </div>
 
-              <button 
+              <button
                 type="submit"
                 className="w-full bg-brand-bone text-brand-black font-black uppercase py-4 tracking-widest hover:bg-white transition-colors flex justify-center items-center gap-2"
               >
@@ -111,7 +111,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             </form>
 
             <div className="mt-6 text-center">
-              <button 
+              <button
                 onClick={() => setView(view === 'login' ? 'register' : 'login')}
                 className="text-xs uppercase tracking-widest text-neutral-500 hover:text-brand-bone transition-colors border-b border-transparent hover:border-brand-bone pb-1"
               >

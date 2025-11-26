@@ -1,16 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Menu, X, Search, User } from 'lucide-react';
-import { useShop } from '../context/ShopContext';
-import { useAuth } from '../context/AuthContext';
+import { useShop } from '../../context/ShopContext';
+import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthModal } from './AuthModal';
+import { AuthModal } from '../ui/AuthModal';
 
 export const Navbar: React.FC = () => {
   const { toggleCart, cartCount } = useShop();
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -34,17 +34,16 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav 
-        className={`fixed w-full top-0 z-30 transition-all duration-300 border-b ${
-          scrolled || mobileMenuOpen 
-            ? 'bg-brand-black/90 backdrop-blur-md border-brand-dark py-4' 
+      <nav
+        className={`fixed w-full top-0 z-30 transition-all duration-300 border-b ${scrolled || mobileMenuOpen
+            ? 'bg-brand-black/90 backdrop-blur-md border-brand-dark py-4'
             : 'bg-transparent border-transparent py-6'
-        }`}
+          }`}
       >
         <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-          
+
           {/* Mobile Menu Button */}
-          <button 
+          <button
             className="md:hidden text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
@@ -68,8 +67,8 @@ export const Navbar: React.FC = () => {
             <button className="text-white hover:text-brand-bone transition-colors hidden md:block">
               <Search size={20} />
             </button>
-            
-            <button 
+
+            <button
               onClick={handleUserClick}
               className="text-white hover:text-brand-bone transition-colors hidden md:flex items-center gap-2"
             >
@@ -80,9 +79,9 @@ export const Navbar: React.FC = () => {
                 </span>
               )}
             </button>
-            
-            <button 
-              onClick={toggleCart} 
+
+            <button
+              onClick={toggleCart}
               className="text-white hover:text-brand-bone transition-colors relative"
             >
               <ShoppingBag size={20} />
@@ -103,23 +102,23 @@ export const Navbar: React.FC = () => {
           <Link to="/collections" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-black uppercase text-white hover:text-brand-bone">Collections</Link>
           <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-black uppercase text-white hover:text-brand-bone">About Us</Link>
           <div className="mt-auto pb-12 border-t border-brand-dark pt-8">
-             <p className="text-neutral-500 uppercase tracking-widest text-xs mb-4">Account</p>
-             {isAuthenticated ? (
-               <>
-                 <Link to="/account" onClick={() => setMobileMenuOpen(false)} className="text-white font-bold block mb-2 text-xl uppercase italic">My Dashboard</Link>
-                 <Link to="/account" onClick={() => setMobileMenuOpen(false)} className="text-neutral-400 text-sm block">Orders & Data</Link>
-               </>
-             ) : (
-               <button 
-                 onClick={() => {
-                   setMobileMenuOpen(false);
-                   setAuthModalOpen(true);
-                 }}
-                 className="text-white font-bold block text-xl uppercase italic"
-               >
-                 Log In / Sign Up
-               </button>
-             )}
+            <p className="text-neutral-500 uppercase tracking-widest text-xs mb-4">Account</p>
+            {isAuthenticated ? (
+              <>
+                <Link to="/account" onClick={() => setMobileMenuOpen(false)} className="text-white font-bold block mb-2 text-xl uppercase italic">My Dashboard</Link>
+                <Link to="/account" onClick={() => setMobileMenuOpen(false)} className="text-neutral-400 text-sm block">Orders & Data</Link>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setAuthModalOpen(true);
+                }}
+                className="text-white font-bold block text-xl uppercase italic"
+              >
+                Log In / Sign Up
+              </button>
+            )}
           </div>
         </div>
       )}

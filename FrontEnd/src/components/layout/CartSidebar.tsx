@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
-import { useShop } from '../context/ShopContext';
+import { useShop } from '../../context/ShopContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ export const CartSidebar: React.FC = () => {
             onClick={toggleCart}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
           />
-          
+
           {/* Sidebar */}
           <motion.div
             initial={{ x: '100%' }}
@@ -68,7 +68,7 @@ export const CartSidebar: React.FC = () => {
                         <p className="text-xs text-brand-bone mt-1 uppercase">Size: {item.size}</p>
                         <p className="text-sm font-medium mt-2 text-white">{formatPrice(item.price)}</p>
                       </div>
-                      <button 
+                      <button
                         onClick={() => removeFromCart(item.id, item.size)}
                         className="text-xs text-neutral-500 hover:text-red-500 uppercase tracking-wider text-left transition-colors w-fit"
                       >
@@ -87,7 +87,7 @@ export const CartSidebar: React.FC = () => {
                   <span className="font-bold text-xl">{formatPrice(cartTotal)}</span>
                 </div>
                 <p className="text-xs text-neutral-500 text-center">Shipping calculated at checkout.</p>
-                <button 
+                <button
                   onClick={handleCheckout}
                   className="w-full bg-brand-bone text-brand-black py-4 font-bold uppercase tracking-widest hover:bg-white transition-colors"
                 >

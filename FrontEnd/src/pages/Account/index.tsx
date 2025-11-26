@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
 import { User, Package, LogOut, Truck, ChevronRight } from 'lucide-react';
-import { MOCK_ORDERS } from '../constants';
-import { useAuth } from '../context/AuthContext';
+import { MOCK_ORDERS } from '../../constants';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -12,7 +12,7 @@ export const Account: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>('orders');
-  
+
   // Local state for editing profile
   const [profileData, setProfileData] = useState(user || {
     name: '', email: '', phone: '', address: '', city: '', zip: ''
@@ -40,7 +40,7 @@ export const Account: React.FC = () => {
   return (
     <div className="min-h-screen bg-brand-black pt-24 pb-20 px-4 md:px-8">
       <div className="container mx-auto">
-        
+
         {/* Header */}
         <div className="mb-12 border-b border-brand-dark pb-8">
           <h1 className="text-4xl md:text-6xl font-black uppercase text-white italic tracking-tighter mb-4">
@@ -52,32 +52,30 @@ export const Account: React.FC = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-12">
-          
+
           {/* Sidebar Nav */}
           <div className="w-full lg:w-64 flex-shrink-0">
             <div className="bg-brand-dark/20 border border-brand-dark p-2 sticky top-32">
               <button
                 onClick={() => setActiveTab('orders')}
-                className={`w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest transition-all ${
-                  activeTab === 'orders' 
-                    ? 'bg-brand-bone text-brand-black' 
+                className={`w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'orders'
+                    ? 'bg-brand-bone text-brand-black'
                     : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
-                }`}
+                  }`}
               >
                 <Package size={16} /> Recent Orders
               </button>
               <button
                 onClick={() => setActiveTab('profile')}
-                className={`w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest transition-all ${
-                  activeTab === 'profile' 
-                    ? 'bg-brand-bone text-brand-black' 
+                className={`w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'profile'
+                    ? 'bg-brand-bone text-brand-black'
                     : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
-                }`}
+                  }`}
               >
                 <User size={16} /> My Data
               </button>
               <div className="h-px bg-brand-dark my-2"></div>
-              <button 
+              <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest text-red-500 hover:bg-red-500/10 transition-colors"
               >
@@ -88,7 +86,7 @@ export const Account: React.FC = () => {
 
           {/* Main Content */}
           <div className="flex-1 min-h-[500px]">
-            
+
             {/* ORDERS TAB */}
             {activeTab === 'orders' && (
               <motion.div
@@ -104,9 +102,8 @@ export const Account: React.FC = () => {
                       <div>
                         <div className="flex items-center gap-4 mb-1">
                           <span className="text-brand-bone font-bold text-lg">#{order.id}</span>
-                          <span className={`text-[10px] font-bold uppercase px-2 py-0.5 border ${
-                            order.status === 'Delivered' ? 'border-green-500 text-green-500' : 'border-yellow-500 text-yellow-500'
-                          }`}>
+                          <span className={`text-[10px] font-bold uppercase px-2 py-0.5 border ${order.status === 'Delivered' ? 'border-green-500 text-green-500' : 'border-yellow-500 text-yellow-500'
+                            }`}>
                             {order.status}
                           </span>
                         </div>
@@ -133,15 +130,15 @@ export const Account: React.FC = () => {
                     </div>
 
                     <div className="mt-6 pt-4 border-t border-brand-dark flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                       <span className="text-xs text-neutral-500 uppercase flex items-center gap-2">
-                         <Truck size={14} /> Track Order
-                       </span>
-                       <button 
-                         onClick={() => navigate(`/account/order/${order.id}`)}
-                         className="text-xs text-white uppercase font-bold flex items-center gap-1 hover:text-brand-bone transition-colors"
-                       >
-                         View Details <ChevronRight size={14} />
-                       </button>
+                      <span className="text-xs text-neutral-500 uppercase flex items-center gap-2">
+                        <Truck size={14} /> Track Order
+                      </span>
+                      <button
+                        onClick={() => navigate(`/account/order/${order.id}`)}
+                        className="text-xs text-white uppercase font-bold flex items-center gap-1 hover:text-brand-bone transition-colors"
+                      >
+                        View Details <ChevronRight size={14} />
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -156,7 +153,7 @@ export const Account: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 <h3 className="text-white font-bold uppercase tracking-widest text-xl mb-8">Personal Data</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                   <div className="space-y-6">
                     <h3 className="text-neutral-500 font-bold uppercase tracking-widest text-xs border-b border-brand-dark pb-2">
@@ -186,7 +183,7 @@ export const Account: React.FC = () => {
                         <input
                           type="tel"
                           value={profileData.phone}
-                          onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
+                          onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
                           className="w-full bg-transparent border-b border-brand-dark py-2 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors"
                           placeholder="+57..."
                         />
@@ -204,7 +201,7 @@ export const Account: React.FC = () => {
                         <input
                           type="text"
                           value={profileData.address}
-                          onChange={(e) => setProfileData({...profileData, address: e.target.value})}
+                          onChange={(e) => setProfileData({ ...profileData, address: e.target.value })}
                           className="w-full bg-transparent border-b border-brand-dark py-2 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors"
                         />
                       </div>
@@ -214,7 +211,7 @@ export const Account: React.FC = () => {
                           <input
                             type="text"
                             value={profileData.city}
-                            onChange={(e) => setProfileData({...profileData, city: e.target.value})}
+                            onChange={(e) => setProfileData({ ...profileData, city: e.target.value })}
                             className="w-full bg-transparent border-b border-brand-dark py-2 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors"
                           />
                         </div>
@@ -223,7 +220,7 @@ export const Account: React.FC = () => {
                           <input
                             type="text"
                             value={profileData.zip}
-                            onChange={(e) => setProfileData({...profileData, zip: e.target.value})}
+                            onChange={(e) => setProfileData({ ...profileData, zip: e.target.value })}
                             className="w-full bg-transparent border-b border-brand-dark py-2 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors"
                           />
                         </div>
@@ -231,7 +228,7 @@ export const Account: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-end pt-6 border-t border-brand-dark">
                   <button className="bg-white text-black px-8 py-3 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors">
                     Update Data

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { useShop } from '../context/ShopContext';
-import { useAuth } from '../context/AuthContext';
+import { useShop } from '../../context/ShopContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, CreditCard, MapPin, Truck, ChevronRight } from 'lucide-react';
@@ -64,7 +64,7 @@ export const Checkout: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       clearCart();
@@ -77,13 +77,13 @@ export const Checkout: React.FC = () => {
     <div className="min-h-screen bg-brand-black pt-24 pb-20 px-4 md:px-8">
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
-          
+
           {/* Left Column: Forms */}
           <div className="flex-1">
             <h1 className="text-4xl font-black uppercase italic text-white mb-8">Checkout</h1>
-            
+
             <form onSubmit={handleSubmit} className="space-y-12">
-              
+
               {/* Contact Info */}
               <section>
                 <h2 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4 mb-6">
@@ -191,7 +191,7 @@ export const Checkout: React.FC = () => {
                 <h2 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4 mb-6">
                   03. Payment Method
                 </h2>
-                
+
                 <div className="bg-brand-dark/20 border border-brand-dark p-6 mb-6 flex items-center gap-4">
                   <Lock size={16} className="text-brand-bone" />
                   <p className="text-xs text-neutral-400 uppercase">All transactions are secure and encrypted.</p>
@@ -242,7 +242,7 @@ export const Checkout: React.FC = () => {
                 </div>
               </section>
 
-              <button 
+              <button
                 type="submit"
                 disabled={loading}
                 className="w-full bg-white text-black h-14 font-black uppercase tracking-[0.2em] hover:bg-brand-bone transition-all mt-8 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -257,7 +257,7 @@ export const Checkout: React.FC = () => {
           <div className="w-full lg:w-96 flex-shrink-0">
             <div className="sticky top-32 bg-brand-dark/10 border border-brand-dark p-6">
               <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-6">Order Summary</h3>
-              
+
               <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {cart.map((item) => (
                   <div key={`${item.id}-${item.size}`} className="flex gap-4">

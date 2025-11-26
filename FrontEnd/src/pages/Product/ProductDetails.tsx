@@ -1,21 +1,21 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useShop } from '../context/ShopContext';
-import { PRODUCTS } from '../constants';
-import { ArrowLeft, Minus, Plus, Share2, Ruler, Truck, ShieldCheck } from 'lucide-react';
-import { ProductCard } from './ProductCard';
-import { motion } from 'framer-motion';
+import { useShop } from '../../context/ShopContext';
+import { PRODUCTS } from '../../constants';
+import { ArrowLeft, Minus, Plus, Share2, Ruler, Truck, ShieldCheck, Check } from 'lucide-react';
+import { ProductCard } from '../../components/ui/ProductCard';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart } = useShop();
-  
+
   const product = PRODUCTS.find(p => p.id === id);
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'details' | 'shipping'>('details');
+  const [showCopied, setShowCopied] = useState(false);
 
   // Scroll to top on mount
   useEffect(() => {
@@ -51,6 +51,30 @@ export const ProductDetails: React.FC = () => {
     }
   };
 
+  const handleShare = async () => {
+    const shareData = {
+      title: `GOUSTTY | ${product.name}`,
+      text: `Check out ${product.name} - ${product.description}`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.debug('Share cancelled');
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        setShowCopied(true);
+        setTimeout(() => setShowCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-brand-black pt-24 pb-20 px-4 md:px-8">
       {/* Breadcrumb */}
@@ -65,15 +89,15 @@ export const ProductDetails: React.FC = () => {
 
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-24">
         {/* Image Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
           className="relative aspect-[4/5] bg-brand-dark overflow-hidden group"
         >
-          <img 
-            src={product.image} 
-            alt={product.name} 
+          <img
+            src={product.image}
+            alt={product.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           {product.isNew && (
@@ -84,25 +108,45 @@ export const ProductDetails: React.FC = () => {
         </motion.div>
 
         {/* Info Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="flex flex-col h-full"
         >
-          <div className="mb-2 flex justify-between items-start">
+          <div className="mb-2 flex justify-between items-start relative">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase italic tracking-tighter leading-none">
               {product.name}
             </h1>
-            <button className="text-neutral-500 hover:text-white transition-colors p-2">
-              <Share2 size={20} />
-            </button>
+
+            {/* Share Button */}
+            <div className="relative">
+              <button
+                onClick={handleShare}
+                className="text-neutral-500 hover:text-white transition-colors p-2 relative z-10"
+                aria-label="Share Product"
+              >
+                {showCopied ? <Check size={20} className="text-brand-bone" /> : <Share2 size={20} />}
+              </button>
+              <AnimatePresence>
+                {showCopied && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    className="absolute right-full top-1/2 -translate-y-1/2 mr-2 bg-brand-bone text-brand-black text-[10px] font-bold uppercase px-2 py-1 tracking-widest whitespace-nowrap"
+                  >
+                    Link Copied
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           <p className="text-2xl font-bold text-brand-bone mb-6">{formatPrice(product.price)}</p>
 
           <p className="text-neutral-400 text-sm leading-relaxed mb-8 max-w-md">
-            {product.description} Designed for the urban environment with premium heavyweight materials. 
+            {product.description} Designed for the urban environment with premium heavyweight materials.
             Features reinforced stitching and signature Goustty branding. Unisex oversized fit.
           </p>
 
@@ -121,11 +165,10 @@ export const ProductDetails: React.FC = () => {
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`h-12 border flex items-center justify-center text-sm font-bold transition-all ${
-                      selectedSize === size
+                    className={`h-12 border flex items-center justify-center text-sm font-bold transition-all ${selectedSize === size
                         ? 'bg-brand-bone border-brand-bone text-brand-black'
                         : 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
-                    }`}
+                      }`}
                   >
                     {size}
                   </button>
@@ -137,14 +180,14 @@ export const ProductDetails: React.FC = () => {
             <div>
               <span className="text-xs font-bold uppercase text-white tracking-widest mb-3 block">Quantity</span>
               <div className="flex items-center border border-neutral-800 w-32 h-12">
-                <button 
+                <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="flex-1 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
                 >
                   <Minus size={16} />
                 </button>
                 <span className="text-white font-bold">{quantity}</span>
-                <button 
+                <button
                   onClick={() => setQuantity(quantity + 1)}
                   className="flex-1 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
                 >
@@ -155,7 +198,7 @@ export const ProductDetails: React.FC = () => {
           </div>
 
           {/* Add to Cart */}
-          <button 
+          <button
             onClick={handleAddToCart}
             className="w-full bg-white text-black h-14 font-black uppercase tracking-[0.2em] hover:bg-brand-bone transition-all mb-8 flex items-center justify-center gap-3 group"
           >
@@ -165,24 +208,22 @@ export const ProductDetails: React.FC = () => {
           {/* Tabs */}
           <div className="mt-auto">
             <div className="flex gap-8 border-b border-brand-dark mb-4">
-              <button 
+              <button
                 onClick={() => setActiveTab('details')}
-                className={`pb-4 text-xs font-bold uppercase tracking-widest transition-colors ${
-                  activeTab === 'details' ? 'text-brand-bone border-b-2 border-brand-bone' : 'text-neutral-500 hover:text-white'
-                }`}
+                className={`pb-4 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'details' ? 'text-brand-bone border-b-2 border-brand-bone' : 'text-neutral-500 hover:text-white'
+                  }`}
               >
                 Details
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab('shipping')}
-                className={`pb-4 text-xs font-bold uppercase tracking-widest transition-colors ${
-                  activeTab === 'shipping' ? 'text-brand-bone border-b-2 border-brand-bone' : 'text-neutral-500 hover:text-white'
-                }`}
+                className={`pb-4 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'shipping' ? 'text-brand-bone border-b-2 border-brand-bone' : 'text-neutral-500 hover:text-white'
+                  }`}
               >
                 Shipping
               </button>
             </div>
-            
+
             <div className="min-h-[100px] text-sm text-neutral-400 leading-relaxed">
               {activeTab === 'details' ? (
                 <ul className="space-y-2 list-disc list-inside marker:text-brand-bone">

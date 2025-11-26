@@ -1,5 +1,5 @@
 
-import { Product, UserProfile, Order } from './types';
+import { Product, UserProfile, Order } from '../types';
 
 export const PRODUCTS: Product[] = [
   {

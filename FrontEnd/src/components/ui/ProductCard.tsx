@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Product } from '../types';
-import { useShop } from '../context/ShopContext';
+import { Product } from '../../types';
+import { useShop } from '../../context/ShopContext';
 import { Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -30,12 +30,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link to={`/product/${product.id}`} className="group relative flex flex-col block cursor-pointer">
       <div className="relative w-full aspect-[4/5] overflow-hidden bg-brand-dark">
-        <img 
-          src={product.image} 
-          alt={product.name} 
+        <img
+          src={product.image}
+          alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
         />
-        
+
         {product.isNew && (
           <div className="absolute top-2 left-2 bg-brand-bone text-brand-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest">
             New Drop
@@ -45,28 +45,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Quick Add Overlay */}
         <div className="absolute bottom-0 left-0 w-full bg-brand-black/90 backdrop-blur-sm p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
           <div className="flex justify-between items-center mb-3">
-             <span className="text-xs uppercase text-neutral-400">Select Size</span>
+            <span className="text-xs uppercase text-neutral-400">Select Size</span>
           </div>
           <div className="flex gap-2 mb-3">
             {sizes.map(size => (
               <button
                 key={size}
-                onClick={(e) => { 
+                onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setSelectedSize(size); 
+                  setSelectedSize(size);
                 }}
-                className={`w-8 h-8 flex items-center justify-center text-xs border ${
-                  selectedSize === size 
-                    ? 'bg-brand-bone border-brand-bone text-brand-black' 
+                className={`w-8 h-8 flex items-center justify-center text-xs border ${selectedSize === size
+                    ? 'bg-brand-bone border-brand-bone text-brand-black'
                     : 'border-neutral-700 text-neutral-400 hover:border-white'
-                }`}
+                  }`}
               >
                 {size}
               </button>
             ))}
           </div>
-          <button 
+          <button
             onClick={handleAddToCart}
             className="w-full bg-white text-black py-2 font-bold uppercase text-xs tracking-widest hover:bg-brand-bone transition-colors flex items-center justify-center gap-2"
           >
