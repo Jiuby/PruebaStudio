@@ -1,24 +1,40 @@
 import React from 'react';
 
+const MARQUEE_CONTENT = [
+  "Worldwide Shipping",
+  "♦",
+  "Unisex Collection",
+  "♦",
+  "Premium Fabrics",
+  "♦",
+  "New Drop Available",
+  "♦",
+  "Worldwide Shipping",
+  "♦",
+  "Unisex Collection",
+  "♦",
+  "Premium Fabrics",
+  "♦",
+  "New Drop Available",
+  "♦"
+];
+
 export const Marquee: React.FC = () => {
   return (
-    <div className="bg-brand-bone text-brand-black py-2 overflow-hidden whitespace-nowrap border-y border-brand-black">
-      <div className="animate-marquee inline-block font-bold text-xs md:text-sm tracking-[0.2em] uppercase">
-        <span className="mx-8">Worldwide Shipping</span>
-        <span className="mx-8">♦</span>
-        <span className="mx-8">Unisex Collection</span>
-        <span className="mx-8">♦</span>
-        <span className="mx-8">Premium Fabrics</span>
-        <span className="mx-8">♦</span>
-        <span className="mx-8">New Drop Available</span>
-        <span className="mx-8">♦</span>
-        <span className="mx-8">Worldwide Shipping</span>
-        <span className="mx-8">♦</span>
-        <span className="mx-8">Unisex Collection</span>
-        <span className="mx-8">♦</span>
-        <span className="mx-8">Premium Fabrics</span>
-        <span className="mx-8">♦</span>
-        <span className="mx-8">New Drop Available</span>
+    <div className="bg-brand-bone text-brand-black py-2 overflow-hidden border-y border-brand-black flex select-none">
+      <div className="animate-marquee flex flex-shrink-0 items-center whitespace-nowrap">
+        {MARQUEE_CONTENT.map((text, index) => (
+          <span key={`original-${index}`} className="mx-8 font-bold text-xs md:text-sm tracking-[0.2em] uppercase">
+            {text}
+          </span>
+        ))}
+      </div>
+      <div className="animate-marquee flex flex-shrink-0 items-center whitespace-nowrap">
+        {MARQUEE_CONTENT.map((text, index) => (
+          <span key={`copy-${index}`} className="mx-8 font-bold text-xs md:text-sm tracking-[0.2em] uppercase">
+            {text}
+          </span>
+        ))}
       </div>
     </div>
   );
