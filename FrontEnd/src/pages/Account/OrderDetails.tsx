@@ -1,13 +1,14 @@
-
 import React, { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { MOCK_ORDERS, MOCK_USER } from '../../constants';
-import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText } from 'lucide-react';
+import { MOCK_ORDERS, MOCK_USER, PRODUCTS } from '../../constants';
+import { useShop } from '../../context/ShopContext';
+import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const OrderDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { addToCart, toggleCart, isCartOpen } = useShop();
   const order = MOCK_ORDERS.find(o => o.id === id);
 
   useEffect(() => {
@@ -31,6 +32,25 @@ export const OrderDetails: React.FC = () => {
       currency: 'COP',
       minimumFractionDigits: 0
     }).format(price);
+  };
+
+  const handleBuyAgain = () => {
+    order.items.forEach(item => {
+      // Find the original product details from the catalog
+      const product = PRODUCTS.find(p => p.id === item.productId);
+
+      if (product) {
+        // Add the specific quantity ordered
+        for (let i = 0; i < item.quantity; i++) {
+          addToCart(product, item.size);
+        }
+      }
+    });
+
+    // Open cart sidebar if not already open
+    if (!isCartOpen) {
+      toggleCart();
+    }
   };
 
   // Helper to calculate mock dates relative to order creation
@@ -231,8 +251,11 @@ export const OrderDetails: React.FC = () => {
               </div>
             </div>
 
-            <button className="w-full bg-white text-black py-4 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors">
-              Buy Again
+            <button
+              onClick={handleBuyAgain}
+              className="w-full bg-white text-black py-4 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors flex items-center justify-center gap-2"
+            >
+              <ShoppingBag size={16} /> Buy Again
             </button>
 
           </div>

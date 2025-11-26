@@ -224,6 +224,90 @@ export const PRODUCTS: Product[] = [
     description: 'Compact daily carry bag with metal hardware.',
     colors: ['Black'],
     sizes: ['One Size']
+  },
+  {
+    id: '19',
+    name: 'NEON CITY WINDBREAKER',
+    price: 130000,
+    category: 'Hoodies',
+    image: 'https://picsum.photos/id/412/800/1000',
+    isNew: true,
+    description: 'Lightweight tech fabric with neon accents.',
+    colors: ['Black', 'Green'],
+    sizes: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: '20',
+    name: 'DISTRESSED CARGO SHORTS',
+    price: 88000,
+    category: 'Bottoms',
+    image: 'https://picsum.photos/id/421/800/1000',
+    description: 'Heavy duty cotton canvas shorts with raw hems.',
+    colors: ['Green'],
+    sizes: ['30', '32', '34', '36']
+  },
+  {
+    id: '21',
+    name: 'CYBER BEANIE',
+    price: 38000,
+    category: 'Accessories',
+    image: 'https://picsum.photos/id/439/800/1000',
+    description: 'Ribbed knit beanie with rubberized logo patch.',
+    colors: ['Grey'],
+    sizes: ['One Size']
+  },
+  {
+    id: '22',
+    name: 'OVERSIZED STRIPED TEE',
+    price: 62000,
+    category: 'Tees',
+    image: 'https://picsum.photos/id/442/800/1000',
+    description: 'Horizontal stripe pattern with boxy silhouette.',
+    colors: ['Black', 'White'],
+    sizes: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: '23',
+    name: 'CHAIN REACTION NECKLACE',
+    price: 42000,
+    category: 'Accessories',
+    image: 'https://picsum.photos/id/453/800/1000',
+    isNew: true,
+    description: 'Industrial style layered chain necklace.',
+    colors: ['Silver'],
+    sizes: ['One Size']
+  },
+  {
+    id: '24',
+    name: 'ACID WASH JOGGERS',
+    price: 92000,
+    category: 'Bottoms',
+    image: 'https://picsum.photos/id/486/800/1000',
+    description: 'Relaxed fit joggers with heavy acid wash treatment.',
+    colors: ['Grey'],
+    sizes: ['S', 'M', 'L', 'XL']
+  },
+  {
+    id: 'test-sold-out',
+    name: 'GHOST PROTOCOL HOODIE',
+    price: 150000,
+    category: 'Hoodies',
+    image: 'https://picsum.photos/id/1060/800/1000',
+    description: 'Extremely limited edition run. Completely sold out.',
+    colors: ['Black'],
+    sizes: ['S', 'M', 'L', 'XL'],
+    inStock: false
+  },
+  {
+    id: 'test-limited',
+    name: 'LIMITED EDITION TEE',
+    price: 70000,
+    category: 'Tees',
+    image: 'https://picsum.photos/id/1059/800/1000',
+    description: 'Running low on stock. Only small sizes remaining.',
+    colors: ['White'],
+    sizes: ['S', 'M', 'L', 'XL'],
+    availableSizes: ['S', 'M']
   }
 ];
 

@@ -10,6 +10,8 @@ export interface Product {
   description: string;
   colors?: string[];
   sizes?: string[];
+  inStock?: boolean;
+  availableSizes?: string[];
 }
 
 export interface CartItem extends Product {

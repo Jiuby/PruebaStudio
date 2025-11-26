@@ -12,7 +12,14 @@ export const ProductDetails: React.FC = () => {
   const { addToCart } = useShop();
 
   const product = PRODUCTS.find(p => p.id === id);
-  const [selectedSize, setSelectedSize] = useState('M');
+  const inStock = product?.inStock !== false;
+
+  // Initialize selectedSize. If availableSizes exists, try to pick the first one.
+  const initialSize = product?.availableSizes && product.availableSizes.length > 0
+    ? product.availableSizes[0]
+    : 'M';
+
+  const [selectedSize, setSelectedSize] = useState(initialSize);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'details' | 'shipping'>('details');
   const [showCopied, setShowCopied] = useState(false);
@@ -24,6 +31,10 @@ export const ProductDetails: React.FC = () => {
     window.scrollTo(0, 0);
     if (product) {
       setActiveImage(product.image);
+      // Reset selected size when product changes if current selected isn't available
+      if (product.availableSizes && !product.availableSizes.includes(selectedSize)) {
+        setSelectedSize(product.availableSizes[0] || 'M');
+      }
     }
   }, [id, product]);
 
@@ -54,6 +65,7 @@ export const ProductDetails: React.FC = () => {
   };
 
   const handleAddToCart = () => {
+    if (!inStock) return;
     for (let i = 0; i < quantity; i++) {
       addToCart(product, selectedSize);
     }
@@ -83,6 +95,11 @@ export const ProductDetails: React.FC = () => {
     }
   };
 
+  const isSizeAvailable = (size: string) => {
+    if (!product.availableSizes) return true;
+    return product.availableSizes.includes(size);
+  };
+
   return (
     <div className="min-h-screen bg-brand-black pt-24 pb-20 px-4 md:px-8">
       {/* Breadcrumb */}
@@ -91,7 +108,7 @@ export const ProductDetails: React.FC = () => {
           <ArrowLeft size={16} /> Back
         </button>
         <div className="text-xs uppercase tracking-widest text-neutral-500">
-          <Link to="/" className="hover:text-white">Home</Link> / <span className="text-white">{product.category}</span> / {product.name}
+          <Link to="/" className="hover:text-white">Home</Link> / <Link to={`/shop?category=${product.category}`} className="text-white hover:text-brand-bone transition-colors">{product.category}</Link> / {product.name}
         </div>
       </div>
 
@@ -110,11 +127,18 @@ export const ProductDetails: React.FC = () => {
             <img
               src={activeImage || product.image}
               alt={product.name}
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-cover ${!inStock ? 'grayscale opacity-70' : ''}`}
             />
-            {product.isNew && (
+            {product.isNew && inStock && (
               <div className="absolute top-4 left-4 bg-brand-bone text-brand-black text-xs font-bold px-3 py-1 uppercase tracking-widest">
                 New Drop
+              </div>
+            )}
+            {!inStock && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                <div className="bg-brand-black border border-white text-white text-xl font-bold px-6 py-3 uppercase tracking-[0.2em] transform -rotate-12">
+                  Sold Out
+                </div>
               </div>
             )}
           </motion.div>
@@ -180,7 +204,7 @@ export const ProductDetails: React.FC = () => {
           </p>
 
           {/* Selectors */}
-          <div className="space-y-8 mb-8 border-y border-brand-dark py-8">
+          <div className={`space-y-8 mb-8 border-y border-brand-dark py-8 ${!inStock ? 'opacity-50 pointer-events-none' : ''}`}>
             {/* Size */}
             <div>
               <div className="flex justify-between mb-3">
@@ -190,18 +214,29 @@ export const ProductDetails: React.FC = () => {
                 </Link>
               </div>
               <div className="grid grid-cols-4 gap-3">
-                {['S', 'M', 'L', 'XL'].map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`h-12 border flex items-center justify-center text-sm font-bold transition-all ${selectedSize === size
-                        ? 'bg-brand-bone border-brand-bone text-brand-black'
-                        : 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
-                      }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+                {['S', 'M', 'L', 'XL'].map((size) => {
+                  const available = isSizeAvailable(size);
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => { if (available) setSelectedSize(size); }}
+                      disabled={!available}
+                      className={`h-12 border flex items-center justify-center text-sm font-bold transition-all relative ${selectedSize === size && available
+                          ? 'bg-brand-bone border-brand-bone text-brand-black'
+                          : available
+                            ? 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
+                            : 'border-neutral-900 text-neutral-700 cursor-not-allowed'
+                        }`}
+                    >
+                      {size}
+                      {!available && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-full h-[1px] bg-neutral-700 transform -rotate-45"></div>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -229,9 +264,17 @@ export const ProductDetails: React.FC = () => {
           {/* Add to Cart */}
           <button
             onClick={handleAddToCart}
-            className="w-full bg-white text-black h-14 font-black uppercase tracking-[0.2em] hover:bg-brand-bone transition-all mb-8 flex items-center justify-center gap-3 group"
+            disabled={!inStock}
+            className={`w-full h-14 font-black uppercase tracking-[0.2em] transition-all mb-8 flex items-center justify-center gap-3 group ${inStock
+                ? 'bg-white text-black hover:bg-brand-bone'
+                : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+              }`}
           >
-            Add To Bag <span className="group-hover:translate-x-1 transition-transform">→</span>
+            {inStock ? (
+              <>Add To Bag <span className="group-hover:translate-x-1 transition-transform">→</span></>
+            ) : (
+              'Sold Out'
+            )}
           </button>
 
           {/* Tabs */}
