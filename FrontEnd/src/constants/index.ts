@@ -308,6 +308,18 @@ export const PRODUCTS: Product[] = [
     colors: ['White'],
     sizes: ['S', 'M', 'L', 'XL'],
     availableSizes: ['S', 'M']
+  },
+  {
+    id: 'test-sale',
+    name: 'VINTAGE FLAME TEE',
+    price: 45000,
+    originalPrice: 75000,
+    category: 'Tees',
+    image: 'https://picsum.photos/id/1067/800/1000',
+    description: 'Classic fit tee with vintage flame graphic. Limited time offer.',
+    colors: ['Black'],
+    sizes: ['S', 'M', 'L', 'XL'],
+    isNew: false
   }
 ];
 

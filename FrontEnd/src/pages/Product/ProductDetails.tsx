@@ -13,6 +13,7 @@ export const ProductDetails: React.FC = () => {
 
   const product = PRODUCTS.find(p => p.id === id);
   const inStock = product?.inStock !== false;
+  const isSale = product?.originalPrice && product.originalPrice > product.price;
 
   // Initialize selectedSize. If availableSizes exists, try to pick the first one.
   const initialSize = product?.availableSizes && product.availableSizes.length > 0
@@ -129,11 +130,22 @@ export const ProductDetails: React.FC = () => {
               alt={product.name}
               className={`w-full h-full object-cover ${!inStock ? 'grayscale opacity-70' : ''}`}
             />
+
+            {/* New Drop Badge */}
             {product.isNew && inStock && (
-              <div className="absolute top-4 left-4 bg-brand-bone text-brand-black text-xs font-bold px-3 py-1 uppercase tracking-widest">
+              <div className="absolute top-4 left-4 bg-brand-bone text-brand-black text-xs font-bold px-3 py-1 uppercase tracking-widest z-10">
                 New Drop
               </div>
             )}
+
+            {/* Sale Badge */}
+            {isSale && inStock && (
+              <div className="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 uppercase tracking-widest z-10">
+                SALE
+              </div>
+            )}
+
+            {/* Sold Out Overlay */}
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                 <div className="bg-brand-black border border-white text-white text-xl font-bold px-6 py-3 uppercase tracking-[0.2em] transform -rotate-12">
@@ -196,7 +208,21 @@ export const ProductDetails: React.FC = () => {
             </div>
           </div>
 
-          <p className="text-2xl font-bold text-brand-bone mb-6">{formatPrice(product.price)}</p>
+          <div className="flex items-center gap-4 mb-6">
+            <p className={`text-2xl font-bold ${isSale ? 'text-red-500' : 'text-brand-bone'}`}>
+              {formatPrice(product.price)}
+            </p>
+            {isSale && (
+              <p className="text-xl text-neutral-500 line-through decoration-neutral-500">
+                {formatPrice(product.originalPrice!)}
+              </p>
+            )}
+            {isSale && (
+              <span className="bg-red-600/20 text-red-500 text-xs font-bold px-2 py-1 uppercase tracking-widest border border-red-600/50">
+                Save {Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)}%
+              </span>
+            )}
+          </div>
 
           <p className="text-neutral-400 text-sm leading-relaxed mb-8 max-w-md">
             {product.description} Designed for the urban environment with premium heavyweight materials.
@@ -222,10 +248,10 @@ export const ProductDetails: React.FC = () => {
                       onClick={() => { if (available) setSelectedSize(size); }}
                       disabled={!available}
                       className={`h-12 border flex items-center justify-center text-sm font-bold transition-all relative ${selectedSize === size && available
-                          ? 'bg-brand-bone border-brand-bone text-brand-black'
-                          : available
-                            ? 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
-                            : 'border-neutral-900 text-neutral-700 cursor-not-allowed'
+                        ? 'bg-brand-bone border-brand-bone text-brand-black'
+                        : available
+                          ? 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
+                          : 'border-neutral-900 text-neutral-700 cursor-not-allowed'
                         }`}
                     >
                       {size}
@@ -266,8 +292,8 @@ export const ProductDetails: React.FC = () => {
             onClick={handleAddToCart}
             disabled={!inStock}
             className={`w-full h-14 font-black uppercase tracking-[0.2em] transition-all mb-8 flex items-center justify-center gap-3 group ${inStock
-                ? 'bg-white text-black hover:bg-brand-bone'
-                : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+              ? 'bg-white text-black hover:bg-brand-bone'
+              : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
               }`}
           >
             {inStock ? (

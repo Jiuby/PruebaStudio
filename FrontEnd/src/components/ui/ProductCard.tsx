@@ -18,6 +18,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
   const sizes = ['S', 'M', 'L', 'XL'];
   const inStock = product.inStock !== false; // Default to true if undefined
+  const isSale = product.originalPrice && product.originalPrice > product.price;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-CO', {
@@ -49,14 +50,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* New Badge */}
         {product.isNew && inStock && (
-          <div className="absolute top-2 left-2 bg-brand-bone text-brand-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest">
+          <div className="absolute top-2 left-2 bg-brand-bone text-brand-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">
             New Drop
+          </div>
+        )}
+
+        {/* Sale Badge */}
+        {isSale && inStock && (
+          <div className="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">
+            SALE
           </div>
         )}
 
         {/* Sold Out Badge */}
         {!inStock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-20">
             <div className="bg-brand-black border border-white text-white text-xs font-bold px-4 py-2 uppercase tracking-[0.2em] transform -rotate-12">
               Sold Out
             </div>
@@ -65,7 +73,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* Quick Add Overlay */}
         {inStock && (
-          <div className="absolute bottom-0 left-0 w-full bg-brand-black/90 backdrop-blur-sm p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+          <div className="absolute bottom-0 left-0 w-full bg-brand-black/90 backdrop-blur-sm p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
             <div className="flex justify-between items-center mb-3">
               <span className="text-xs uppercase text-neutral-400">Select Size</span>
             </div>
@@ -110,10 +118,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       <div className="mt-4 flex flex-col gap-1">
         <div className="flex justify-between items-start">
-          <h3 className={`font-bold text-sm uppercase tracking-wide leading-tight max-w-[70%] transition-colors ${inStock ? 'text-white group-hover:text-brand-bone' : 'text-neutral-500'}`}>
+          <h3 className={`font-bold text-sm uppercase tracking-wide leading-tight max-w-[65%] transition-colors ${inStock ? 'text-white group-hover:text-brand-bone' : 'text-neutral-500'}`}>
             {product.name}
           </h3>
-          <span className={`font-medium text-sm ${inStock ? 'text-brand-bone' : 'text-neutral-600 line-through'}`}>{formatPrice(product.price)}</span>
+          <div className="flex flex-col items-end">
+            {isSale && (
+              <span className="text-xs text-neutral-500 line-through">
+                {formatPrice(product.originalPrice!)}
+              </span>
+            )}
+            <span className={`font-medium text-sm ${inStock ? (isSale ? 'text-red-500' : 'text-brand-bone') : 'text-neutral-600 line-through'}`}>
+              {formatPrice(product.price)}
+            </span>
+          </div>
         </div>
         <p className="text-neutral-500 text-xs">{product.category}</p>
       </div>
