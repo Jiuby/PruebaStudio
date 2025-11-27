@@ -1,8 +1,10 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { CartItem, Product } from '../types';
+import { CartItem, Product, Order } from '../types';
+import { PRODUCTS, MOCK_ORDERS } from '../constants';
 
 interface ShopContextType {
+  products: Product[];
+  orders: Order[];
   cart: CartItem[];
   isCartOpen: boolean;
   addToCart: (product: Product, size: string) => void;
@@ -11,11 +13,20 @@ interface ShopContextType {
   toggleCart: () => void;
   cartTotal: number;
   cartCount: number;
+  // Admin Actions
+  addProduct: (product: Product) => void;
+  updateProduct: (product: Product) => void;
+  deleteProduct: (id: string) => void;
+  updateOrderStatus: (id: string, status: Order['status']) => void;
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  // Initialize state with constants, but allow modification
+  const [products, setProducts] = useState<Product[]>(PRODUCTS);
+  const [orders, setOrders] = useState<Order[]>(MOCK_ORDERS);
+
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -44,6 +55,26 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const toggleCart = () => setIsCartOpen((prev) => !prev);
 
+  // --- Admin Functions ---
+
+  const addProduct = (product: Product) => {
+    setProducts((prev) => [product, ...prev]);
+  };
+
+  const updateProduct = (updatedProduct: Product) => {
+    setProducts((prev) => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
+  };
+
+  const deleteProduct = (id: string) => {
+    setProducts((prev) => prev.filter(p => p.id !== id));
+  };
+
+  const updateOrderStatus = (id: string, status: Order['status']) => {
+    setOrders((prev) => prev.map(o => o.id === id ? { ...o, status } : o));
+  };
+
+  // -----------------------
+
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
   const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
 
@@ -62,6 +93,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <ShopContext.Provider
       value={{
+        products,
+        orders,
         cart,
         isCartOpen,
         addToCart,
@@ -70,6 +103,10 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         toggleCart,
         cartTotal,
         cartCount,
+        addProduct,
+        updateProduct,
+        deleteProduct,
+        updateOrderStatus
       }}
     >
       {children}

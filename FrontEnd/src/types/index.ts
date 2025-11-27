@@ -1,4 +1,3 @@
-
 export interface Product {
   id: string;
   name: string;
@@ -29,6 +28,7 @@ export interface UserProfile {
   address?: string;
   city?: string;
   zip?: string;
+  role?: 'user' | 'admin';
 }
 
 export interface OrderItem {
@@ -46,4 +46,6 @@ export interface Order {
   status: 'Processing' | 'Shipped' | 'Delivered';
   total: number;
   items: OrderItem[];
+  customerName?: string;
+  customerEmail?: string;
 }

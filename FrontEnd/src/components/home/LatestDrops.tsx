@@ -2,11 +2,12 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ProductCard } from '../ui/ProductCard';
-import { PRODUCTS } from '../../constants';
+import { useShop } from '../../context/ShopContext';
 
 export const LatestDrops: React.FC = () => {
+  const { products } = useShop();
   // Show first 4 items as "Latest"
-  const latestProducts = PRODUCTS.slice(0, 4);
+  const latestProducts = products.slice(0, 4);
 
   return (
     <section className="bg-brand-black py-20 px-4 md:px-8 border-b border-brand-dark">

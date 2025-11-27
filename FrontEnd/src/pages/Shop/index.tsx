@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ProductCard } from '../../components/ui/ProductCard';
-import { PRODUCTS, CATEGORIES } from '../../constants';
+import { useShop } from '../../context/ShopContext';
+import { CATEGORIES } from '../../constants';
 import { SortOption } from '../../types';
 import { Filter, X, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
@@ -26,6 +27,7 @@ const SIZES = ['S', 'M', 'L', 'XL', 'One Size'];
 const ITEMS_PER_PAGE = 9;
 
 export const Shop: React.FC = () => {
+  const { products } = useShop();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || 'All';
 
@@ -73,7 +75,7 @@ export const Shop: React.FC = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    let result = [...PRODUCTS];
+    let result = [...products];
 
     // Category Filter
     if (selectedCategory !== 'All') {
@@ -153,8 +155,8 @@ export const Shop: React.FC = () => {
                     key={cat}
                     onClick={() => handleCategoryChange(cat)}
                     className={`block text-sm uppercase font-bold tracking-wide transition-all duration-300 ${selectedCategory === cat
-                        ? 'text-brand-bone translate-x-2'
-                        : 'text-neutral-500 hover:text-white'
+                      ? 'text-brand-bone translate-x-2'
+                      : 'text-neutral-500 hover:text-white'
                       }`}
                   >
                     {cat}
@@ -188,8 +190,8 @@ export const Shop: React.FC = () => {
                 <button
                   onClick={() => setSelectedSize('all')}
                   className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${selectedSize === 'all'
-                      ? 'bg-brand-bone text-brand-black border-brand-bone'
-                      : 'text-neutral-500 border-neutral-800 hover:border-white'
+                    ? 'bg-brand-bone text-brand-black border-brand-bone'
+                    : 'text-neutral-500 border-neutral-800 hover:border-white'
                     }`}
                 >
                   All
@@ -199,8 +201,8 @@ export const Shop: React.FC = () => {
                     key={size}
                     onClick={() => setSelectedSize(size)}
                     className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${selectedSize === size
-                        ? 'bg-brand-bone text-brand-black border-brand-bone'
-                        : 'text-neutral-500 border-neutral-800 hover:border-white'
+                      ? 'bg-brand-bone text-brand-black border-brand-bone'
+                      : 'text-neutral-500 border-neutral-800 hover:border-white'
                       }`}
                   >
                     {size}
@@ -250,8 +252,8 @@ export const Shop: React.FC = () => {
                     key={opt.value}
                     onClick={() => setSortBy(opt.value as SortOption)}
                     className={`block text-sm uppercase font-bold tracking-wide transition-colors text-left ${sortBy === opt.value
-                        ? 'text-brand-bone'
-                        : 'text-neutral-500 hover:text-white'
+                      ? 'text-brand-bone'
+                      : 'text-neutral-500 hover:text-white'
                       }`}
                   >
                     {opt.label}
@@ -302,8 +304,8 @@ export const Shop: React.FC = () => {
                         key={cat}
                         onClick={() => handleCategoryChange(cat)}
                         className={`p-3 text-xs font-bold uppercase border ${selectedCategory === cat
-                            ? 'bg-brand-bone text-brand-black border-brand-bone'
-                            : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {cat}
@@ -321,8 +323,8 @@ export const Shop: React.FC = () => {
                         key={range.value}
                         onClick={() => setSelectedPrice(range.value)}
                         className={`block w-full text-left p-3 text-xs font-bold uppercase border ${selectedPrice === range.value
-                            ? 'bg-brand-bone text-brand-black border-brand-bone'
-                            : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {range.label}
@@ -338,8 +340,8 @@ export const Shop: React.FC = () => {
                     <button
                       onClick={() => setSelectedSize('all')}
                       className={`px-4 py-3 text-xs font-bold uppercase border ${selectedSize === 'all'
-                          ? 'bg-brand-bone text-brand-black border-brand-bone'
-                          : 'text-neutral-400 border-brand-dark'
+                        ? 'bg-brand-bone text-brand-black border-brand-bone'
+                        : 'text-neutral-400 border-brand-dark'
                         }`}
                     >
                       All
@@ -349,8 +351,8 @@ export const Shop: React.FC = () => {
                         key={size}
                         onClick={() => setSelectedSize(size)}
                         className={`px-4 py-3 text-xs font-bold uppercase border ${selectedSize === size
-                            ? 'bg-brand-bone text-brand-black border-brand-bone'
-                            : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {size}
@@ -398,8 +400,8 @@ export const Shop: React.FC = () => {
                         key={opt.value}
                         onClick={() => setSortBy(opt.value as SortOption)}
                         className={`block w-full text-left p-3 text-xs font-bold uppercase border ${sortBy === opt.value
-                            ? 'bg-brand-bone text-brand-black border-brand-bone'
-                            : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {opt.label}
@@ -462,8 +464,8 @@ export const Shop: React.FC = () => {
                     key={page}
                     onClick={() => handlePageChange(page)}
                     className={`w-10 h-10 flex items-center justify-center text-sm font-bold border transition-colors ${currentPage === page
-                        ? 'bg-brand-bone text-brand-black border-brand-bone'
-                        : 'text-neutral-500 border-brand-dark hover:text-white hover:border-white'
+                      ? 'bg-brand-bone text-brand-black border-brand-bone'
+                      : 'text-neutral-500 border-brand-dark hover:text-white hover:border-white'
                       }`}
                   >
                     {page}

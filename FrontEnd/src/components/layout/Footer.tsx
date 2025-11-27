@@ -7,7 +7,7 @@ export const Footer: React.FC = () => (
       <div className="col-span-1 md:col-span-2">
         <h2 className="text-3xl font-black uppercase italic text-white mb-4">Goustty</h2>
         <p className="text-neutral-500 text-sm max-w-md">
-          Redefining urban aesthetic through oversized silhouettes and aggressive details. 
+          Redefining urban aesthetic through oversized silhouettes and aggressive details.
           Born in the streets, made for the world.
         </p>
       </div>
