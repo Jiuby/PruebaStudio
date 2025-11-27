@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ProductCard } from '../../components/ui/ProductCard';
-import { useShop } from '../../context/ShopContext';
-import { CATEGORIES } from '../../constants';
+import { PRODUCTS, CATEGORIES } from '../../constants';
 import { SortOption } from '../../types';
 import { Filter, X, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
@@ -27,7 +26,6 @@ const SIZES = ['S', 'M', 'L', 'XL', 'One Size'];
 const ITEMS_PER_PAGE = 9;
 
 export const Shop: React.FC = () => {
-  const { products } = useShop();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || 'All';
 
@@ -75,7 +73,7 @@ export const Shop: React.FC = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    let result = [...products];
+    let result = [...PRODUCTS];
 
     // Category Filter
     if (selectedCategory !== 'All') {

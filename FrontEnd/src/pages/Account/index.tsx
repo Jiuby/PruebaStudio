@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { User, Package, LogOut, Truck, ChevronRight } from 'lucide-react';
-import { useShop } from '../../context/ShopContext';
+import { MOCK_ORDERS } from '../../constants';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -9,7 +10,6 @@ type Tab = 'profile' | 'orders';
 
 export const Account: React.FC = () => {
   const { user, logout } = useAuth();
-  const { orders } = useShop(); // Changed: get orders from context
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>('orders');
 
@@ -59,8 +59,8 @@ export const Account: React.FC = () => {
               <button
                 onClick={() => setActiveTab('orders')}
                 className={`w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'orders'
-                    ? 'bg-brand-bone text-brand-black'
-                    : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
+                  ? 'bg-brand-bone text-brand-black'
+                  : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
                   }`}
               >
                 <Package size={16} /> Recent Orders
@@ -68,13 +68,12 @@ export const Account: React.FC = () => {
               <button
                 onClick={() => setActiveTab('profile')}
                 className={`w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'profile'
-                    ? 'bg-brand-bone text-brand-black'
-                    : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
+                  ? 'bg-brand-bone text-brand-black'
+                  : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
                   }`}
               >
                 <User size={16} /> My Data
               </button>
-
               <div className="h-px bg-brand-dark my-2"></div>
               <button
                 onClick={handleLogout}
@@ -97,15 +96,13 @@ export const Account: React.FC = () => {
                 className="space-y-6"
               >
                 <h3 className="text-white font-bold uppercase tracking-widest text-xl mb-6">Recent Purchases</h3>
-                {orders.map((order) => (
+                {MOCK_ORDERS.map((order) => (
                   <div key={order.id} className="border border-brand-dark bg-brand-dark/10 p-6 group hover:border-brand-bone/50 transition-colors">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-brand-dark pb-4">
                       <div>
                         <div className="flex items-center gap-4 mb-1">
                           <span className="text-brand-bone font-bold text-lg">#{order.id}</span>
-                          <span className={`text-[10px] font-bold uppercase px-2 py-0.5 border ${order.status === 'Delivered' ? 'border-green-500 text-green-500' :
-                              order.status === 'Shipped' ? 'border-blue-500 text-blue-500' :
-                                'border-yellow-500 text-yellow-500'
+                          <span className={`text-[10px] font-bold uppercase px-2 py-0.5 border ${order.status === 'Delivered' ? 'border-green-500 text-green-500' : 'border-yellow-500 text-yellow-500'
                             }`}>
                             {order.status}
                           </span>

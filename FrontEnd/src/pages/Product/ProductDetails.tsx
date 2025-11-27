@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../../context/ShopContext';
+import { PRODUCTS } from '../../constants';
 import { ArrowLeft, Minus, Plus, Share2, Ruler, Truck, ShieldCheck, Check } from 'lucide-react';
 import { ProductCard } from '../../components/ui/ProductCard';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,9 +9,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart, products } = useShop();
+  const { addToCart } = useShop();
 
-  const product = products.find(p => p.id === id);
+  const product = PRODUCTS.find(p => p.id === id);
   const inStock = product?.inStock !== false;
   const isSale = product?.originalPrice && product.originalPrice > product.price;
 
@@ -52,7 +53,7 @@ export const ProductDetails: React.FC = () => {
   // Determine gallery images (fallback to main image if array is missing/empty)
   const galleryImages = product.images && product.images.length > 0 ? product.images : [product.image];
 
-  const relatedProducts = products
+  const relatedProducts = PRODUCTS
     .filter(p => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 

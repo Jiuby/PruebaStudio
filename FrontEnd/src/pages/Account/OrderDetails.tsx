@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { MOCK_USER } from '../../constants';
+import { MOCK_ORDERS, MOCK_USER, PRODUCTS } from '../../constants';
 import { useShop } from '../../context/ShopContext';
-import { ArrowLeft, Package, Truck, MapPin, Calendar, CreditCard, ShoppingBag, Clock, CheckCircle, FileText } from 'lucide-react';
+import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const OrderDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart, toggleCart, isCartOpen, orders, products } = useShop();
-  const order = orders.find(o => o.id === id);
+  const { addToCart, toggleCart, isCartOpen } = useShop();
+  const order = MOCK_ORDERS.find(o => o.id === id);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -36,8 +36,8 @@ export const OrderDetails: React.FC = () => {
 
   const handleBuyAgain = () => {
     order.items.forEach(item => {
-      // Find the original product details from the catalog using products from context
-      const product = products.find(p => p.id === item.productId);
+      // Find the original product details from the catalog
+      const product = PRODUCTS.find(p => p.id === item.productId);
 
       if (product) {
         // Add the specific quantity ordered
@@ -139,16 +139,16 @@ export const OrderDetails: React.FC = () => {
                     <div key={index} className="flex md:flex-col items-start md:items-center gap-4 md:gap-4 flex-1">
 
                       {/* Icon Circle */}
-                      <div className={`relative z - 10 w - 10 h - 10 rounded - full flex items - center justify - center border - 2 transition - all duration - 500 ${step.completed
-                          ? 'bg-brand-black border-brand-bone text-brand-bone shadow-[0_0_15px_rgba(216,212,197,0.3)]'
-                          : 'bg-brand-black border-neutral-800 text-neutral-800'
-                        } `}>
+                      <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${step.completed
+                        ? 'bg-brand-black border-brand-bone text-brand-bone shadow-[0_0_15px_rgba(216,212,197,0.3)]'
+                        : 'bg-brand-black border-neutral-800 text-neutral-800'
+                        }`}>
                         <Icon size={18} />
                       </div>
 
                       {/* Info Text */}
-                      <div className={`md: text - center transition - all duration - 500 ${step.completed ? 'opacity-100' : 'opacity-40'} `}>
-                        <h4 className={`text - xs font - bold uppercase tracking - widest mb - 1 ${step.completed ? 'text-white' : 'text-neutral-600'} `}>
+                      <div className={`md:text-center transition-all duration-500 ${step.completed ? 'opacity-100' : 'opacity-40'}`}>
+                        <h4 className={`text-xs font-bold uppercase tracking-widest mb-1 ${step.completed ? 'text-white' : 'text-neutral-600'}`}>
                           {step.label}
                         </h4>
 
