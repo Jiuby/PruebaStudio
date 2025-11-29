@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import coverPC from '../../../static/IMG/DESKTOP_2.jpg';
-import coverCel from '../../../static/IMG/SS_2.jpg';
+import coverCel from '../../../static/IMG/ss_2.jpg';
 
 export const Hero: React.FC = () => {
   return (
