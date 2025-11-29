@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useShop } from '../../../context/ShopContext';
-import { TrendingUp, TrendingDown, Users, Package, DollarSign, Calendar, Filter, ShoppingBag, Tag } from 'lucide-react';
+import { TrendingUp, TrendingDown, Users, Package, DollarSign, Calendar, Filter, ShoppingBag, Tag, BarChart3 } from 'lucide-react';
 
 export const AnalyticsTab: React.FC = () => {
    const { orders, products } = useShop();
@@ -136,11 +136,38 @@ export const AnalyticsTab: React.FC = () => {
 
    const topProducts = Object.values(productSales).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
 
+   // --- Monthly Earnings Chart Data (Last 6 Months) ---
+   const earningsChartData = useMemo(() => {
+      const chartData = [];
+      const today = new Date();
+
+      for (let i = 5; i >= 0; i--) {
+         const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+         const monthIdx = d.getMonth();
+         const year = d.getFullYear();
+         const monthName = d.toLocaleString('en-US', { month: 'short' });
+
+         const monthlyRevenue = orders.reduce((acc, order) => {
+            const orderDate = new Date(order.date);
+            // Simple check assuming order.date is parseable
+            if (orderDate.getMonth() === monthIdx && orderDate.getFullYear() === year) {
+               return acc + order.total;
+            }
+            return acc;
+         }, 0);
+
+         chartData.push({ label: monthName, value: monthlyRevenue });
+      }
+      return chartData;
+   }, [orders]);
+
+   const maxChartValue = Math.max(...earningsChartData.map(d => d.value), 100000); // Prevent divide by zero
+
    return (
-      <div className="space-y-8 animate-fade-in">
+      <div className="space-y-8 animate-fade-in pb-12">
          <h2 className="text-3xl font-black uppercase italic text-white">Analytics Dashboard</h2>
 
-         {/* 1. Global High Level Metrics (Cards) - UPDATED */}
+         {/* 1. Global High Level Metrics (Cards) */}
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Best Selling Category */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
@@ -309,6 +336,34 @@ export const AnalyticsTab: React.FC = () => {
                      )}
                   </tbody>
                </table>
+            </div>
+         </div>
+
+         {/* 4. Monthly Earnings Bar Chart */}
+         <div className="bg-brand-dark/20 border border-brand-dark p-8">
+            <div className="flex justify-between items-center mb-8">
+               <h3 className="text-white font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                  <BarChart3 size={18} className="text-brand-bone" /> Monthly Earnings (Last 6 Months)
+               </h3>
+            </div>
+
+            <div className="h-64 flex items-end justify-between gap-4">
+               {earningsChartData.map((data, index) => (
+                  <div key={index} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+                     <div className="w-full bg-brand-dark/30 rounded-t-sm relative flex items-end h-full">
+                        <div
+                           className="w-full bg-brand-bone transition-all duration-1000 ease-out group-hover:bg-white relative border-t border-x border-brand-bone"
+                           style={{ height: `${Math.max((data.value / maxChartValue) * 100, 1)}%` }}
+                        >
+                           {/* Tooltip */}
+                           <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-neutral-700 z-10 pointer-events-none">
+                              {formatPrice(data.value)}
+                           </div>
+                        </div>
+                     </div>
+                     <span className="text-[10px] text-neutral-500 uppercase font-bold">{data.label}</span>
+                  </div>
+               ))}
             </div>
          </div>
       </div>
