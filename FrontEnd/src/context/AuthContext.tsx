@@ -27,10 +27,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Mock Admin Credentials
     if (email === 'admin@goustty.com' && password === 'admin') {
       setUser({
+        id: 'admin-001',
         name: 'Goustty Admin',
         email: 'admin@goustty.com',
-        role: 'admin'
-      } as UserProfile);
+        role: 'admin',
+        joinDate: 'Jan 01, 2024'
+      });
       return true;
     }
     return false;
@@ -39,13 +41,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const register = (data: Partial<UserProfile>) => {
     // Simulating register
     setUser({
+      id: Math.random().toString(36).substr(2, 9),
       name: data.name || 'New User',
       email: data.email || '',
       phone: '',
       address: '',
       city: '',
       zip: '',
-      role: 'user'
+      role: 'user',
+      joinDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     });
   };
 

@@ -1,17 +1,18 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../../context/ShopContext';
-import { PRODUCTS } from '../../constants';
 import { ArrowLeft, Minus, Plus, Share2, Ruler, Truck, ShieldCheck, Check } from 'lucide-react';
-import { ProductCard } from '../../components/ui/ProductCard';
+import { ProductCard } from '../../components/features/product/ProductCard';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart } = useShop();
+  const { products, addToCart } = useShop(); // Changed: get products from context
 
-  const product = PRODUCTS.find(p => p.id === id);
+  const product = products.find(p => p.id === id); // Changed: search in context products
   const inStock = product?.inStock !== false;
   const isSale = product?.originalPrice && product.originalPrice > product.price;
 
@@ -53,7 +54,7 @@ export const ProductDetails: React.FC = () => {
   // Determine gallery images (fallback to main image if array is missing/empty)
   const galleryImages = product.images && product.images.length > 0 ? product.images : [product.image];
 
-  const relatedProducts = PRODUCTS
+  const relatedProducts = products
     .filter(p => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
@@ -248,10 +249,10 @@ export const ProductDetails: React.FC = () => {
                       onClick={() => { if (available) setSelectedSize(size); }}
                       disabled={!available}
                       className={`h-12 border flex items-center justify-center text-sm font-bold transition-all relative ${selectedSize === size && available
-                        ? 'bg-brand-bone border-brand-bone text-brand-black'
-                        : available
-                          ? 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
-                          : 'border-neutral-900 text-neutral-700 cursor-not-allowed'
+                          ? 'bg-brand-bone border-brand-bone text-brand-black'
+                          : available
+                            ? 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
+                            : 'border-neutral-900 text-neutral-700 cursor-not-allowed'
                         }`}
                     >
                       {size}
@@ -292,8 +293,8 @@ export const ProductDetails: React.FC = () => {
             onClick={handleAddToCart}
             disabled={!inStock}
             className={`w-full h-14 font-black uppercase tracking-[0.2em] transition-all mb-8 flex items-center justify-center gap-3 group ${inStock
-              ? 'bg-white text-black hover:bg-brand-bone'
-              : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+                ? 'bg-white text-black hover:bg-brand-bone'
+                : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
               }`}
           >
             {inStock ? (
@@ -325,11 +326,19 @@ export const ProductDetails: React.FC = () => {
             <div className="min-h-[100px] text-sm text-neutral-400 leading-relaxed">
               {activeTab === 'details' ? (
                 <ul className="space-y-2 list-disc list-inside marker:text-brand-bone">
-                  <li>Heavyweight cotton blend</li>
-                  <li>Oversized, boxy fit</li>
-                  <li>Signature lightning embroidery</li>
-                  <li>Designed in Cúcuta, Colombia</li>
-                  <li>Care: Cold wash, hang dry</li>
+                  {product.details && product.details.length > 0 ? (
+                    product.details.map((detail, idx) => (
+                      <li key={idx}>{detail}</li>
+                    ))
+                  ) : (
+                    <>
+                      <li>Heavyweight cotton blend</li>
+                      <li>Oversized, boxy fit</li>
+                      <li>Signature lightning embroidery</li>
+                      <li>Designed in Cúcuta, Colombia</li>
+                      <li>Care: Cold wash, hang dry</li>
+                    </>
+                  )}
                 </ul>
               ) : (
                 <div className="space-y-4">

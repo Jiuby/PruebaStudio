@@ -1,6 +1,7 @@
+
 import React, { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { MOCK_ORDERS, MOCK_USER, PRODUCTS } from '../../constants';
+import { MOCK_USER } from '../../constants';
 import { useShop } from '../../context/ShopContext';
 import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -8,8 +9,8 @@ import { motion } from 'framer-motion';
 export const OrderDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart, toggleCart, isCartOpen } = useShop();
-  const order = MOCK_ORDERS.find(o => o.id === id);
+  const { addToCart, toggleCart, isCartOpen, orders, products } = useShop(); // Changed: get orders/products from context
+  const order = orders.find(o => o.id === id);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -36,8 +37,8 @@ export const OrderDetails: React.FC = () => {
 
   const handleBuyAgain = () => {
     order.items.forEach(item => {
-      // Find the original product details from the catalog
-      const product = PRODUCTS.find(p => p.id === item.productId);
+      // Find the original product details from the catalog in context
+      const product = products.find(p => p.id === item.productId);
 
       if (product) {
         // Add the specific quantity ordered
@@ -61,19 +62,18 @@ export const OrderDetails: React.FC = () => {
   };
 
   // Timeline Logic
-  // Depending on status, we determine which steps are "completed" (active)
   const steps = [
     {
       label: 'Order Placed',
       icon: Clock,
-      completed: true, // Always true if order exists
+      completed: true,
       date: order.date,
       info: 'Order received and confirmed.'
     },
     {
       label: 'Processing',
       icon: Package,
-      completed: true, // Assuming all displayed orders are at least processing
+      completed: true,
       date: getStepDate(order.date, 1),
       info: 'Your items are being packed.'
     },
@@ -140,8 +140,8 @@ export const OrderDetails: React.FC = () => {
 
                       {/* Icon Circle */}
                       <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${step.completed
-                        ? 'bg-brand-black border-brand-bone text-brand-bone shadow-[0_0_15px_rgba(216,212,197,0.3)]'
-                        : 'bg-brand-black border-neutral-800 text-neutral-800'
+                          ? 'bg-brand-black border-brand-bone text-brand-bone shadow-[0_0_15px_rgba(216,212,197,0.3)]'
+                          : 'bg-brand-black border-neutral-800 text-neutral-800'
                         }`}>
                         <Icon size={18} />
                       </div>
@@ -186,13 +186,13 @@ export const OrderDetails: React.FC = () => {
                   transition={{ delay: idx * 0.1 }}
                   className="flex gap-6 items-start"
                 >
-                  <Link to={`/ product / ${item.productId} `} className="w-24 h-32 bg-brand-dark flex-shrink-0 overflow-hidden group">
+                  <Link to={`/product/${item.productId}`} className="w-24 h-32 bg-brand-dark flex-shrink-0 overflow-hidden group">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   </Link>
                   <div className="flex-1 flex flex-col md:flex-row justify-between">
                     <div>
                       <h4 className="text-white text-lg font-black uppercase italic tracking-tighter mb-2">
-                        <Link to={`/ product / ${item.productId} `} className="hover:text-brand-bone transition-colors">
+                        <Link to={`/product/${item.productId}`} className="hover:text-brand-bone transition-colors">
                           {item.name}
                         </Link>
                       </h4>

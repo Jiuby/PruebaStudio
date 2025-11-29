@@ -1,6 +1,8 @@
+
+
 import React, { useState, useMemo, useEffect } from 'react';
-import { ProductCard } from '../../components/ui/ProductCard';
-import { PRODUCTS, CATEGORIES } from '../../constants';
+import { ProductCard } from '../../components/features/product/ProductCard';
+import { useShop } from '../../context/ShopContext';
 import { SortOption } from '../../types';
 import { Filter, X, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
@@ -26,10 +28,15 @@ const SIZES = ['S', 'M', 'L', 'XL', 'One Size'];
 const ITEMS_PER_PAGE = 9;
 
 export const Shop: React.FC = () => {
+  const { products, categories, collections } = useShop();
   const [searchParams, setSearchParams] = useSearchParams();
+
   const initialCategory = searchParams.get('category') || 'All';
+  const initialCollectionId = searchParams.get('collection');
 
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(initialCollectionId);
+
   const [selectedPrice, setSelectedPrice] = useState<string>('all');
   const [selectedColor, setSelectedColor] = useState<string>('all');
   const [selectedSize, setSelectedSize] = useState<string>('all');
@@ -37,34 +44,43 @@ export const Shop: React.FC = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Sync state if URL param changes (e.g. back button navigation)
+  // Sync state if URL param changes
   useEffect(() => {
     const categoryParam = searchParams.get('category');
-    if (categoryParam) {
-      setSelectedCategory(categoryParam);
+    const collectionParam = searchParams.get('collection');
+
+    if (collectionParam) {
+      setSelectedCollectionId(collectionParam);
+      setSelectedCategory('All'); // Reset category visual if collection is active
     } else {
-      setSelectedCategory('All');
+      setSelectedCollectionId(null);
+      setSelectedCategory(categoryParam || 'All');
     }
   }, [searchParams]);
 
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory, selectedPrice, selectedColor, selectedSize, sortBy]);
+  }, [selectedCategory, selectedCollectionId, selectedPrice, selectedColor, selectedSize, sortBy]);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
-    // Update URL without reloading page
+    // Reset collection when picking a specific category manually
+    setSelectedCollectionId(null);
+
     if (category === 'All') {
-      searchParams.delete('category');
-      setSearchParams(searchParams);
+      setSearchParams({});
     } else {
       setSearchParams({ category });
     }
   };
 
+  const activeCollection = collections.find(c => c.id === selectedCollectionId);
+
   const clearFilters = () => {
-    handleCategoryChange('All');
+    setSearchParams({}); // Clear URL params
+    setSelectedCategory('All');
+    setSelectedCollectionId(null);
     setSelectedPrice('all');
     setSelectedColor('all');
     setSelectedSize('all');
@@ -73,10 +89,14 @@ export const Shop: React.FC = () => {
   };
 
   const filteredProducts = useMemo(() => {
-    let result = [...PRODUCTS];
+    let result = [...products];
 
-    // Category Filter
-    if (selectedCategory !== 'All') {
+    // Collection Filter (Priority)
+    if (selectedCollectionId) {
+      result = result.filter(p => p.collectionId === selectedCollectionId);
+    }
+    // Category Filter (Only if no collection selected, or we could allow both to intersect)
+    else if (selectedCategory !== 'All') {
       result = result.filter(p => p.category === selectedCategory);
     }
 
@@ -112,7 +132,7 @@ export const Shop: React.FC = () => {
         break;
     }
     return result;
-  }, [selectedCategory, selectedPrice, selectedColor, selectedSize, sortBy]);
+  }, [products, selectedCategory, selectedCollectionId, selectedPrice, selectedColor, selectedSize, sortBy]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
@@ -133,10 +153,10 @@ export const Shop: React.FC = () => {
         {/* Header */}
         <div className="mb-12 border-b border-brand-dark pb-8">
           <h1 className="text-5xl md:text-7xl font-black uppercase text-white italic tracking-tighter mb-4">
-            Shop All
+            {activeCollection ? activeCollection.title : (selectedCategory === 'All' ? 'Shop All' : selectedCategory)}
           </h1>
           <p className="text-neutral-500 uppercase tracking-widest text-xs">
-            {filteredProducts.length} Products Available
+            {activeCollection ? `Collection • ${activeCollection.subtitle}` : `${filteredProducts.length} Products Available`}
           </p>
         </div>
 
@@ -148,13 +168,13 @@ export const Shop: React.FC = () => {
             <div>
               <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Categories</h3>
               <div className="space-y-3">
-                {CATEGORIES.map(cat => (
+                {categories.map(cat => (
                   <button
                     key={cat}
                     onClick={() => handleCategoryChange(cat)}
-                    className={`block text-sm uppercase font-bold tracking-wide transition-all duration-300 ${selectedCategory === cat
-                      ? 'text-brand-bone translate-x-2'
-                      : 'text-neutral-500 hover:text-white'
+                    className={`block text-sm uppercase font-bold tracking-wide transition-all duration-300 ${selectedCategory === cat && !selectedCollectionId
+                        ? 'text-brand-bone translate-x-2'
+                        : 'text-neutral-500 hover:text-white'
                       }`}
                   >
                     {cat}
@@ -188,8 +208,8 @@ export const Shop: React.FC = () => {
                 <button
                   onClick={() => setSelectedSize('all')}
                   className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${selectedSize === 'all'
-                    ? 'bg-brand-bone text-brand-black border-brand-bone'
-                    : 'text-neutral-500 border-neutral-800 hover:border-white'
+                      ? 'bg-brand-bone text-brand-black border-brand-bone'
+                      : 'text-neutral-500 border-neutral-800 hover:border-white'
                     }`}
                 >
                   All
@@ -199,8 +219,8 @@ export const Shop: React.FC = () => {
                     key={size}
                     onClick={() => setSelectedSize(size)}
                     className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${selectedSize === size
-                      ? 'bg-brand-bone text-brand-black border-brand-bone'
-                      : 'text-neutral-500 border-neutral-800 hover:border-white'
+                        ? 'bg-brand-bone text-brand-black border-brand-bone'
+                        : 'text-neutral-500 border-neutral-800 hover:border-white'
                       }`}
                   >
                     {size}
@@ -250,8 +270,8 @@ export const Shop: React.FC = () => {
                     key={opt.value}
                     onClick={() => setSortBy(opt.value as SortOption)}
                     className={`block text-sm uppercase font-bold tracking-wide transition-colors text-left ${sortBy === opt.value
-                      ? 'text-brand-bone'
-                      : 'text-neutral-500 hover:text-white'
+                        ? 'text-brand-bone'
+                        : 'text-neutral-500 hover:text-white'
                       }`}
                   >
                     {opt.label}
@@ -297,13 +317,13 @@ export const Shop: React.FC = () => {
                 <div>
                   <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Category</h3>
                   <div className="grid grid-cols-2 gap-3">
-                    {CATEGORIES.map(cat => (
+                    {categories.map(cat => (
                       <button
                         key={cat}
                         onClick={() => handleCategoryChange(cat)}
-                        className={`p-3 text-xs font-bold uppercase border ${selectedCategory === cat
-                          ? 'bg-brand-bone text-brand-black border-brand-bone'
-                          : 'text-neutral-400 border-brand-dark'
+                        className={`p-3 text-xs font-bold uppercase border ${selectedCategory === cat && !selectedCollectionId
+                            ? 'bg-brand-bone text-brand-black border-brand-bone'
+                            : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {cat}
@@ -321,8 +341,8 @@ export const Shop: React.FC = () => {
                         key={range.value}
                         onClick={() => setSelectedPrice(range.value)}
                         className={`block w-full text-left p-3 text-xs font-bold uppercase border ${selectedPrice === range.value
-                          ? 'bg-brand-bone text-brand-black border-brand-bone'
-                          : 'text-neutral-400 border-brand-dark'
+                            ? 'bg-brand-bone text-brand-black border-brand-bone'
+                            : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {range.label}
@@ -338,8 +358,8 @@ export const Shop: React.FC = () => {
                     <button
                       onClick={() => setSelectedSize('all')}
                       className={`px-4 py-3 text-xs font-bold uppercase border ${selectedSize === 'all'
-                        ? 'bg-brand-bone text-brand-black border-brand-bone'
-                        : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                         }`}
                     >
                       All
@@ -349,8 +369,8 @@ export const Shop: React.FC = () => {
                         key={size}
                         onClick={() => setSelectedSize(size)}
                         className={`px-4 py-3 text-xs font-bold uppercase border ${selectedSize === size
-                          ? 'bg-brand-bone text-brand-black border-brand-bone'
-                          : 'text-neutral-400 border-brand-dark'
+                            ? 'bg-brand-bone text-brand-black border-brand-bone'
+                            : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {size}
@@ -398,8 +418,8 @@ export const Shop: React.FC = () => {
                         key={opt.value}
                         onClick={() => setSortBy(opt.value as SortOption)}
                         className={`block w-full text-left p-3 text-xs font-bold uppercase border ${sortBy === opt.value
-                          ? 'bg-brand-bone text-brand-black border-brand-bone'
-                          : 'text-neutral-400 border-brand-dark'
+                            ? 'bg-brand-bone text-brand-black border-brand-bone'
+                            : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {opt.label}
@@ -462,8 +482,8 @@ export const Shop: React.FC = () => {
                     key={page}
                     onClick={() => handlePageChange(page)}
                     className={`w-10 h-10 flex items-center justify-center text-sm font-bold border transition-colors ${currentPage === page
-                      ? 'bg-brand-bone text-brand-black border-brand-bone'
-                      : 'text-neutral-500 border-brand-dark hover:text-white hover:border-white'
+                        ? 'bg-brand-bone text-brand-black border-brand-bone'
+                        : 'text-neutral-500 border-brand-dark hover:text-white hover:border-white'
                       }`}
                   >
                     {page}

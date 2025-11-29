@@ -3,14 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Lock, CreditCard, MapPin, Truck, ChevronRight } from 'lucide-react';
+import { Lock, CreditCard, Truck } from 'lucide-react';
+import { Order, OrderItem } from '../../types';
 
 export const Checkout: React.FC = () => {
-  const { cart, cartTotal, clearCart } = useShop();
+  const { cart, cartTotal, clearCart, createOrder } = useShop();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  // Add a flag to track if the order was just completed successfully
+  const [orderComplete, setOrderComplete] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -42,12 +44,13 @@ export const Checkout: React.FC = () => {
     }
   }, [user]);
 
-  // Redirect if cart is empty
+  // Redirect if cart is empty, BUT only if order is NOT complete.
+  // This prevents the user from being kicked back to /shop when clearCart() runs during checkout.
   useEffect(() => {
-    if (cart.length === 0) {
+    if (cart.length === 0 && !orderComplete) {
       navigate('/shop');
     }
-  }, [cart, navigate]);
+  }, [cart, navigate, orderComplete]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-CO', {
@@ -65,11 +68,53 @@ export const Checkout: React.FC = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
+    // 1. Create new order object
+    const newOrderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
+    const orderDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    const orderItems: OrderItem[] = cart.map(item => ({
+      productId: item.id,
+      name: item.name,
+      image: item.image,
+      price: item.price,
+      quantity: item.quantity,
+      size: item.size
+    }));
+
+    const newOrder: Order = {
+      id: newOrderId,
+      date: orderDate,
+      status: 'Processing',
+      total: cartTotal,
+      items: orderItems,
+      customerName: `${formData.firstName} ${formData.lastName}`,
+      customerEmail: formData.email,
+      shippingDetails: {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        address: formData.address,
+        city: formData.city,
+        zip: formData.zip,
+        phone: formData.phone
+      }
+    };
+
+    // 2. Simulate Payment Processing (2 seconds)
     setTimeout(() => {
-      clearCart();
+      // CRITICAL: Set this flag to true BEFORE clearing the cart to prevent the useEffect redirect
+      setOrderComplete(true);
+
+      createOrder(newOrder); // Save to global context
+      clearCart();           // Empty the cart
       setLoading(false);
-      navigate('/order-success');
+
+      // 3. REDIRECT to Order Success Page
+      navigate('/order-success', {
+        state: {
+          orderId: newOrderId,
+          email: formData.email
+        }
+      });
     }, 2000);
   };
 

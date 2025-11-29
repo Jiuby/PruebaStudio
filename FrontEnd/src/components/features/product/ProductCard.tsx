@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
-import { Product } from '../../types';
-import { useShop } from '../../context/ShopContext';
+import { Product } from '../../../types';
+import { useShop } from '../../../context/ShopContext';
 import { Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

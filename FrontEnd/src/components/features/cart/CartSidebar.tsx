@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
-import { useShop } from '../../context/ShopContext';
+import { useShop } from '../../../context/ShopContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
