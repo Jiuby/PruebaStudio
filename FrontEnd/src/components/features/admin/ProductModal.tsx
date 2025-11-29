@@ -220,22 +220,23 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
       }
     } else {
       // JSON Fallback
-      const productData = {
+      const productData: any = {
         ...formData,
         colors: formData.colors && formData.colors.length > 0 ? formData.colors : ['Black'],
         sizes: formData.availableSizes && formData.availableSizes.length > 0 ? formData.availableSizes : ['S', 'M', 'L', 'XL'],
         availableSizes: formData.availableSizes && formData.availableSizes.length > 0 ? formData.availableSizes : ['S', 'M', 'L', 'XL'],
-        images: formData.images || [formData.image || ''],
         originalPrice: formData.originalPrice && formData.originalPrice > 0 ? formData.originalPrice : undefined,
-      } as Product;
+      };
 
+      // Remove image field if updating (don't send existing URL)
       if (productToEdit) {
+        delete productData.image;
+        delete productData.images;
         updateProduct(productData);
       } else {
-        addProduct({
-          ...productData,
-          // Don't send ID
-        });
+        // For new products, we need image
+        productData.images = formData.images || [formData.image || ''];
+        addProduct(productData);
       }
     }
     onClose();

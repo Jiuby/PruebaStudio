@@ -19,17 +19,19 @@ class ProductSerializer(serializers.ModelSerializer):
     category = serializers.CharField()
     # Allow writing collection by ID (mapped to collectionId)
     collectionId = serializers.PrimaryKeyRelatedField(source='collection', queryset=Collection.objects.all(), required=False, allow_null=True)
+    # Accept camelCase fields from frontend
+    originalPrice = serializers.DecimalField(source='original_price', max_digits=10, decimal_places=0, required=False, allow_null=True, write_only=True)
+    isNew = serializers.BooleanField(source='is_new', required=False, write_only=True)
+    inStock = serializers.BooleanField(source='in_stock', required=False, write_only=True)
+    availableSizes = serializers.JSONField(source='available_sizes', required=False, write_only=True)
 
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'price', 'original_price', 'category', 'collectionId',
-            'image', 'images', 'is_new', 'description', 'details',
-            'colors', 'sizes', 'in_stock', 'available_sizes'
+            'id', 'name', 'price', 'originalPrice', 'category', 'collectionId',
+            'image', 'images', 'isNew', 'description', 'details',
+            'colors', 'sizes', 'inStock', 'availableSizes'
         ]
-        extra_kwargs = {
-            'original_price': {'source': 'originalPrice'}, 
-        }
 
     def create(self, validated_data):
         category_name = validated_data.pop('category', None)
@@ -67,10 +69,11 @@ class ProductSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # Convert snake_case to camelCase for frontend compatibility
         data = super().to_representation(instance)
-        data['originalPrice'] = data.pop('original_price', None)
-        data['isNew'] = data.pop('is_new', None)
-        data['inStock'] = data.pop('in_stock', None)
-        data['availableSizes'] = data.pop('available_sizes', None)
+        # Add snake_case versions for reading
+        data['originalPrice'] = instance.original_price
+        data['isNew'] = instance.is_new
+        data['inStock'] = instance.in_stock
+        data['availableSizes'] = instance.available_sizes
         return data
 
 class CollectionSerializer(serializers.ModelSerializer):

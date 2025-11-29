@@ -33,9 +33,9 @@ class Product(models.Model):
     original_price = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='products')
     collection = models.ForeignKey(Collection, on_delete=models.SET_NULL, null=True, blank=True, related_name='products')
-    image = models.ImageField(upload_to='products/')
+    image = models.ImageField(upload_to='products/', blank=True)
     is_new = models.BooleanField(default=True)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     in_stock = models.BooleanField(default=True)
     
     # Storing lists as JSON

@@ -140,8 +140,10 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const newProduct = await api.createProduct(product);
       setProducts((prev) => [newProduct, ...prev]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to add product:", error);
+      console.error("Error response:", error.response?.data);
+      alert(`Failed to add product: ${JSON.stringify(error.response?.data, null, 2)}`);
     }
   };
 
@@ -160,8 +162,10 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       const result = await api.updateProduct(id, payload);
       setProducts((prev) => prev.map(p => p.id === id ? result : p));
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to update product:", error);
+      console.error("Error response:", error.response?.data);
+      alert(`Failed to update product: ${JSON.stringify(error.response?.data, null, 2)}`);
     }
   };
 
