@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { useShop } from '../../../context/ShopContext';
-import { TrendingUp, Users, Package, DollarSign, Calendar, Filter } from 'lucide-react';
+import { TrendingUp, TrendingDown, Users, Package, DollarSign, Calendar, Filter, ShoppingBag, Tag } from 'lucide-react';
 
 export const AnalyticsTab: React.FC = () => {
    const { orders, products } = useShop();
 
-   // State for Date Filtering
+   // State for Date Filtering (Lower Section)
    const [filterType, setFilterType] = useState<'weekly' | 'monthly' | 'all' | 'custom'>('monthly');
    const [customStartDate, setCustomStartDate] = useState('');
    const [customEndDate, setCustomEndDate] = useState('');
@@ -19,20 +19,66 @@ export const AnalyticsTab: React.FC = () => {
       }).format(price);
    };
 
-   // --- Global KPI Calculations (All Time) ---
-   const globalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
-   const globalOrders = orders.length;
-   const globalAOV = globalOrders > 0 ? globalRevenue / globalOrders : 0;
+   // --- TOP CARDS CALCULATIONS (Monthly vs Previous Month) ---
+   const now = new Date();
+   const currentMonth = now.getMonth();
+   const currentYear = now.getFullYear();
 
-   const uniqueCustomerEmails = new Set(orders.map(o => o.customerEmail).filter(e => !!e));
-   const totalUniqueCustomers = uniqueCustomerEmails.size;
-   const customerLTV = totalUniqueCustomers > 0 ? globalRevenue / totalUniqueCustomers : 0;
+   const lastMonthDate = new Date(now);
+   lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+   const lastMonth = lastMonthDate.getMonth();
+   const lastMonthYear = lastMonthDate.getFullYear();
 
-   // --- Filtered Data Logic ---
+   const thisMonthOrders = orders.filter(o => {
+      const d = new Date(o.date);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+   });
+
+   const lastMonthOrders = orders.filter(o => {
+      const d = new Date(o.date);
+      return d.getMonth() === lastMonth && d.getFullYear() === lastMonthYear;
+   });
+
+   // 1. Revenue
+   const thisMonthRevenue = thisMonthOrders.reduce((acc, o) => acc + o.total, 0);
+   const lastMonthRevenue = lastMonthOrders.reduce((acc, o) => acc + o.total, 0);
+   const revenueDiff = thisMonthRevenue - lastMonthRevenue;
+   const revenueGrowth = lastMonthRevenue === 0 ? (thisMonthRevenue > 0 ? 100 : 0) : ((revenueDiff) / lastMonthRevenue) * 100;
+
+   // 2. Orders
+   const thisMonthCount = thisMonthOrders.length;
+   const lastMonthCount = lastMonthOrders.length;
+   const ordersDiff = thisMonthCount - lastMonthCount;
+   const ordersGrowth = lastMonthCount === 0 ? (thisMonthCount > 0 ? 100 : 0) : ((ordersDiff) / lastMonthCount) * 100;
+
+   // 3. Units Sold (Current Month)
+   const unitsSoldThisMonth = thisMonthOrders.reduce((acc, o) => acc + o.items.reduce((sum, i) => sum + i.quantity, 0), 0);
+
+   // 4. Best Selling Category (Current Month)
+   const categoryRevenue: Record<string, number> = {};
+   thisMonthOrders.forEach(o => {
+      o.items.forEach(item => {
+         const product = products.find(p => p.id === item.productId);
+         const cat = product ? product.category : 'Unknown';
+         categoryRevenue[cat] = (categoryRevenue[cat] || 0) + (item.price * item.quantity);
+      });
+   });
+
+   let bestCategory = 'N/A';
+   let maxCatRevenue = 0;
+   Object.entries(categoryRevenue).forEach(([cat, rev]) => {
+      if (rev > maxCatRevenue) {
+         maxCatRevenue = rev;
+         bestCategory = cat;
+      }
+   });
+
+
+   // --- FILTERED DATA LOGIC (Lower Section) ---
    const filteredOrders = useMemo(() => {
-      const now = new Date();
+      const today = new Date();
       // Reset time to end of day for accurate comparison
-      now.setHours(23, 59, 59, 999);
+      today.setHours(23, 59, 59, 999);
 
       return orders.filter(order => {
          const orderDate = new Date(order.date);
@@ -41,16 +87,16 @@ export const AnalyticsTab: React.FC = () => {
 
          if (filterType === 'weekly') {
             const past7Days = new Date();
-            past7Days.setDate(now.getDate() - 7);
+            past7Days.setDate(today.getDate() - 7);
             past7Days.setHours(0, 0, 0, 0);
-            return orderDate >= past7Days && orderDate <= now;
+            return orderDate >= past7Days && orderDate <= today;
          }
 
          if (filterType === 'monthly') {
             const past30Days = new Date();
-            past30Days.setDate(now.getDate() - 30);
+            past30Days.setDate(today.getDate() - 30);
             past30Days.setHours(0, 0, 0, 0);
-            return orderDate >= past30Days && orderDate <= now;
+            return orderDate >= past30Days && orderDate <= today;
          }
 
          if (filterType === 'custom') {
@@ -70,7 +116,6 @@ export const AnalyticsTab: React.FC = () => {
    const periodOrdersCount = filteredOrders.length;
 
    // --- Top Products (Based on Filtered Data) ---
-   // Only show top products that were sold IN the selected period
    const productSales: { [id: string]: { name: string, qty: number, revenue: number, category: string } } = {};
 
    filteredOrders.forEach(o => {
@@ -95,53 +140,60 @@ export const AnalyticsTab: React.FC = () => {
       <div className="space-y-8 animate-fade-in">
          <h2 className="text-3xl font-black uppercase italic text-white">Analytics Dashboard</h2>
 
-         {/* 1. Global High Level Metrics (Cards) */}
+         {/* 1. Global High Level Metrics (Cards) - UPDATED */}
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* LTV */}
+            {/* Best Selling Category */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Customer LTV</h3>
-                  <Users size={20} className="text-purple-500" />
+                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Best-Selling Category</h3>
+                  <Tag size={20} className="text-purple-500" />
                </div>
-               <p className="text-2xl font-black text-white">{formatPrice(customerLTV)}</p>
-               <p className="text-[10px] text-neutral-500 mt-1 uppercase">Lifetime Value</p>
+               <p className="text-2xl font-black text-white uppercase truncate" title={bestCategory}>{bestCategory}</p>
+               <p className="text-[10px] text-neutral-500 mt-1 uppercase">Top performer this month</p>
             </div>
 
-            {/* AOV */}
+            {/* Total Sales x Month */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Avg. Order Value</h3>
-                  <Package size={20} className="text-blue-500" />
+                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Monthly Sales</h3>
+                  <DollarSign size={20} className="text-brand-bone" />
                </div>
-               <p className="text-2xl font-black text-white">{formatPrice(globalAOV)}</p>
-               <p className="text-[10px] text-neutral-500 mt-1 uppercase">Across all orders</p>
+               <p className="text-2xl font-black text-white">{formatPrice(thisMonthRevenue)}</p>
+               <div className={`mt-2 text-[10px] font-bold uppercase flex items-center gap-1 ${revenueGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  {revenueGrowth >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                  {Math.abs(revenueGrowth).toFixed(1)}% vs last month
+               </div>
             </div>
 
-            {/* Total Customers */}
+            {/* Total Orders x Month */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Unique Customers</h3>
-                  <Users size={20} className="text-brand-bone" />
+                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Monthly Orders</h3>
+                  <ShoppingBag size={20} className="text-blue-500" />
                </div>
-               <p className="text-2xl font-black text-white">{totalUniqueCustomers}</p>
+               <p className="text-2xl font-black text-white">{thisMonthCount}</p>
+               <div className={`mt-2 text-[10px] font-bold uppercase flex items-center gap-1 ${ordersGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  {ordersGrowth >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                  {Math.abs(ordersGrowth).toFixed(1)}% vs last month
+               </div>
             </div>
 
-            {/* Retention */}
+            {/* Units Sold This Month */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Total Orders</h3>
-                  <TrendingUp size={20} className="text-green-500" />
+                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Units Sold</h3>
+                  <Package size={20} className="text-green-500" />
                </div>
-               <p className="text-2xl font-black text-white">{globalOrders}</p>
-               <p className="text-[10px] text-neutral-500 mt-1 uppercase">All time</p>
+               <p className="text-2xl font-black text-white">{unitsSoldThisMonth}</p>
+               <p className="text-[10px] text-neutral-500 mt-1 uppercase">Items shipped this month</p>
             </div>
          </div>
 
-         {/* 2. SALES PERIOD ANALYSIS (New Section) */}
+         {/* 2. SALES PERIOD ANALYSIS */}
          <div className="bg-brand-dark/10 border border-brand-dark p-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
                <h3 className="text-white font-bold uppercase tracking-widest text-lg flex items-center gap-2">
-                  <DollarSign size={20} className="text-brand-bone" /> Sales Performance
+                  <DollarSign size={20} className="text-brand-bone" /> Detailed Sales Analysis
                </h3>
 
                {/* Filters */}
