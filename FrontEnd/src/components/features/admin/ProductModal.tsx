@@ -35,6 +35,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
   const [newSize, setNewSize] = useState('');
   const [discountPercentage, setDiscountPercentage] = useState<string>('');
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
   useEffect(() => {
     if (productToEdit) {
       setFormData({
@@ -44,6 +46,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         colors: productToEdit.colors || [],
         availableSizes: productToEdit.availableSizes || []
       });
+      setImageFile(null);
       if (productToEdit.originalPrice && productToEdit.originalPrice > productToEdit.price) {
         const discount = Math.round(((productToEdit.originalPrice - productToEdit.price) / productToEdit.originalPrice) * 100);
         setDiscountPercentage(discount.toString());
@@ -65,9 +68,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         colors: [],
         availableSizes: ['S', 'M', 'L', 'XL'] // Default for new products
       });
+      setImageFile(null);
       setDiscountPercentage('');
     }
   }, [productToEdit, isOpen]);
+
+
 
   const handleOriginalPriceChange = (val: string) => {
     const newOriginal = Number(val);
@@ -187,22 +193,50 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
 
   const handleSaveProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    const productData = {
-      ...formData,
-      colors: formData.colors && formData.colors.length > 0 ? formData.colors : ['Black'],
-      sizes: formData.availableSizes && formData.availableSizes.length > 0 ? formData.availableSizes : ['S', 'M', 'L', 'XL'],
-      availableSizes: formData.availableSizes && formData.availableSizes.length > 0 ? formData.availableSizes : ['S', 'M', 'L', 'XL'],
-      images: formData.images || [formData.image || ''],
-      originalPrice: formData.originalPrice && formData.originalPrice > 0 ? formData.originalPrice : undefined,
-    } as Product;
 
-    if (productToEdit) {
-      updateProduct(productData);
+    if (imageFile) {
+      // Use FormData
+      const data = new FormData();
+      data.append('name', formData.name || '');
+      data.append('price', String(formData.price || 0));
+      if (formData.originalPrice) data.append('originalPrice', String(formData.originalPrice));
+      data.append('category', formData.category || '');
+      if (formData.collectionId) data.append('collectionId', formData.collectionId);
+      data.append('description', formData.description || '');
+      data.append('inStock', String(formData.inStock));
+      data.append('isNew', String(formData.isNew));
+
+      // Append JSON fields as strings
+      data.append('details', JSON.stringify(formData.details || []));
+      data.append('colors', JSON.stringify(formData.colors || []));
+      data.append('availableSizes', JSON.stringify(formData.availableSizes || []));
+
+      data.append('image', imageFile);
+
+      if (productToEdit) {
+        updateProduct(productToEdit.id, data); // Need to update context signature
+      } else {
+        addProduct(data as any);
+      }
     } else {
-      addProduct({
-        ...productData,
-        id: Math.random().toString(36).substr(2, 9),
-      });
+      // JSON Fallback
+      const productData = {
+        ...formData,
+        colors: formData.colors && formData.colors.length > 0 ? formData.colors : ['Black'],
+        sizes: formData.availableSizes && formData.availableSizes.length > 0 ? formData.availableSizes : ['S', 'M', 'L', 'XL'],
+        availableSizes: formData.availableSizes && formData.availableSizes.length > 0 ? formData.availableSizes : ['S', 'M', 'L', 'XL'],
+        images: formData.images || [formData.image || ''],
+        originalPrice: formData.originalPrice && formData.originalPrice > 0 ? formData.originalPrice : undefined,
+      } as Product;
+
+      if (productToEdit) {
+        updateProduct(productData);
+      } else {
+        addProduct({
+          ...productData,
+          // Don't send ID
+        });
+      }
     }
     onClose();
   };
@@ -218,12 +252,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 md:pt-20 bg-black/80 backdrop-blur-sm">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-brand-black border border-brand-dark p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="bg-brand-black border border-brand-dark p-8 w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl"
           >
             <div className="flex justify-between items-center mb-8 border-b border-brand-dark pb-4">
               <h2 className="text-2xl font-black uppercase italic text-white">{productToEdit ? 'Edit Product' : 'New Product'}</h2>
@@ -332,7 +366,10 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
               {/* Image Upload */}
               <ImageUpload
                 image={formData.image}
-                onImageChange={(base64) => setFormData({ ...formData, image: base64 })}
+                onImageChange={(base64, file) => {
+                  setFormData({ ...formData, image: base64 });
+                  if (file) setImageFile(file);
+                }}
                 label="Product Image"
               />
 

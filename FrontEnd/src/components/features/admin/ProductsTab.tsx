@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { Filter, Plus, ChevronLeft, ChevronRight, Edit2, Trash2, Check, X } from 'lucide-react';
+import { Filter, Plus, ChevronLeft, ChevronRight, Edit2, Trash2, Check, X, Layers } from 'lucide-react';
 import { useShop } from '../../../context/ShopContext';
 import { Product } from '../../../types';
 import { ProductModal } from './ProductModal';
+import { CategoryModal } from './CategoryModal';
 
 interface ProductsTabProps {
   autoOpenModal?: boolean;
@@ -19,6 +20,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
 
   // Modal State
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   useEffect(() => {
@@ -89,6 +91,13 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
               <Filter size={14} />
             </div>
           </div>
+
+          <button
+            onClick={() => setIsCategoryModalOpen(true)}
+            className="bg-brand-dark border border-brand-dark text-white px-4 py-3 font-bold uppercase tracking-widest text-xs hover:bg-brand-dark/50 transition-colors flex items-center gap-2"
+          >
+            <Layers size={16} /> Categories
+          </button>
 
           <button
             onClick={() => {
@@ -202,6 +211,11 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
         isOpen={isProductModalOpen}
         onClose={() => setIsProductModalOpen(false)}
         productToEdit={editingProduct}
+      />
+
+      <CategoryModal
+        isOpen={isCategoryModalOpen}
+        onClose={() => setIsCategoryModalOpen(false)}
       />
     </div>
   );
