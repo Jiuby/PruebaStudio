@@ -20,7 +20,6 @@ export const Footer: React.FC = () => (
                     <li><Link to="/contact" className="hover:text-brand-bone">Contact Us</Link></li>
                     <li><Link to="/faq" className="hover:text-brand-bone">FAQ</Link></li>
                     {/* Admin Link added for development */}
-                    <li><Link to="/admin/login" className="hover:text-brand-bone text-neutral-700 hover:text-white transition-colors">Admin Login</Link></li>
                 </ul>
             </div>
             <div>
