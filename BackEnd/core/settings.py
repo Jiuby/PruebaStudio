@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-n08x3hs$n5@6$w^6g&^&-9$ihi2gxbbcp!nbd$*yv&_&t=03-=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['jiuby.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -122,6 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files
 MEDIA_URL = '/media/'
@@ -148,4 +149,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://jiuby.pythonanywhere.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://jiuby.pythonanywhere.com",
 ]
