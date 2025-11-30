@@ -28,6 +28,7 @@ export interface User {
     first_name?: string;
     last_name?: string;
     profile?: UserProfile;
+    is_staff?: boolean;
 }
 
 export interface AuthResponse {

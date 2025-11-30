@@ -9,6 +9,18 @@ const api = axios.create({
     },
 });
 
+// Add a request interceptor to attach the token
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('authToken'); // Changed from 'token' to 'authToken'
+    if (token) {
+        config.headers.Authorization = `Token ${token}`;
+        console.log('[API] Sending request with token:', token.substring(0, 10) + '...');
+    } else {
+        console.log('[API] No token found in localStorage');
+    }
+    return config;
+});
+
 export const fetchProducts = async () => {
     const response = await api.get('/products/');
     return response.data;
@@ -132,6 +144,11 @@ export const updateSettings = async (settingsData: any) => {
     // Our backend implementation for create/update on settings was a bit stubbed.
     // Let's assume we can POST to /settings/ to update.
     const response = await api.post('/settings/', settingsData);
+    return response.data;
+};
+
+export const trackOrder = async (id: string, email: string) => {
+    const response = await api.post('/orders/track/', { id, email });
     return response.data;
 };
 

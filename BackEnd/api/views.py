@@ -1,10 +1,11 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Product, Collection, Order, StoreSettings, Category, UserProfile
+from .permissions import IsAdminOrReadOnly
 from .serializers import (
     ProductSerializer, CollectionSerializer, OrderSerializer, 
     StoreSettingsSerializer, CategorySerializer, UserRegistrationSerializer,
@@ -90,7 +91,7 @@ def update_profile_address(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])  # TODO: Change to IsAdminUser for production
+@permission_classes([IsAdminUser])
 def users_list_view(request):
     """Get list of all users for admin panel"""
     users = User.objects.all().order_by('-date_joined')
@@ -103,18 +104,35 @@ def users_list_view(request):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 class CollectionViewSet(viewsets.ModelViewSet):
     queryset = Collection.objects.all()
     serializer_class = CollectionSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all().order_by('-date')
     serializer_class = OrderSerializer
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        if self.action in ['update', 'partial_update', 'destroy']:
+            return [IsAdminUser()]
+        return [IsAuthenticated()] # List/Retrieve needs auth (or admin)
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Order.objects.all().order_by('-date')
+        if user.is_authenticated:
+            return Order.objects.filter(customer_email__iexact=user.email).order_by('-date')
+        return Order.objects.none()
     
     def create(self, request, *args, **kwargs):
         # Create the order first
@@ -144,11 +162,41 @@ class OrderViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    def track(self, request):
+        """
+        Public endpoint to track an order by ID and Email.
+        """
+        order_id = request.data.get('id')
+        email = request.data.get('email')
+        
+        if not order_id or not email:
+            return Response(
+                {'error': 'Order ID and Email are required.'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        try:
+            # Case-insensitive email match
+            order = Order.objects.get(id=order_id, customer_email__iexact=email)
+            serializer = self.get_serializer(order)
+            return Response(serializer.data)
+        except Order.DoesNotExist:
+            return Response(
+                {'error': 'Order not found or email does not match.'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 class StoreSettingsViewSet(viewsets.ViewSet):
     """
     A simple ViewSet for retrieving and updating StoreSettings.
     Since it's a singleton, we don't need standard list/create logic usually.
     """
+    def get_permissions(self):
+        if self.action == 'list':
+            return [AllowAny()]
+        return [IsAdminUser()]
+
     def list(self, request):
         settings = StoreSettings.objects.first()
         if not settings:

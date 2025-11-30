@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Package } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -7,7 +7,8 @@ import { useAuth } from '../../context/AuthContext';
 
 export const OrderSuccess: React.FC = () => {
   const { state } = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, token } = useAuth();
+  const [hasValidSession, setHasValidSession] = useState(false);
 
   // Extract order ID and email passed from checkout
   const orderId = state?.orderId || 'ORD-0000';
@@ -15,9 +16,12 @@ export const OrderSuccess: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
 
-  const trackingLink = `/track/${orderId}?email=${encodeURIComponent(email)}`;
+    // Check if user has a valid session by verifying token exists
+    setHasValidSession(isAuthenticated && !!token);
+  }, [isAuthenticated, token]);
+
+  const trackingLink = `/track-order?id=${orderId}&email=${encodeURIComponent(email)}`;
 
   return (
     <div className="min-h-screen bg-brand-black flex flex-col items-center justify-center px-4 text-center pt-20">
@@ -45,7 +49,7 @@ export const OrderSuccess: React.FC = () => {
         {/* Dynamic Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
 
-          {isAuthenticated ? (
+          {hasValidSession ? (
             <Link
               to={`/account/order/${orderId}`}
               className="px-8 py-4 border border-brand-dark text-white font-bold uppercase tracking-widest hover:bg-brand-dark transition-colors flex items-center gap-2"

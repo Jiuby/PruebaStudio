@@ -58,18 +58,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const loginAdmin = async (email: string, password: string): Promise<boolean> => {
-    // Mock Admin Credentials for now - can be replaced with real admin endpoint
-    if (email === 'admin@goustty.com' && password === 'admin') {
-      setUser({
-        id: 0,
-        username: 'admin',
-        email: 'admin@goustty.com',
-        first_name: 'Goustty',
-        last_name: 'Admin',
-      });
-      return true;
+    try {
+      const response = await authService.login({ email, password });
+      if (response.user.is_staff) {
+        setUser(response.user);
+        setToken(response.token);
+        localStorage.setItem('authToken', response.token);
+        return true;
+      } else {
+        // User is valid but not admin
+        return false;
+      }
+    } catch (error) {
+      console.error("Admin login failed", error);
+      return false;
     }
-    return false;
   };
 
   const register = async (data: RegisterData) => {
@@ -91,8 +94,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('authToken');
   };
 
-  // Check if user is admin based on email (simple check for now)
-  const isAdmin = user?.email === 'admin@goustty.com';
+  // Check if user is admin based on is_staff flag from backend
+  const isAdmin = !!user?.is_staff;
 
   return (
     <AuthContext.Provider

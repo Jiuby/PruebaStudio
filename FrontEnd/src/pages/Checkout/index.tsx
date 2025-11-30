@@ -84,7 +84,8 @@ export const Checkout: React.FC = () => {
           image: item.image,
           price: item.price,
           quantity: item.quantity,
-          size: item.size
+          size: item.size,
+          color: item.color
         })),
         shippingDetails: {
           firstName: formData.firstName,
@@ -99,8 +100,10 @@ export const Checkout: React.FC = () => {
       // 2. Send order to backend API
       const createdOrder = await orderService.createOrder(orderData, token || undefined);
 
-      // 3. Reload orders to ensure the new order is in the context
-      await reloadOrders();
+      // 3. Reload orders to ensure the new order is in the context (only for logged in users)
+      if (token) {
+        await reloadOrders();
+      }
 
       // 4. Set order complete flag and clear cart
       setOrderComplete(true);
@@ -308,7 +311,7 @@ export const Checkout: React.FC = () => {
 
               <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {cart.map((item) => (
-                  <div key={`${item.id}-${item.size}`} className="flex gap-4">
+                  <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-4">
                     <div className="w-16 h-20 bg-brand-dark flex-shrink-0">
                       <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                     </div>
@@ -317,7 +320,7 @@ export const Checkout: React.FC = () => {
                       <p className="text-[10px] text-neutral-500 uppercase">Size: {item.size} • Color: {item.color}</p>
                       <div className="flex justify-between items-center mt-2">
                         <span className="text-[10px] text-neutral-400">Qty: {item.quantity}</span>
-                        <span className="text-xs text-brand-bone font-bold">{formatPrice(item.price * item.quantity)}</span>
+                        <span className="text-xs text-brand-bone font-bold">{formatPrice(Number(item.price) * Number(item.quantity))}</span>
                       </div>
                     </div>
                   </div>

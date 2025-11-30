@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { CartItem, Product, Order, Collection, UserProfile, StoreSettings } from '../types';
-import { MOCK_CUSTOMERS, CATEGORIES } from '../constants';
+import { CATEGORIES } from '../constants';
 import * as api from '../services/api';
 import { authService, RegisterData, LoginData, User } from '../services/auth';
 
@@ -23,6 +23,7 @@ interface ShopContextType {
   // Cart
   addToCart: (product: Product, size: string, color: string) => void;
   removeFromCart: (productId: string, size: string) => void;
+  updateQuantity: (productId: string, size: string, quantity: number) => void;
   clearCart: () => void;
   toggleCart: () => void;
   cartTotal: number;
@@ -52,7 +53,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [orders, setOrders] = useState<Order[]>([]);
   const [categories, setCategories] = useState<string[]>(CATEGORIES);
   const [collections, setCollections] = useState<Collection[]>([]);
-  const [customers, setCustomers] = useState<UserProfile[]>(MOCK_CUSTOMERS);
+  const [customers, setCustomers] = useState<UserProfile[]>([]);
 
   const [storeSettings, setStoreSettings] = useState<StoreSettings>({
     storeName: 'GOUSTTY',
@@ -79,67 +80,78 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [productsData, collectionsData, ordersData, settingsData, categoriesData, usersData] = await Promise.all([
+        // 1. Load Public Data (Products, Collections, Settings, Categories)
+        const [productsData, collectionsData, settingsData, categoriesData] = await Promise.all([
           api.fetchProducts(),
           api.fetchCollections(),
-          api.fetchOrders(),
           api.fetchSettings(),
-          api.fetchCategories(),
-          api.fetchUsers()
+          api.fetchCategories()
         ]);
 
         setProducts(productsData);
         setCollections(collectionsData);
-        setOrders(ordersData);
         if (settingsData) {
           setStoreSettings(prev => ({ ...prev, ...settingsData }));
         }
 
-        // Map users to UserProfile format for customers
-        const userProfiles: UserProfile[] = usersData.map((u: any) => {
-          let joinDate = 'N/A';
-          if (u.date_joined) {
-            try {
-              const date = new Date(u.date_joined);
-              if (!isNaN(date.getTime())) {
-                joinDate = date.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric'
-                });
-              }
-            } catch (e) {
-              console.error('Error parsing date for user:', u.id, e);
-            }
-          }
-
-          return {
-            id: String(u.id),
-            name: `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.username,
-            email: u.email,
-            phone: u.profile?.phone || '',
-            address: u.profile?.address || '',
-            city: u.profile?.city || '',
-            zip: u.profile?.postal_code || '',
-            joinDate
-          };
-        });
-        setCustomers(userProfiles);
-
         setCategoryObjects(categoriesData);
-        // Map category objects to strings for compatibility, plus 'All'
         const categoryNames = categoriesData.map((c: any) => c.name);
-        // Also include any categories from products that might not be in the category list (legacy)
         const productCategories = new Set(productsData.map((p: Product) => p.category));
         const allCategories = Array.from(new Set([...categoryNames, ...productCategories]));
-
-        // Ensure 'All' is there if needed, or just rely on the UI to add it. 
-        // The original constant had 'All', 'T-Shirts', etc.
-        // We'll just set the state to the fetched names.
         setCategories(allCategories);
 
+        // 2. Load Protected Data (Orders) - Fail silently if unauthorized
+        try {
+          const ordersData = await api.fetchOrders();
+          setOrders(ordersData);
+        } catch (e: any) {
+          console.log('Orders not accessible (guest or non-admin)');
+          if (e.response && e.response.status === 401) {
+            console.log("Session expired during load, logging out...");
+            logout();
+          }
+          setOrders([]);
+        }
+
+        // 3. Load Protected Data (Users) - Fail silently if unauthorized
+        try {
+          const usersData = await api.fetchUsers();
+          const userProfiles: UserProfile[] = usersData.map((u: any) => {
+            let joinDate = 'N/A';
+            if (u.date_joined) {
+              try {
+                const date = new Date(u.date_joined);
+                if (!isNaN(date.getTime())) {
+                  joinDate = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  });
+                }
+              } catch (e) {
+                console.error('Error parsing date for user:', u.id, e);
+              }
+            }
+
+            return {
+              id: String(u.id),
+              name: `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.username,
+              email: u.email,
+              phone: u.profile?.phone || '',
+              address: u.profile?.address || '',
+              city: u.profile?.city || '',
+              zip: u.profile?.postal_code || '',
+              joinDate
+            };
+          });
+          setCustomers(userProfiles);
+        } catch (e) {
+          console.log('Users list not accessible (guest or non-admin)');
+          setCustomers([]); // Fallback to empty instead of mock
+        }
+
       } catch (error) {
-        console.error("Failed to fetch data from API:", error);
+        console.error("Failed to fetch public data from API:", error);
       }
     };
 
@@ -214,6 +226,17 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCart((prev) => prev.filter((item) => !(item.id === productId && item.size === size)));
   };
 
+  const updateQuantity = (productId: string, size: string, quantity: number) => {
+    if (quantity < 1) return;
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === productId && item.size === size
+          ? { ...item, quantity: Number(quantity) }
+          : item
+      )
+    );
+  };
+
   const clearCart = () => {
     setCart([]);
   };
@@ -236,8 +259,12 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const ordersData = await api.fetchOrders();
       setOrders(ordersData);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to reload orders:", error);
+      if (error.response && error.response.status === 401) {
+        console.log("Session expired or invalid, logging out...");
+        logout();
+      }
     }
   };
 
@@ -377,8 +404,10 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       await api.updateCollection(id, payload);
       const result = await api.fetchCollections();
       setCollections(result);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to update collection:", error);
+      console.error("Error response:", error.response?.data);
+      alert(`Failed to update collection: ${JSON.stringify(error.response?.data, null, 2)}`);
     }
   };
 
@@ -405,8 +434,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
+  const cartTotal = cart.reduce((total, item) => total + Number(item.price) * Number(item.quantity), 0);
+  const cartCount = cart.reduce((count, item) => count + Number(item.quantity), 0);
 
   useEffect(() => {
     if (isCartOpen) {
@@ -432,6 +461,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isCartOpen,
         addToCart,
         removeFromCart,
+        updateQuantity,
         clearCart,
         toggleCart,
         cartTotal,

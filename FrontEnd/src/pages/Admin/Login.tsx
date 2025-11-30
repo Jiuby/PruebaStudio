@@ -14,14 +14,14 @@ export const AdminLogin: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    // Simulate network delay for realism
-    setTimeout(() => {
-      const success = loginAdmin(email, password);
+    // Simulate network delay for realism (optional, kept for UX consistency)
+    setTimeout(async () => {
+      const success = await loginAdmin(email, password);
       if (success) {
         navigate('/admin');
       } else {

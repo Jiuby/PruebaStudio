@@ -6,7 +6,7 @@ router = DefaultRouter()
 router.register(r'products', views.ProductViewSet)
 router.register(r'collections', views.CollectionViewSet)
 router.register(r'categories', views.CategoryViewSet)
-router.register(r'orders', views.OrderViewSet)
+router.register(r'orders', views.OrderViewSet, basename='order') # Explicit basename required due to get_queryset
 router.register(r'settings', views.StoreSettingsViewSet, basename='settings')
 
 urlpatterns = [

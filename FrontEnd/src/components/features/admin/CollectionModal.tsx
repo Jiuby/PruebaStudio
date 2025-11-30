@@ -46,24 +46,33 @@ export const CollectionModal: React.FC<CollectionModalProps> = ({ isOpen, onClos
       data.append('image', imageFile);
 
       if (collectionToEdit) {
-        updateCollection(collectionToEdit.id, data); // We need to update api.ts signature or handle this in context
+        updateCollection(collectionToEdit.id, data);
       } else {
-        addCollection(data as any); // Type assertion for now, context should handle it
+        addCollection(data as any);
       }
     } else {
       // JSON fallback (only if no new image)
-      const collectionData = {
-        ...formData,
-        image: formData.image || '', // If empty, backend might complain if required
-      } as Collection;
+      const collectionData: any = {
+        title: formData.title,
+        subtitle: formData.subtitle,
+        size: formData.size,
+      };
+
+      // Only include category if it exists
+      if (formData.category) {
+        collectionData.category = formData.category;
+      }
+
+      // For new collections, image is required
+      if (!collectionToEdit) {
+        collectionData.image = formData.image || '';
+      }
+      // For updates, don't send image field if not changed (backend will keep existing)
 
       if (collectionToEdit) {
-        updateCollection(collectionData);
+        updateCollection(collectionToEdit.id, collectionData);
       } else {
-        addCollection({
-          ...collectionData,
-          // Don't send ID for new creation, let backend handle it
-        });
+        addCollection(collectionData);
       }
     }
     onClose();

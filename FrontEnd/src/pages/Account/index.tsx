@@ -167,7 +167,11 @@ export const Account: React.FC = () => {
                           </div>
                           <div className="flex-1">
                             <h4 className="text-white text-sm font-bold uppercase leading-none mb-1">{item.name}</h4>
-                            <p className="text-xs text-neutral-500 uppercase">Size: {item.size} • Color: {item.color} • Qty: {item.quantity}</p>
+                            <p className="text-xs text-neutral-500 uppercase">
+                              Size: {item.size}
+                              {item.color && ` • Color: ${item.color}`}
+                              {' • Qty: '}{item.quantity}
+                            </p>
                           </div>
                         </div>
                       ))}

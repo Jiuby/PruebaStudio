@@ -16,8 +16,8 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'profile', 'date_joined']
-        read_only_fields = ['id', 'date_joined']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'profile', 'date_joined', 'is_staff']
+        read_only_fields = ['id', 'date_joined', 'is_staff']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
@@ -267,10 +267,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True
     )
+    image = serializers.CharField(required=False, allow_blank=True)
     
     class Meta:
         model = OrderItem
-        fields = ['productId', 'name', 'image', 'price', 'quantity', 'size']
+        fields = ['productId', 'name', 'image', 'price', 'quantity', 'size', 'color']
 
 class OrderSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)

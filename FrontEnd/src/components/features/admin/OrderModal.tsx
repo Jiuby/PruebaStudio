@@ -86,6 +86,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                       <div className="flex-1 flex justify-between items-start">
                         <div>
                           <h4 className="text-white text-sm font-bold uppercase leading-tight mb-1">{item.name}</h4>
+                          {item.color && <p className="text-[10px] text-neutral-400 uppercase">Color: {item.color}</p>}
                           <p className="text-[10px] text-neutral-400 uppercase">Size: {item.size}</p>
                           <p className="text-[10px] text-neutral-400 uppercase">Qty: {item.quantity}</p>
                         </div>

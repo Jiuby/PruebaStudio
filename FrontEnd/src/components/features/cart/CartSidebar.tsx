@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
 export const CartSidebar: React.FC = () => {
-  const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useShop();
+  const { cart, isCartOpen, toggleCart, removeFromCart, updateQuantity, cartTotal } = useShop();
   const navigate = useNavigate();
 
   const formatPrice = (price: number) => {
@@ -58,7 +58,7 @@ export const CartSidebar: React.FC = () => {
                 </div>
               ) : (
                 cart.map((item) => (
-                  <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-4">
+                  <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-4 border-b border-brand-dark pb-4 last:border-0">
                     <div className="w-24 h-32 bg-brand-dark overflow-hidden flex-shrink-0">
                       <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                     </div>
@@ -67,7 +67,25 @@ export const CartSidebar: React.FC = () => {
                         <h3 className="font-bold text-sm uppercase text-brand-light leading-tight">{item.name}</h3>
                         <p className="text-xs text-brand-bone mt-1 uppercase">Size: {item.size}</p>
                         <p className="text-xs text-brand-bone uppercase">Color: {item.color}</p>
-                        <p className="text-sm font-medium mt-2 text-white">{formatPrice(item.price)}</p>
+                        <div className="flex items-center gap-3 mt-2">
+                          <div className="flex items-center border border-brand-dark bg-brand-black/50">
+                            <button
+                              onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
+                              className="p-1 hover:bg-brand-dark text-brand-bone transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                              disabled={item.quantity <= 1}
+                            >
+                              <Minus size={12} />
+                            </button>
+                            <span className="px-2 text-xs font-medium text-white min-w-[20px] text-center">{item.quantity}</span>
+                            <button
+                              onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
+                              className="p-1 hover:bg-brand-dark text-brand-bone transition-colors"
+                            >
+                              <Plus size={12} />
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-sm font-medium mt-2 text-white">{formatPrice(Number(item.price))}</p>
                       </div>
                       <button
                         onClick={() => removeFromCart(item.id, item.size)}

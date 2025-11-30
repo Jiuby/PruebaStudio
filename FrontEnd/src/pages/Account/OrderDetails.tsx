@@ -1,25 +1,71 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../../context/ShopContext';
+import { useAuth } from '../../context/AuthContext';
 import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText, ShoppingBag, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import jsPDF from 'jspdf';
+import api from '../../services/api';
+import { Order } from '../../types';
 
 export const OrderDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart, toggleCart, isCartOpen, orders, products } = useShop(); // Changed: get orders/products from context
-  const order = orders.find(o => String(o.id) === String(id));
+  const { isAuthenticated } = useAuth();
+  const { addToCart, toggleCart, isCartOpen, orders, products } = useShop();
+  const [fetchedOrder, setFetchedOrder] = useState<Order | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Try to find order in context first, then use fetched order
+  const order = orders.find(o => String(o.id) === String(id)) || fetchedOrder;
 
   useEffect(() => {
-    window.scrollTo(0, 120); // Scroll a bit down, not all the way to top
-  }, [id]);
+    // Redirect to home if not authenticated
+    if (!isAuthenticated) {
+      navigate('/');
+      return;
+    }
 
-  if (!order) {
+    window.scrollTo(0, 120);
+
+    // If order not in context, try to fetch it from backend
+    if (!orders.find(o => String(o.id) === String(id)) && id) {
+      setLoading(true);
+      api.get(`/orders/${id}/`)
+        .then(response => {
+          setFetchedOrder(response.data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Failed to fetch order:', err);
+          if (err.response && err.response.status === 401) {
+            // Token is invalid, clear it and redirect to home
+            localStorage.removeItem('authToken');
+            setError('Your session has expired. Redirecting to home...');
+            setTimeout(() => navigate('/'), 2000);
+          } else {
+            setError('Failed to load order details');
+          }
+          setLoading(false);
+        });
+    }
+  }, [id, orders, isAuthenticated, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-brand-black flex items-center justify-center text-white">
+        <p>Loading order details...</p>
+      </div>
+    );
+  }
+
+  if (error || !order) {
     return (
       <div className="min-h-screen bg-brand-black flex items-center justify-center text-white">
         <div className="text-center">
           <h2 className="text-4xl font-black uppercase mb-4">Order Not Found</h2>
+          <p className="text-neutral-500 mb-4">{error || 'This order does not exist or you do not have permission to view it.'}</p>
           <Link to="/account" className="text-brand-bone underline uppercase tracking-widest text-sm">Return to Dashboard</Link>
         </div>
       </div>
@@ -135,22 +181,33 @@ export const OrderDetails: React.FC = () => {
   };
 
   const handleBuyAgain = () => {
-    order.items.forEach(item => {
-      // Find the original product details from the catalog in context
-      const product = products.find(p => p.id === item.productId);
+    console.log('Buy Again clicked');
+    console.log('Order items:', order.items);
 
-      if (product) {
-        // Add the specific quantity ordered
-        for (let i = 0; i < item.quantity; i++) {
-          addToCart(product, item.size);
-        }
+    order.items.forEach(item => {
+      // Reconstruct product object from order item data
+      // We have all the info we need from the order item itself
+      const productForCart = {
+        id: item.productId,
+        name: item.name,
+        price: Number(item.price),
+        image: item.image,
+        // We need these fields for addToCart to work, but they're not critical
+        category: '',
+        description: '',
+        inStock: true,
+        colors: item.color ? [item.color] : [],
+        sizes: [item.size],
+        availableSizes: [item.size]
+      };
+
+      console.log(`Adding ${item.quantity}x ${item.name} (size: ${item.size}, color: ${item.color})`);
+
+      // Add the specific quantity ordered with size and color
+      for (let i = 0; i < item.quantity; i++) {
+        addToCart(productForCart, item.size, item.color);
       }
     });
-
-    // Open cart sidebar if not already open
-    if (!isCartOpen) {
-      toggleCart();
-    }
   };
 
   // Helper to calculate mock dates relative to order creation
@@ -314,6 +371,7 @@ export const OrderDetails: React.FC = () => {
                         </Link>
                       </h4>
                       <div className="space-y-1 text-xs text-neutral-400 uppercase tracking-wide">
+                        {item.color && <p>Color: <span className="text-white">{item.color}</span></p>}
                         <p>Size: <span className="text-white">{item.size}</span></p>
                         <p>Qty: <span className="text-white">{item.quantity}</span></p>
                       </div>

@@ -1,28 +1,51 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
-import { useShop } from '../../context/ShopContext';
+import { trackOrder } from '../../services/api';
+import { Order } from '../../types';
 import { ArrowLeft, Package, CheckCircle, Clock, Truck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const GuestOrderTracking: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
+  const id = searchParams.get('id');
   const emailParam = searchParams.get('email');
-  const { orders } = useShop();
 
+  const [order, setOrder] = useState<Order | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Find order
-  const order = orders.find(o => o.id === id);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Basic security check: The email in the link must match the order's email
-    if (order && order.customerEmail !== emailParam) {
-      setError("You are not authorized to view this order.");
-    }
-  }, [id, order, emailParam]);
+
+    const fetchOrder = async () => {
+      if (!id || !emailParam) {
+        setError("Missing Order ID or Email.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const data = await trackOrder(id, emailParam);
+        setOrder(data);
+      } catch (err) {
+        console.error(err);
+        setError("Order not found or email does not match.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrder();
+  }, [id, emailParam]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-brand-black flex items-center justify-center text-white pt-24">
+        <p>Loading order details...</p>
+      </div>
+    );
+  }
 
   if (!order || error) {
     return (

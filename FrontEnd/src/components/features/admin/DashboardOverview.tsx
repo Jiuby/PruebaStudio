@@ -14,7 +14,8 @@ import {
   CheckCircle,
   Plus,
   ArrowRight,
-  Eye
+  Eye,
+  TrendingDown
 } from 'lucide-react';
 
 interface DashboardOverviewProps {
@@ -30,6 +31,38 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
   const totalRevenue = orders.reduce((acc, order) => acc + Number(order.total), 0);
   const totalOrders = orders.length;
   const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+  // Calculate Revenue Change vs Last Month
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  const previousMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const previousMonth = previousMonthDate.getMonth();
+  const previousYear = previousMonthDate.getFullYear();
+
+  const currentMonthRevenue = orders
+    .filter(o => {
+      const orderDate = new Date(o.date);
+      return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+    })
+    .reduce((acc, o) => acc + Number(o.total), 0);
+
+  const previousMonthRevenue = orders
+    .filter(o => {
+      const orderDate = new Date(o.date);
+      return orderDate.getMonth() === previousMonth && orderDate.getFullYear() === previousYear;
+    })
+    .reduce((acc, o) => acc + Number(o.total), 0);
+
+  let revenueChangePercentage = 0;
+  if (previousMonthRevenue > 0) {
+    revenueChangePercentage = ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) * 100;
+  } else if (currentMonthRevenue > 0) {
+    revenueChangePercentage = 100; // If previous was 0 and current is > 0, treat as 100% increase (or could be infinite)
+  }
+
+  const isPositiveChange = revenueChangePercentage >= 0;
 
   // Order Pipeline Status
   const processingOrders = orders.filter(o => o.status === 'Processing');
@@ -71,8 +104,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
           </div>
           <p className="text-3xl font-black text-white relative z-10">{formatPrice(totalRevenue)}</p>
           <div className="flex items-center gap-2 mt-2 relative z-10">
-            <span className="text-green-500 text-[10px] font-bold uppercase flex items-center gap-1 bg-green-500/10 px-2 py-0.5 rounded-full">
-              <TrendingUp size={12} /> +12.5%
+            <span className={`text-[10px] font-bold uppercase flex items-center gap-1 px-2 py-0.5 rounded-full ${isPositiveChange ? 'text-green-500 bg-green-500/10' : 'text-red-500 bg-red-500/10'}`}>
+              {isPositiveChange ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+              {revenueChangePercentage > 0 ? '+' : ''}{revenueChangePercentage.toFixed(1)}%
             </span>
             <span className="text-neutral-600 text-[10px] uppercase">vs last month</span>
           </div>

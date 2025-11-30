@@ -53,7 +53,7 @@ export const CustomersTab: React.FC = () => {
                   <tbody>
                      {paginatedCustomers.map((customer) => {
                         const customerOrders = orders.filter(o => o.customerEmail === customer.email);
-                        const totalSpent = customerOrders.reduce((sum, o) => sum + o.total, 0);
+                        const totalSpent = customerOrders.reduce((sum, o) => sum + Number(o.total), 0);
 
                         return (
                            <tr key={customer.id} className="border-b border-brand-dark/50 hover:bg-brand-dark/20 transition-colors">
