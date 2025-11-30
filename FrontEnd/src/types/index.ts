@@ -38,6 +38,7 @@ export interface StoreSettings {
 export interface CartItem extends Product {
   quantity: number;
   size: string;
+  color: string;
 }
 
 export type SortOption = 'featured' | 'price-asc' | 'price-desc';
@@ -75,7 +76,7 @@ export interface OrderShippingDetails {
 export interface Order {
   id: string;
   date: string;
-  status: 'Processing' | 'Shipped' | 'Delivered';
+  status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
   total: number;
   items: OrderItem[];
   customerName?: string;

@@ -58,7 +58,7 @@ export const CartSidebar: React.FC = () => {
                 </div>
               ) : (
                 cart.map((item) => (
-                  <div key={`${item.id}-${item.size}`} className="flex gap-4">
+                  <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-4">
                     <div className="w-24 h-32 bg-brand-dark overflow-hidden flex-shrink-0">
                       <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                     </div>
@@ -66,6 +66,7 @@ export const CartSidebar: React.FC = () => {
                       <div>
                         <h3 className="font-bold text-sm uppercase text-brand-light leading-tight">{item.name}</h3>
                         <p className="text-xs text-brand-bone mt-1 uppercase">Size: {item.size}</p>
+                        <p className="text-xs text-brand-bone uppercase">Color: {item.color}</p>
                         <p className="text-sm font-medium mt-2 text-white">{formatPrice(item.price)}</p>
                       </div>
                       <button

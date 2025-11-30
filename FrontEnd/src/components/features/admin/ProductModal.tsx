@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, DollarSign, Percent, List, Palette, Ruler } from 'lucide-react';
+import { X, DollarSign, Percent, List, Palette, Ruler, Image as ImageIcon } from 'lucide-react';
 import { Product } from '../../../types';
 import { useShop } from '../../../context/ShopContext';
 import { ImageUpload } from './ImageUpload';
@@ -15,14 +14,18 @@ interface ProductModalProps {
 export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, productToEdit }) => {
   const { addProduct, updateProduct, categories, collections } = useShop();
 
+  // Get first category that's not 'All'
+  const defaultCategory = categories.filter(c => c !== 'All')[0] || 'Tees';
+
   const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
     price: 0,
     originalPrice: undefined,
-    category: 'Tees',
+    category: defaultCategory,
     collectionId: '',
     description: '',
     image: '',
+    images: [],
     inStock: true,
     isNew: false,
     details: [],
@@ -30,12 +33,11 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
     availableSizes: []
   });
 
+  const [imageFiles, setImageFiles] = useState<(File | null)[]>([null, null, null, null, null]);
   const [newDetail, setNewDetail] = useState('');
   const [newColor, setNewColor] = useState('');
   const [newSize, setNewSize] = useState('');
   const [discountPercentage, setDiscountPercentage] = useState<string>('');
-
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (productToEdit) {
@@ -44,9 +46,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         originalPrice: productToEdit.originalPrice || undefined,
         details: productToEdit.details || [],
         colors: productToEdit.colors || [],
-        availableSizes: productToEdit.availableSizes || []
+        availableSizes: productToEdit.availableSizes || [],
+        images: productToEdit.images && productToEdit.images.length > 0
+          ? productToEdit.images
+          : [productToEdit.image]
       });
-      setImageFile(null);
+      setImageFiles([null, null, null, null, null]);
       if (productToEdit.originalPrice && productToEdit.originalPrice > productToEdit.price) {
         const discount = Math.round(((productToEdit.originalPrice - productToEdit.price) / productToEdit.originalPrice) * 100);
         setDiscountPercentage(discount.toString());
@@ -58,22 +63,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         name: '',
         price: 0,
         originalPrice: undefined,
-        category: 'Tees',
+        category: defaultCategory,
         collectionId: '',
         description: '',
         image: '',
+        images: [],
         inStock: true,
         isNew: false,
         details: [],
         colors: [],
-        availableSizes: ['S', 'M', 'L', 'XL'] // Default for new products
+        availableSizes: ['S', 'M', 'L', 'XL']
       });
-      setImageFile(null);
+      setImageFiles([null, null, null, null, null]);
       setDiscountPercentage('');
     }
   }, [productToEdit, isOpen]);
-
-
 
   const handleOriginalPriceChange = (val: string) => {
     const newOriginal = Number(val);
@@ -191,11 +195,52 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
     }));
   };
 
+  // --- Image Handling ---
+
+  const handleMainImageChange = (base64: string, file?: File) => {
+    const currentImages = [...(formData.images || [])];
+    currentImages[0] = base64;
+    setFormData(prev => ({ ...prev, image: base64, images: currentImages }));
+
+    const newFiles = [...imageFiles];
+    newFiles[0] = file || null;
+    setImageFiles(newFiles);
+  };
+
+  const handleGalleryImageChange = (index: number, base64: string, file?: File) => {
+    const currentImages = [...(formData.images || [])];
+    currentImages[index] = base64;
+    setFormData(prev => ({ ...prev, images: currentImages }));
+
+    const newFiles = [...imageFiles];
+    newFiles[index] = file || null;
+    setImageFiles(newFiles);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const currentImages = [...(formData.images || [])];
+    currentImages[index] = '';
+
+    const newFiles = [...imageFiles];
+    newFiles[index] = null;
+    setImageFiles(newFiles);
+
+    if (index === 0) {
+      setFormData(prev => ({ ...prev, image: '', images: currentImages }));
+    } else {
+      setFormData(prev => ({ ...prev, images: currentImages }));
+    }
+  };
+
+  // ----------------------
+
   const handleSaveProduct = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (imageFile) {
-      // Use FormData
+    const hasNewImages = imageFiles.some(file => file !== null);
+
+    if (hasNewImages) {
+      // Use FormData for file uploads
       const data = new FormData();
       data.append('name', formData.name || '');
       data.append('price', String(formData.price || 0));
@@ -206,20 +251,30 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
       data.append('inStock', String(formData.inStock));
       data.append('isNew', String(formData.isNew));
 
-      // Append JSON fields as strings
       data.append('details', JSON.stringify(formData.details || []));
       data.append('colors', JSON.stringify(formData.colors || []));
       data.append('availableSizes', JSON.stringify(formData.availableSizes || []));
+      data.append('sizes', JSON.stringify(formData.availableSizes || []));
 
-      data.append('image', imageFile);
+      // Add primary image if exists
+      if (imageFiles[0]) {
+        data.append('image', imageFiles[0]);
+      }
+
+      // Add all gallery images (indices 1-4)
+      for (let i = 1; i <= 4; i++) {
+        if (imageFiles[i]) {
+          data.append(`gallery_${i}`, imageFiles[i]);
+        }
+      }
 
       if (productToEdit) {
-        updateProduct(productToEdit.id, data); // Need to update context signature
+        updateProduct(productToEdit.id, data);
       } else {
         addProduct(data as any);
       }
     } else {
-      // JSON Fallback
+      // JSON payload when no new images
       const productData: any = {
         ...formData,
         colors: formData.colors && formData.colors.length > 0 ? formData.colors : ['Black'],
@@ -228,17 +283,17 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         originalPrice: formData.originalPrice && formData.originalPrice > 0 ? formData.originalPrice : undefined,
       };
 
-      // Remove image field if updating (don't send existing URL)
+      // Remove image fields when updating without new images
       if (productToEdit) {
         delete productData.image;
+        delete productData.secondaryImage;
         delete productData.images;
         updateProduct(productData);
       } else {
-        // For new products, we need image
-        productData.images = formData.images || [formData.image || ''];
         addProduct(productData);
       }
     }
+
     onClose();
   };
 
@@ -307,7 +362,46 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                 </select>
               </div>
 
-              {/* Pricing Section - Redesigned */}
+              {/* Image Upload Section */}
+              <div className="bg-brand-dark/10 p-6 border border-brand-dark">
+                <h3 className="text-white font-bold uppercase text-xs tracking-widest border-b border-brand-dark pb-2 mb-4 flex items-center gap-2">
+                  <ImageIcon size={14} /> Product Images (Max 5)
+                </h3>
+
+                {/* Main Image */}
+                <div className="mb-4">
+                  <ImageUpload
+                    image={formData.images?.[0] || formData.image}
+                    onImageChange={handleMainImageChange}
+                    label="Main Image (Cover)"
+                  />
+                </div>
+
+                {/* Gallery Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[1, 2, 3, 4].map(idx => (
+                    <div key={idx} className="relative group">
+                      <ImageUpload
+                        image={formData.images?.[idx]}
+                        onImageChange={(base64, file) => handleGalleryImageChange(idx, base64, file)}
+                        label={`View ${idx + 1}`}
+                      />
+                      {formData.images?.[idx] && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(idx)}
+                          className="absolute top-6 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                          title="Remove Image"
+                        >
+                          <X size={12} />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Pricing Section */}
               <div className="bg-brand-dark/10 p-6 border border-brand-dark">
                 <h3 className="text-white font-bold uppercase text-xs tracking-widest border-b border-brand-dark pb-2 mb-4 flex items-center gap-2">
                   <DollarSign size={14} /> Pricing & Discounts
@@ -363,16 +457,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                   </div>
                 )}
               </div>
-
-              {/* Image Upload */}
-              <ImageUpload
-                image={formData.image}
-                onImageChange={(base64, file) => {
-                  setFormData({ ...formData, image: base64 });
-                  if (file) setImageFile(file);
-                }}
-                label="Product Image"
-              />
 
               <div>
                 <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Description</label>

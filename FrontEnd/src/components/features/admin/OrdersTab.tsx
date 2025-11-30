@@ -60,7 +60,8 @@ export const OrdersTab: React.FC = () => {
                   <td className="py-4 text-white font-bold text-sm">{formatPrice(order.total)}</td>
                   <td className="py-4">
                     <span className={`px-2 py-1 text-[10px] font-bold uppercase border ${order.status === 'Delivered' ? 'border-green-500 text-green-500' :
-                        order.status === 'Shipped' ? 'border-blue-500 text-blue-500' :
+                      order.status === 'Shipped' ? 'border-blue-500 text-blue-500' :
+                        order.status === 'Cancelled' ? 'border-red-500 text-red-500' :
                           'border-yellow-500 text-yellow-500'
                       }`}>
                       {order.status}
@@ -76,6 +77,7 @@ export const OrdersTab: React.FC = () => {
                         <option value="Processing">Processing</option>
                         <option value="Shipped">Shipped</option>
                         <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
                       </select>
 
                       <button

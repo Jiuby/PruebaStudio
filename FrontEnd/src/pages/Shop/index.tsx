@@ -14,17 +14,6 @@ const PRICE_RANGES = [
   { label: 'Over $100,000', value: 'over-100' }
 ];
 
-const COLORS = [
-  { label: 'Black', value: 'Black', hex: '#000000' },
-  { label: 'White', value: 'White', hex: '#ffffff' },
-  { label: 'Grey', value: 'Grey', hex: '#6b7280' },
-  { label: 'Blue', value: 'Blue', hex: '#1e3a8a' },
-  { label: 'Green', value: 'Green', hex: '#14532d' },
-  { label: 'Silver', value: 'Silver', hex: '#d1d5db' }
-];
-
-const SIZES = ['S', 'M', 'L', 'XL', 'One Size'];
-
 const ITEMS_PER_PAGE = 9;
 
 export const Shop: React.FC = () => {
@@ -43,6 +32,27 @@ export const Shop: React.FC = () => {
   const [sortBy, setSortBy] = useState<SortOption>('featured');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Generate unique colors and sizes from all products
+  const availableColors = useMemo(() => {
+    const colorsSet = new Set<string>();
+    products.forEach(product => {
+      if (product.colors && Array.isArray(product.colors)) {
+        product.colors.forEach(color => colorsSet.add(color));
+      }
+    });
+    return Array.from(colorsSet).sort();
+  }, [products]);
+
+  const availableSizes = useMemo(() => {
+    const sizesSet = new Set<string>();
+    products.forEach(product => {
+      if (product.availableSizes && Array.isArray(product.availableSizes)) {
+        product.availableSizes.forEach(size => sizesSet.add(size));
+      }
+    });
+    return Array.from(sizesSet).sort();
+  }, [products]);
 
   // Sync state if URL param changes
   useEffect(() => {
@@ -93,7 +103,7 @@ export const Shop: React.FC = () => {
 
     // Collection Filter (Priority)
     if (selectedCollectionId) {
-      result = result.filter(p => p.collectionId === selectedCollectionId);
+      result = result.filter(p => String(p.collectionId) === String(selectedCollectionId));
     }
     // Category Filter (Only if no collection selected, or we could allow both to intersect)
     else if (selectedCategory !== 'All') {
@@ -173,8 +183,8 @@ export const Shop: React.FC = () => {
                     key={cat}
                     onClick={() => handleCategoryChange(cat)}
                     className={`block text-sm uppercase font-bold tracking-wide transition-all duration-300 ${selectedCategory === cat && !selectedCollectionId
-                        ? 'text-brand-bone translate-x-2'
-                        : 'text-neutral-500 hover:text-white'
+                      ? 'text-brand-bone translate-x-2'
+                      : 'text-neutral-500 hover:text-white'
                       }`}
                   >
                     {cat}
@@ -208,19 +218,19 @@ export const Shop: React.FC = () => {
                 <button
                   onClick={() => setSelectedSize('all')}
                   className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${selectedSize === 'all'
-                      ? 'bg-brand-bone text-brand-black border-brand-bone'
-                      : 'text-neutral-500 border-neutral-800 hover:border-white'
+                    ? 'bg-brand-bone text-brand-black border-brand-bone'
+                    : 'text-neutral-500 border-neutral-800 hover:border-white'
                     }`}
                 >
                   All
                 </button>
-                {SIZES.map(size => (
+                {availableSizes.map(size => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
                     className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${selectedSize === size
-                        ? 'bg-brand-bone text-brand-black border-brand-bone'
-                        : 'text-neutral-500 border-neutral-800 hover:border-white'
+                      ? 'bg-brand-bone text-brand-black border-brand-bone'
+                      : 'text-neutral-500 border-neutral-800 hover:border-white'
                       }`}
                   >
                     {size}
@@ -241,17 +251,16 @@ export const Shop: React.FC = () => {
                 >
                   <span className="text-[10px] font-bold">ALL</span>
                 </button>
-                {COLORS.map(color => (
+                {availableColors.map(color => (
                   <button
-                    key={color.value}
-                    onClick={() => setSelectedColor(color.value)}
-                    className={`w-8 h-8 rounded-full border relative flex items-center justify-center transition-transform hover:scale-110 ${selectedColor === color.value ? 'border-brand-bone scale-110 ring-1 ring-brand-bone ring-offset-2 ring-offset-black' : 'border-transparent'
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    className={`px-3 py-2 text-xs font-bold uppercase border transition-colors ${selectedColor === color
+                      ? 'bg-brand-bone text-brand-black border-brand-bone'
+                      : 'text-neutral-500 border-neutral-800 hover:border-white'
                       }`}
-                    style={{ backgroundColor: color.hex }}
-                    title={color.label}
                   >
-                    {selectedColor === color.value && color.value === 'White' && <Check size={14} className="text-black" />}
-                    {selectedColor === color.value && color.value !== 'White' && <Check size={14} className="text-white" />}
+                    {color}
                   </button>
                 ))}
               </div>
@@ -270,8 +279,8 @@ export const Shop: React.FC = () => {
                     key={opt.value}
                     onClick={() => setSortBy(opt.value as SortOption)}
                     className={`block text-sm uppercase font-bold tracking-wide transition-colors text-left ${sortBy === opt.value
-                        ? 'text-brand-bone'
-                        : 'text-neutral-500 hover:text-white'
+                      ? 'text-brand-bone'
+                      : 'text-neutral-500 hover:text-white'
                       }`}
                   >
                     {opt.label}
@@ -322,8 +331,8 @@ export const Shop: React.FC = () => {
                         key={cat}
                         onClick={() => handleCategoryChange(cat)}
                         className={`p-3 text-xs font-bold uppercase border ${selectedCategory === cat && !selectedCollectionId
-                            ? 'bg-brand-bone text-brand-black border-brand-bone'
-                            : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {cat}
@@ -341,8 +350,8 @@ export const Shop: React.FC = () => {
                         key={range.value}
                         onClick={() => setSelectedPrice(range.value)}
                         className={`block w-full text-left p-3 text-xs font-bold uppercase border ${selectedPrice === range.value
-                            ? 'bg-brand-bone text-brand-black border-brand-bone'
-                            : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {range.label}
@@ -358,19 +367,19 @@ export const Shop: React.FC = () => {
                     <button
                       onClick={() => setSelectedSize('all')}
                       className={`px-4 py-3 text-xs font-bold uppercase border ${selectedSize === 'all'
-                          ? 'bg-brand-bone text-brand-black border-brand-bone'
-                          : 'text-neutral-400 border-brand-dark'
+                        ? 'bg-brand-bone text-brand-black border-brand-bone'
+                        : 'text-neutral-400 border-brand-dark'
                         }`}
                     >
                       All
                     </button>
-                    {SIZES.map(size => (
+                    {availableSizes.map(size => (
                       <button
                         key={size}
                         onClick={() => setSelectedSize(size)}
                         className={`px-4 py-3 text-xs font-bold uppercase border ${selectedSize === size
-                            ? 'bg-brand-bone text-brand-black border-brand-bone'
-                            : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {size}
@@ -390,16 +399,16 @@ export const Shop: React.FC = () => {
                     >
                       <span className="text-[10px] font-bold">ALL</span>
                     </button>
-                    {COLORS.map(color => (
+                    {availableColors.map(color => (
                       <button
-                        key={color.value}
-                        onClick={() => setSelectedColor(color.value)}
-                        className={`w-10 h-10 rounded-full border flex items-center justify-center ${selectedColor === color.value ? 'border-brand-bone ring-1 ring-brand-bone ring-offset-2 ring-offset-black' : 'border-transparent'
+                        key={color}
+                        onClick={() => setSelectedColor(color)}
+                        className={`px-4 py-3 text-xs font-bold uppercase border ${selectedColor === color
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
-                        style={{ backgroundColor: color.hex }}
                       >
-                        {selectedColor === color.value && color.value === 'White' && <Check size={16} className="text-black" />}
-                        {selectedColor === color.value && color.value !== 'White' && <Check size={16} className="text-white" />}
+                        {color}
                       </button>
                     ))}
                   </div>
@@ -418,8 +427,8 @@ export const Shop: React.FC = () => {
                         key={opt.value}
                         onClick={() => setSortBy(opt.value as SortOption)}
                         className={`block w-full text-left p-3 text-xs font-bold uppercase border ${sortBy === opt.value
-                            ? 'bg-brand-bone text-brand-black border-brand-bone'
-                            : 'text-neutral-400 border-brand-dark'
+                          ? 'bg-brand-bone text-brand-black border-brand-bone'
+                          : 'text-neutral-400 border-brand-dark'
                           }`}
                       >
                         {opt.label}
@@ -482,8 +491,8 @@ export const Shop: React.FC = () => {
                     key={page}
                     onClick={() => handlePageChange(page)}
                     className={`w-10 h-10 flex items-center justify-center text-sm font-bold border transition-colors ${currentPage === page
-                        ? 'bg-brand-bone text-brand-black border-brand-bone'
-                        : 'text-neutral-500 border-brand-dark hover:text-white hover:border-white'
+                      ? 'bg-brand-bone text-brand-black border-brand-bone'
+                      : 'text-neutral-500 border-brand-dark hover:text-white hover:border-white'
                       }`}
                   >
                     {page}

@@ -16,8 +16,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     ? product.availableSizes[0]
     : 'M';
 
+  const defaultColor = product.colors && product.colors.length > 0
+    ? product.colors[0]
+    : 'Black';
+
   const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
-  const sizes = ['S', 'M', 'L', 'XL'];
+  const [selectedColor] = useState<string>(defaultColor);
+  const sizes = product.availableSizes && product.availableSizes.length > 0 ? product.availableSizes : ['S', 'M', 'L', 'XL'];
   const inStock = product.inStock !== false; // Default to true if undefined
   const isSale = product.originalPrice && product.originalPrice > product.price;
 
@@ -32,7 +37,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product, selectedSize);
+    addToCart(product, selectedSize, selectedColor);
   };
 
   const isSizeAvailable = (size: string) => {
@@ -91,10 +96,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     }}
                     disabled={!available}
                     className={`w-8 h-8 flex items-center justify-center text-xs border transition-colors relative ${selectedSize === size && available
-                        ? 'bg-brand-bone border-brand-bone text-brand-black'
-                        : available
-                          ? 'border-neutral-700 text-neutral-400 hover:border-white'
-                          : 'border-neutral-800 text-neutral-700 cursor-not-allowed opacity-50'
+                      ? 'bg-brand-bone border-brand-bone text-brand-black'
+                      : available
+                        ? 'border-neutral-700 text-neutral-400 hover:border-white'
+                        : 'border-neutral-800 text-neutral-700 cursor-not-allowed opacity-50'
                       }`}
                   >
                     {size}

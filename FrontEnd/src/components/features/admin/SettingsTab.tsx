@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Check, Globe, Truck, ShieldAlert, Save } from 'lucide-react';
+import { Check, Truck, ShieldAlert, Save } from 'lucide-react';
 import { useShop } from '../../../context/ShopContext';
-import { useAuth } from '../../../context/AuthContext';
 import { StoreSettings } from '../../../types';
 
 export const SettingsTab: React.FC = () => {
@@ -34,43 +33,6 @@ export const SettingsTab: React.FC = () => {
          </div>
 
          <form onSubmit={handleSaveSettings} className="space-y-8">
-            {/* General Info */}
-            <div className="bg-brand-dark/10 border border-brand-dark p-8">
-               <div className="flex items-center gap-3 mb-6 border-b border-brand-dark pb-4">
-                  <Globe size={20} className="text-brand-bone" />
-                  <h3 className="text-white font-bold uppercase tracking-widest text-sm">General Information</h3>
-               </div>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                     <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Store Name</label>
-                     <input
-                        type="text"
-                        value={settingsFormData.storeName}
-                        onChange={(e) => setSettingsFormData({ ...settingsFormData, storeName: e.target.value })}
-                        className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone"
-                     />
-                  </div>
-                  <div>
-                     <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Support Email</label>
-                     <input
-                        type="email"
-                        value={settingsFormData.supportEmail}
-                        onChange={(e) => setSettingsFormData({ ...settingsFormData, supportEmail: e.target.value })}
-                        className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone"
-                     />
-                  </div>
-                  <div>
-                     <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Currency Code</label>
-                     <input
-                        type="text"
-                        value={settingsFormData.currency}
-                        onChange={(e) => setSettingsFormData({ ...settingsFormData, currency: e.target.value })}
-                        className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone uppercase"
-                     />
-                  </div>
-               </div>
-            </div>
-
             {/* Shipping Configuration */}
             <div className="bg-brand-dark/10 border border-brand-dark p-8">
                <div className="flex items-center gap-3 mb-6 border-b border-brand-dark pb-4">

@@ -24,13 +24,19 @@ export const fetchOrders = async () => {
     return response.data;
 };
 
-export const fetchSettings = async () => {
+export const fetchSettings = async (): Promise<any> => {
     const response = await api.get('/settings/');
-    return response.data;
+    return response.data[0]; // settings is a list with one item
 };
 
 export const fetchCategories = async () => {
     const response = await api.get('/categories/');
+    return response.data;
+};
+
+// Fetch users (for admin panel)
+export const fetchUsers = async (): Promise<any[]> => {
+    const response = await api.get('/auth/users/');
     return response.data;
 };
 

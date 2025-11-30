@@ -40,8 +40,8 @@ export const AnalyticsTab: React.FC = () => {
    });
 
    // 1. Revenue
-   const thisMonthRevenue = thisMonthOrders.reduce((acc, o) => acc + o.total, 0);
-   const lastMonthRevenue = lastMonthOrders.reduce((acc, o) => acc + o.total, 0);
+   const thisMonthRevenue = thisMonthOrders.reduce((acc, o) => acc + Number(o.total), 0);
+   const lastMonthRevenue = lastMonthOrders.reduce((acc, o) => acc + Number(o.total), 0);
    const revenueDiff = thisMonthRevenue - lastMonthRevenue;
    const revenueGrowth = lastMonthRevenue === 0 ? (thisMonthRevenue > 0 ? 100 : 0) : ((revenueDiff) / lastMonthRevenue) * 100;
 
@@ -58,9 +58,9 @@ export const AnalyticsTab: React.FC = () => {
    const categoryRevenue: Record<string, number> = {};
    thisMonthOrders.forEach(o => {
       o.items.forEach(item => {
-         const product = products.find(p => p.id === item.productId);
+         const product = products.find(p => String(p.id) === String(item.productId));
          const cat = product ? product.category : 'Unknown';
-         categoryRevenue[cat] = (categoryRevenue[cat] || 0) + (item.price * item.quantity);
+         categoryRevenue[cat] = (categoryRevenue[cat] || 0) + (Number(item.price) * item.quantity);
       });
    });
 
@@ -112,7 +112,7 @@ export const AnalyticsTab: React.FC = () => {
    }, [orders, filterType, customStartDate, customEndDate]);
 
    // --- Filtered Metrics ---
-   const periodRevenue = filteredOrders.reduce((acc, o) => acc + o.total, 0);
+   const periodRevenue = filteredOrders.reduce((acc, o) => acc + Number(o.total), 0);
    const periodOrdersCount = filteredOrders.length;
 
    // --- Top Products (Based on Filtered Data) ---
@@ -121,7 +121,7 @@ export const AnalyticsTab: React.FC = () => {
    filteredOrders.forEach(o => {
       o.items.forEach(item => {
          if (!productSales[item.productId]) {
-            const product = products.find(p => p.id === item.productId);
+            const product = products.find(p => String(p.id) === String(item.productId));
             productSales[item.productId] = {
                name: item.name,
                qty: 0,
@@ -130,7 +130,7 @@ export const AnalyticsTab: React.FC = () => {
             };
          }
          productSales[item.productId].qty += item.quantity;
-         productSales[item.productId].revenue += item.price * item.quantity;
+         productSales[item.productId].revenue += Number(item.price) * item.quantity;
       });
    });
 
@@ -151,7 +151,7 @@ export const AnalyticsTab: React.FC = () => {
             const orderDate = new Date(order.date);
             // Simple check assuming order.date is parseable
             if (orderDate.getMonth() === monthIdx && orderDate.getFullYear() === year) {
-               return acc + order.total;
+               return acc + Number(order.total);
             }
             return acc;
          }, 0);
@@ -228,8 +228,8 @@ export const AnalyticsTab: React.FC = () => {
                   <button
                      onClick={() => setFilterType('weekly')}
                      className={`px-4 py-2 text-xs font-bold uppercase border transition-colors ${filterType === 'weekly'
-                           ? 'bg-brand-bone text-brand-black border-brand-bone'
-                           : 'text-neutral-400 border-brand-dark hover:border-white'
+                        ? 'bg-brand-bone text-brand-black border-brand-bone'
+                        : 'text-neutral-400 border-brand-dark hover:border-white'
                         }`}
                   >
                      Last 7 Days
@@ -237,8 +237,8 @@ export const AnalyticsTab: React.FC = () => {
                   <button
                      onClick={() => setFilterType('monthly')}
                      className={`px-4 py-2 text-xs font-bold uppercase border transition-colors ${filterType === 'monthly'
-                           ? 'bg-brand-bone text-brand-black border-brand-bone'
-                           : 'text-neutral-400 border-brand-dark hover:border-white'
+                        ? 'bg-brand-bone text-brand-black border-brand-bone'
+                        : 'text-neutral-400 border-brand-dark hover:border-white'
                         }`}
                   >
                      Last 30 Days
@@ -246,8 +246,8 @@ export const AnalyticsTab: React.FC = () => {
                   <button
                      onClick={() => setFilterType('all')}
                      className={`px-4 py-2 text-xs font-bold uppercase border transition-colors ${filterType === 'all'
-                           ? 'bg-brand-bone text-brand-black border-brand-bone'
-                           : 'text-neutral-400 border-brand-dark hover:border-white'
+                        ? 'bg-brand-bone text-brand-black border-brand-bone'
+                        : 'text-neutral-400 border-brand-dark hover:border-white'
                         }`}
                   >
                      All Time
@@ -255,8 +255,8 @@ export const AnalyticsTab: React.FC = () => {
                   <button
                      onClick={() => setFilterType('custom')}
                      className={`px-4 py-2 text-xs font-bold uppercase border transition-colors flex items-center gap-2 ${filterType === 'custom'
-                           ? 'bg-brand-bone text-brand-black border-brand-bone'
-                           : 'text-neutral-400 border-brand-dark hover:border-white'
+                        ? 'bg-brand-bone text-brand-black border-brand-bone'
+                        : 'text-neutral-400 border-brand-dark hover:border-white'
                         }`}
                   >
                      <Calendar size={14} /> Custom

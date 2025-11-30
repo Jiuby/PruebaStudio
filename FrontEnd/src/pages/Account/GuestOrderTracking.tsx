@@ -83,8 +83,8 @@ export const GuestOrderTracking: React.FC = () => {
               return (
                 <div key={index} className="flex md:flex-col items-start md:items-center gap-4 flex-1">
                   <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center border-2 ${step.completed
-                      ? 'bg-brand-black border-brand-bone text-brand-bone'
-                      : 'bg-brand-black border-neutral-800 text-neutral-800'
+                    ? 'bg-brand-black border-brand-bone text-brand-bone'
+                    : 'bg-brand-black border-neutral-800 text-neutral-800'
                     }`}>
                     <Icon size={18} />
                   </div>
@@ -119,7 +119,7 @@ export const GuestOrderTracking: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <h4 className="text-white text-xs font-bold uppercase mb-1">{item.name}</h4>
-                    <p className="text-[10px] text-neutral-500 uppercase">Size: {item.size} • Qty: {item.quantity}</p>
+                    <p className="text-[10px] text-neutral-500 uppercase">Size: {item.size} • Color: {item.color} • Qty: {item.quantity}</p>
                     <p className="text-brand-bone font-bold text-sm mt-2">{formatPrice(item.price)}</p>
                   </div>
                 </motion.div>

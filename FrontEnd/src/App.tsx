@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { HashRouter, Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { CartSidebar } from './components/features/cart/CartSidebar';
@@ -53,21 +53,19 @@ const MaintenanceGuard = ({ children }: { children: React.ReactElement }) => {
   const { isAdmin } = useAuth();
   const location = useLocation();
 
-  // 1. Always allow access to Admin Routes
+  // Always allow access to Admin Routes
   if (location.pathname.startsWith('/admin')) {
     return children;
   }
 
-  // 2. If Maintenance Mode is ON and user is NOT an admin, show maintenance page
+  // If Maintenance Mode is ON and user is NOT an admin, show maintenance page
   if (storeSettings.maintenanceMode && !isAdmin) {
     return <MaintenancePage />;
   }
 
-  // 3. Otherwise, render the site normally
+  // Otherwise, render the site normally
   return children;
 };
-
-
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -82,20 +80,24 @@ const AppRoutes = () => {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/shop/:category" element={<Shop />} />
             <Route path="/collections" element={<Collections />} />
+            <Route path="/latest-drops" element={<LatestDrops />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/account/order/:id" element={<OrderDetails />} />
+            <Route path="/track-order" element={<GuestOrderTracking />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
+
+            {/* Info pages */}
             <Route path="/about" element={<About />} />
             <Route path="/shipping" element={<ShippingInfo />} />
             <Route path="/returns" element={<ReturnsExchanges />} />
             <Route path="/size-guide" element={<SizeGuide />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/account/order/:id" element={<OrderDetails />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/track/:id" element={<GuestOrderTracking />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />

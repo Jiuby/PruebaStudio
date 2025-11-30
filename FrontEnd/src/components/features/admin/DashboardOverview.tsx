@@ -27,7 +27,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Metrics Calculations
-  const totalRevenue = orders.reduce((acc, order) => acc + order.total, 0);
+  const totalRevenue = orders.reduce((acc, order) => acc + Number(order.total), 0);
   const totalOrders = orders.length;
   const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
@@ -181,7 +181,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
                   <span className="text-white font-bold text-xs">{formatPrice(order.total)}</span>
                   <span className={`px-2 py-0.5 text-[10px] font-bold uppercase border min-w-[80px] text-center ${order.status === 'Delivered' ? 'border-green-500 text-green-500' :
                     order.status === 'Shipped' ? 'border-blue-500 text-blue-500' :
-                      'border-yellow-500 text-yellow-500'
+                      order.status === 'Cancelled' ? 'border-red-500 text-red-500' :
+                        'border-yellow-500 text-yellow-500'
                     }`}>
                     {order.status}
                   </span>

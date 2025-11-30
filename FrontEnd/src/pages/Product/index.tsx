@@ -21,7 +21,13 @@ export const ProductDetails: React.FC = () => {
     ? product.availableSizes[0]
     : 'M';
 
+  // Initialize selectedColor. If colors exists, pick the first one.
+  const initialColor = product?.colors && product.colors.length > 0
+    ? product.colors[0]
+    : 'Black';
+
   const [selectedSize, setSelectedSize] = useState(initialSize);
+  const [selectedColor, setSelectedColor] = useState(initialColor);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'details' | 'shipping'>('details');
   const [showCopied, setShowCopied] = useState(false);
@@ -36,6 +42,10 @@ export const ProductDetails: React.FC = () => {
       // Reset selected size when product changes if current selected isn't available
       if (product.availableSizes && !product.availableSizes.includes(selectedSize)) {
         setSelectedSize(product.availableSizes[0] || 'M');
+      }
+      // Reset selected color when product changes if current selected isn't available
+      if (product.colors && !product.colors.includes(selectedColor)) {
+        setSelectedColor(product.colors[0] || 'Black');
       }
     }
   }, [id, product]);
@@ -69,7 +79,7 @@ export const ProductDetails: React.FC = () => {
   const handleAddToCart = () => {
     if (!inStock) return;
     for (let i = 0; i < quantity; i++) {
-      addToCart(product, selectedSize);
+      addToCart(product, selectedSize, selectedColor);
     }
   };
 
@@ -225,13 +235,35 @@ export const ProductDetails: React.FC = () => {
             )}
           </div>
 
-          <p className="text-neutral-400 text-sm leading-relaxed mb-8 max-w-md">
-            {product.description} Designed for the urban environment with premium heavyweight materials.
-            Features reinforced stitching and signature Goustty branding. Unisex oversized fit.
-          </p>
+          {product.description && (
+            <p className="text-neutral-400 text-sm leading-relaxed mb-8 max-w-md">
+              {product.description}
+            </p>
+          )}
 
           {/* Selectors */}
           <div className={`space-y-8 mb-8 border-y border-brand-dark py-8 ${!inStock ? 'opacity-50 pointer-events-none' : ''}`}>
+            {/* Color Selection */}
+            {product.colors && product.colors.length > 0 && (
+              <div>
+                <span className="text-xs font-bold uppercase text-white tracking-widest mb-3 block">Select Color</span>
+                <div className="flex flex-wrap gap-3">
+                  {product.colors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setSelectedColor(color)}
+                      className={`px-4 h-12 border flex items-center justify-center text-sm font-bold transition-all ${selectedColor === color
+                        ? 'bg-brand-bone border-brand-bone text-brand-black'
+                        : 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
+                        }`}
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Size */}
             <div>
               <div className="flex justify-between mb-3">
@@ -241,7 +273,7 @@ export const ProductDetails: React.FC = () => {
                 </Link>
               </div>
               <div className="grid grid-cols-4 gap-3">
-                {['S', 'M', 'L', 'XL'].map((size) => {
+                {(product.availableSizes || ['S', 'M', 'L', 'XL']).map((size) => {
                   const available = isSizeAvailable(size);
                   return (
                     <button
@@ -249,10 +281,10 @@ export const ProductDetails: React.FC = () => {
                       onClick={() => { if (available) setSelectedSize(size); }}
                       disabled={!available}
                       className={`h-12 border flex items-center justify-center text-sm font-bold transition-all relative ${selectedSize === size && available
-                          ? 'bg-brand-bone border-brand-bone text-brand-black'
-                          : available
-                            ? 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
-                            : 'border-neutral-900 text-neutral-700 cursor-not-allowed'
+                        ? 'bg-brand-bone border-brand-bone text-brand-black'
+                        : available
+                          ? 'border-neutral-800 text-neutral-400 hover:border-white hover:text-white'
+                          : 'border-neutral-900 text-neutral-700 cursor-not-allowed'
                         }`}
                     >
                       {size}
@@ -293,8 +325,8 @@ export const ProductDetails: React.FC = () => {
             onClick={handleAddToCart}
             disabled={!inStock}
             className={`w-full h-14 font-black uppercase tracking-[0.2em] transition-all mb-8 flex items-center justify-center gap-3 group ${inStock
-                ? 'bg-white text-black hover:bg-brand-bone'
-                : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+              ? 'bg-white text-black hover:bg-brand-bone'
+              : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
               }`}
           >
             {inStock ? (

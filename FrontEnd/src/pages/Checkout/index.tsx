@@ -4,11 +4,11 @@ import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Lock, CreditCard, Truck } from 'lucide-react';
-import { Order, OrderItem } from '../../types';
+import { orderService } from '../../services/order';
 
 export const Checkout: React.FC = () => {
-  const { cart, cartTotal, clearCart, createOrder } = useShop();
-  const { user } = useAuth();
+  const { cart, cartTotal, clearCart, storeSettings, reloadOrders } = useShop();
+  const { user, token } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   // Add a flag to track if the order was just completed successfully
@@ -34,12 +34,12 @@ export const Checkout: React.FC = () => {
       setFormData(prev => ({
         ...prev,
         email: user.email,
-        firstName: user.name.split(' ')[0] || '',
-        lastName: user.name.split(' ').slice(1).join(' ') || '',
-        address: user.address || '',
-        city: user.city || '',
-        zip: user.zip || '',
-        phone: user.phone || ''
+        firstName: user.first_name || '',
+        lastName: user.last_name || '',
+        address: user.profile?.address || '',
+        city: user.profile?.city || '',
+        zip: user.profile?.postal_code || '',
+        phone: user.profile?.phone || ''
       }));
     }
   }, [user]);
@@ -60,62 +60,65 @@ export const Checkout: React.FC = () => {
     }).format(price);
   };
 
+  // Calculate shipping cost
+  const shippingCost = cartTotal >= storeSettings.freeShippingThreshold ? 0 : storeSettings.shippingFlatRate;
+  const orderTotal = cartTotal + shippingCost;
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // 1. Create new order object
-    const newOrderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
-    const orderDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    try {
+      // 1. Prepare order data for API
+      const orderData = {
+        customerName: `${formData.firstName} ${formData.lastName}`,
+        customerEmail: formData.email,
+        total: orderTotal, // Include shipping in total
+        items: cart.map(item => ({
+          productId: item.id,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          quantity: item.quantity,
+          size: item.size
+        })),
+        shippingDetails: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address: formData.address,
+          city: formData.city,
+          zip: formData.zip,
+          phone: formData.phone
+        }
+      };
 
-    const orderItems: OrderItem[] = cart.map(item => ({
-      productId: item.id,
-      name: item.name,
-      image: item.image,
-      price: item.price,
-      quantity: item.quantity,
-      size: item.size
-    }));
+      // 2. Send order to backend API
+      const createdOrder = await orderService.createOrder(orderData, token || undefined);
 
-    const newOrder: Order = {
-      id: newOrderId,
-      date: orderDate,
-      status: 'Processing',
-      total: cartTotal,
-      items: orderItems,
-      customerName: `${formData.firstName} ${formData.lastName}`,
-      customerEmail: formData.email,
-      shippingDetails: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        address: formData.address,
-        city: formData.city,
-        zip: formData.zip,
-        phone: formData.phone
-      }
-    };
+      // 3. Reload orders to ensure the new order is in the context
+      await reloadOrders();
 
-    // 2. Simulate Payment Processing (2 seconds)
-    setTimeout(() => {
-      // CRITICAL: Set this flag to true BEFORE clearing the cart to prevent the useEffect redirect
+      // 4. Set order complete flag and clear cart
       setOrderComplete(true);
+      clearCart();
 
-      createOrder(newOrder); // Save to global context
-      clearCart();           // Empty the cart
-      setLoading(false);
-
-      // 3. REDIRECT to Order Success Page
+      // 5. Redirect to success page
       navigate('/order-success', {
         state: {
-          orderId: newOrderId,
+          orderId: createdOrder.id,
           email: formData.email
         }
       });
-    }, 2000);
+    } catch (error) {
+      console.error('Error creating order:', error);
+      alert('Hubo un error al procesar tu pedido. Por favor intenta de nuevo.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -292,7 +295,7 @@ export const Checkout: React.FC = () => {
                 disabled={loading}
                 className="w-full bg-white text-black h-14 font-black uppercase tracking-[0.2em] hover:bg-brand-bone transition-all mt-8 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Processing...' : `Pay ${formatPrice(cartTotal)}`}
+                {loading ? 'Processing...' : `Pay ${formatPrice(orderTotal)}`}
               </button>
 
             </form>
@@ -311,7 +314,7 @@ export const Checkout: React.FC = () => {
                     </div>
                     <div className="flex-1">
                       <h4 className="text-white text-xs font-bold uppercase leading-tight mb-1">{item.name}</h4>
-                      <p className="text-[10px] text-neutral-500 uppercase">Size: {item.size}</p>
+                      <p className="text-[10px] text-neutral-500 uppercase">Size: {item.size} • Color: {item.color}</p>
                       <div className="flex justify-between items-center mt-2">
                         <span className="text-[10px] text-neutral-400">Qty: {item.quantity}</span>
                         <span className="text-xs text-brand-bone font-bold">{formatPrice(item.price * item.quantity)}</span>
@@ -330,11 +333,25 @@ export const Checkout: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-neutral-400">
                   <span>Shipping</span>
-                  <span>Calculated</span>
+                  <span className="flex items-center gap-2">
+                    {shippingCost === 0 ? (
+                      <>
+                        <span className="text-green-500 font-bold uppercase text-[10px]">Free</span>
+                        <span className="line-through">{formatPrice(storeSettings.shippingFlatRate)}</span>
+                      </>
+                    ) : (
+                      formatPrice(shippingCost)
+                    )}
+                  </span>
                 </div>
+                {cartTotal < storeSettings.freeShippingThreshold && shippingCost > 0 && (
+                  <div className="text-[10px] text-brand-bone uppercase">
+                    Add {formatPrice(storeSettings.freeShippingThreshold - cartTotal)} more for free shipping
+                  </div>
+                )}
                 <div className="flex justify-between text-white font-bold pt-4 border-t border-brand-dark mt-4">
                   <span className="uppercase">Total</span>
-                  <span className="text-xl">{formatPrice(cartTotal)}</span>
+                  <span className="text-xl">{formatPrice(orderTotal)}</span>
                 </div>
               </div>
 

@@ -1,19 +1,18 @@
-
 import React, { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { MOCK_USER } from '../../constants';
 import { useShop } from '../../context/ShopContext';
-import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText, ShoppingBag, X } from 'lucide-react';
 import { motion } from 'framer-motion';
+import jsPDF from 'jspdf';
 
 export const OrderDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart, toggleCart, isCartOpen, orders, products } = useShop(); // Changed: get orders/products from context
-  const order = orders.find(o => o.id === id);
+  const order = orders.find(o => String(o.id) === String(id));
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 120); // Scroll a bit down, not all the way to top
   }, [id]);
 
   if (!order) {
@@ -33,6 +32,106 @@ export const OrderDetails: React.FC = () => {
       currency: 'COP',
       minimumFractionDigits: 0
     }).format(price);
+  };
+
+  const downloadInvoice = () => {
+    const doc = new jsPDF();
+
+    // Calculate totals
+    const itemsSubtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shippingCost = order.total - itemsSubtotal;
+
+    // Company Header
+    doc.setFillColor(26, 26, 26);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(216, 212, 197);
+    doc.setFontSize(28);
+    doc.setFont('helvetica', 'bold');
+    doc.text('GOUSTTY', 20, 25);
+
+    // Invoice Title
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
+    doc.text('INVOICE', 150, 25);
+
+    // Order Info
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Order #${order.id}`, 20, 55);
+    doc.text(`Date: ${order.date}`, 20, 62);
+    doc.text(`Status: ${order.status}`, 20, 69);
+
+    // Customer Info
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('BILL TO:', 20, 85);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(order.customerName, 20, 93);
+    if (order.shippingDetails) {
+      doc.text(order.shippingDetails.address || '', 20, 100);
+      doc.text(`${order.shippingDetails.city || ''} ${order.shippingDetails.zip || ''}`, 20, 107);
+      if (order.shippingDetails.phone) {
+        doc.text(order.shippingDetails.phone, 20, 114);
+      }
+    }
+
+    // Items Table Header
+    let yPos = 135;
+    doc.setFillColor(216, 212, 197);
+    doc.rect(20, yPos - 7, 170, 10, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('ITEM', 25, yPos);
+    doc.text('QTY', 110, yPos);
+    doc.text('PRICE', 135, yPos);
+    doc.text('TOTAL', 165, yPos);
+
+    // Items
+    yPos += 10;
+    doc.setFont('helvetica', 'normal');
+    order.items.forEach((item) => {
+      doc.text(item.name.substring(0, 30), 25, yPos);
+      doc.text(`${item.quantity}`, 110, yPos);
+      doc.text(formatPrice(item.price), 135, yPos);
+      doc.text(formatPrice(item.price * item.quantity), 165, yPos);
+      yPos += 8;
+    });
+
+    // Totals
+    yPos += 10;
+    doc.setDrawColor(200, 200, 200);
+    doc.line(120, yPos, 190, yPos);
+    yPos += 8;
+    doc.text('Subtotal:', 120, yPos);
+    doc.text(formatPrice(itemsSubtotal), 165, yPos);
+    yPos += 7;
+    doc.text('Shipping:', 120, yPos);
+    doc.text(shippingCost === 0 ? 'FREE' : formatPrice(shippingCost), 165, yPos);
+    yPos += 7;
+    doc.text('Taxes:', 120, yPos);
+    doc.text('Included', 165, yPos);
+
+    // Grand Total
+    yPos += 10;
+    doc.setFillColor(26, 26, 26);
+    doc.rect(120, yPos - 7, 70, 12, 'F');
+    doc.setTextColor(216, 212, 197);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('TOTAL:', 125, yPos);
+    doc.text(formatPrice(order.total), 165, yPos);
+
+    // Footer
+    doc.setTextColor(128, 128, 128);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Thank you for your purchase!', 105, 280, { align: 'center' });
+    doc.text('GOUSTTY - Premium Streetwear', 105, 285, { align: 'center' });
+
+    // Save
+    doc.save(`GOUSTTY-Invoice-${order.id}.pdf`);
   };
 
   const handleBuyAgain = () => {
@@ -62,7 +161,22 @@ export const OrderDetails: React.FC = () => {
   };
 
   // Timeline Logic
-  const steps = [
+  const steps = order.status === 'Cancelled' ? [
+    {
+      label: 'Order Placed',
+      icon: Clock,
+      completed: true,
+      date: order.date,
+      info: 'Order received.'
+    },
+    {
+      label: 'Cancelled',
+      icon: X,
+      completed: true,
+      date: order.date,
+      info: 'Order has been cancelled.'
+    }
+  ] : [
     {
       label: 'Order Placed',
       icon: Clock,
@@ -111,7 +225,10 @@ export const OrderDetails: React.FC = () => {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <button className="border border-brand-bone text-brand-bone px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-brand-bone hover:text-black transition-colors flex items-center gap-2">
+            <button
+              onClick={downloadInvoice}
+              className="border border-brand-bone text-brand-bone px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-brand-bone hover:text-black transition-colors flex items-center gap-2"
+            >
               <FileText size={14} /> Download Invoice
             </button>
           </div>
@@ -140,8 +257,8 @@ export const OrderDetails: React.FC = () => {
 
                       {/* Icon Circle */}
                       <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${step.completed
-                          ? 'bg-brand-black border-brand-bone text-brand-bone shadow-[0_0_15px_rgba(216,212,197,0.3)]'
-                          : 'bg-brand-black border-neutral-800 text-neutral-800'
+                        ? 'bg-brand-black border-brand-bone text-brand-bone shadow-[0_0_15px_rgba(216,212,197,0.3)]'
+                        : 'bg-brand-black border-neutral-800 text-neutral-800'
                         }`}>
                         <Icon size={18} />
                       </div>
@@ -221,11 +338,15 @@ export const OrderDetails: React.FC = () => {
                 <MapPin size={14} /> Shipping Address
               </h3>
               <div className="text-sm text-neutral-400 leading-relaxed">
-                <p className="text-white font-bold uppercase">{MOCK_USER.name}</p>
-                <p>{MOCK_USER.address}</p>
-                <p>{MOCK_USER.city}</p>
-                <p>{MOCK_USER.zip}</p>
-                <p className="mt-2">{MOCK_USER.phone}</p>
+                <p className="text-white font-bold uppercase">{order.customerName}</p>
+                {order.shippingDetails && (
+                  <>
+                    <p>{order.shippingDetails.address}</p>
+                    <p>{order.shippingDetails.city}</p>
+                    {order.shippingDetails.zip && <p>{order.shippingDetails.zip}</p>}
+                    {order.shippingDetails.phone && <p className="mt-2">{order.shippingDetails.phone}</p>}
+                  </>
+                )}
               </div>
             </div>
 
@@ -233,22 +354,32 @@ export const OrderDetails: React.FC = () => {
 
             {/* Cost Breakdown */}
             <div className="space-y-3">
-              <div className="flex justify-between text-sm text-neutral-400">
-                <span>Subtotal</span>
-                <span>{formatPrice(order.total)}</span>
-              </div>
-              <div className="flex justify-between text-sm text-neutral-400">
-                <span>Shipping</span>
-                <span>Free</span>
-              </div>
-              <div className="flex justify-between text-sm text-neutral-400">
-                <span>Taxes</span>
-                <span>Calculated</span>
-              </div>
-              <div className="border-t border-brand-dark pt-3 mt-3 flex justify-between items-center">
-                <span className="text-white font-black uppercase italic text-lg">Total</span>
-                <span className="text-brand-bone font-bold text-xl">{formatPrice(order.total)}</span>
-              </div>
+              {(() => {
+                // Calculate actual subtotal from items
+                const itemsSubtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const shippingCost = order.total - itemsSubtotal;
+
+                return (
+                  <>
+                    <div className="flex justify-between text-sm text-neutral-400">
+                      <span>Subtotal</span>
+                      <span>{formatPrice(itemsSubtotal)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-neutral-400">
+                      <span>Shipping</span>
+                      <span>{shippingCost === 0 ? 'Free' : formatPrice(shippingCost)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-neutral-400">
+                      <span>Taxes</span>
+                      <span>Included</span>
+                    </div>
+                    <div className="border-t border-brand-dark pt-3 mt-3 flex justify-between items-center">
+                      <span className="text-white font-black uppercase italic text-lg">Total</span>
+                      <span className="text-brand-bone font-bold text-xl">{formatPrice(order.total)}</span>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             <button

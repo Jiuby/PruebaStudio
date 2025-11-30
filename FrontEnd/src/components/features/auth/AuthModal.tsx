@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
-import { X, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, ArrowRight, AlertCircle, Check } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface AuthModalProps {
@@ -10,23 +11,87 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
-  const { login, register } = useAuth();
+  const { login, register, error: authError } = useAuth();
+  const navigate = useNavigate();
   const [view, setView] = useState<'login' | 'register'>('login');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
-    password: ''
+    password: '',
+    passwordConfirm: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Password validation state
+  const [passwordValidation, setPasswordValidation] = useState({
+    minLength: false,
+    twoNumbers: false
+  });
+
+  // Reset form when switching views
+  useEffect(() => {
+    setFormData({
+      username: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      passwordConfirm: ''
+    });
+    setError(null);
+  }, [view]);
+
+  // Update password validation as user types
+  useEffect(() => {
+    const password = formData.password;
+    setPasswordValidation({
+      minLength: password.length >= 5,
+      twoNumbers: (password.match(/\d/g) || []).length >= 2
+    });
+  }, [formData.password]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (view === 'login') {
-      login(formData.email);
-    } else {
-      register({ name: formData.name, email: formData.email });
+    setError(null);
+    setLoading(true);
+
+    try {
+      if (view === 'login') {
+        await login(formData.email, formData.password);
+        onClose();
+      } else {
+        // Client-side validation for registration
+        if (formData.password !== formData.passwordConfirm) {
+          setError('Las contraseñas no coinciden');
+          setLoading(false);
+          return;
+        }
+
+        if (!passwordValidation.minLength || !passwordValidation.twoNumbers) {
+          setError('La contraseña no cumple con los requisitos');
+          setLoading(false);
+          return;
+        }
+
+        await register({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          password_confirm: formData.passwordConfirm,
+          first_name: formData.firstName,
+          last_name: formData.lastName
+        });
+        onClose();
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ocurrió un error');
+    } finally {
+      setLoading(false);
     }
-    onClose();
   };
 
   return (
@@ -45,7 +110,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-brand-black border border-brand-dark p-8 shadow-2xl"
+            className="relative w-full max-w-md bg-brand-black border border-brand-dark p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
           >
             <button
               onClick={onClose}
@@ -63,19 +128,52 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               </p>
             </div>
 
+            {/* Error Display */}
+            {(error || authError) && (
+              <div className="mb-6 bg-red-900/20 border border-red-900/50 p-3 flex items-start gap-2">
+                <AlertCircle size={18} className="text-red-400 flex-shrink-0 mt-0.5" />
+                <p className="text-red-400 text-xs">{error || authError}</p>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
               {view === 'register' && (
-                <div>
-                  <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
-                    placeholder="ENTER NAME"
-                  />
-                </div>
+                <>
+                  <div>
+                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Username</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.username}
+                      onChange={e => setFormData({ ...formData, username: e.target.value })}
+                      className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
+                      placeholder="ENTER USERNAME"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">First Name</label>
+                      <input
+                        type="text"
+                        value={formData.firstName}
+                        onChange={e => setFormData({ ...formData, firstName: e.target.value })}
+                        className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
+                        placeholder="FIRST"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Last Name</label>
+                      <input
+                        type="text"
+                        value={formData.lastName}
+                        onChange={e => setFormData({ ...formData, lastName: e.target.value })}
+                        className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
+                        placeholder="LAST"
+                      />
+                    </div>
+                  </div>
+                </>
               )}
 
               <div>
@@ -100,13 +198,43 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
                   placeholder="••••••••"
                 />
+
+                {/* Password Requirements - Only show during registration */}
+                {view === 'register' && formData.password && (
+                  <div className="mt-2 space-y-1">
+                    <div className={`flex items - center gap - 2 text - xs ${passwordValidation.minLength ? 'text-green-400' : 'text-neutral-500'} `}>
+                      <Check size={14} />
+                      <span>Mínimo 5 caracteres</span>
+                    </div>
+                    <div className={`flex items - center gap - 2 text - xs ${passwordValidation.twoNumbers ? 'text-green-400' : 'text-neutral-500'} `}>
+                      <Check size={14} />
+                      <span>Al menos 2 números</span>
+                    </div>
+                  </div>
+                )}
               </div>
+
+              {view === 'register' && (
+                <div>
+                  <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Confirm Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={formData.passwordConfirm}
+                    onChange={e => setFormData({ ...formData, passwordConfirm: e.target.value })}
+                    className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
+                    placeholder="••••••••"
+                  />
+                </div>
+              )}
 
               <button
                 type="submit"
-                className="w-full bg-brand-bone text-brand-black font-black uppercase py-4 tracking-widest hover:bg-white transition-colors flex justify-center items-center gap-2"
+                disabled={loading}
+                className="w-full bg-brand-bone text-brand-black font-black uppercase py-4 tracking-widest hover:bg-white transition-colors flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {view === 'login' ? 'Sign In' : 'Create Account'} <ArrowRight size={16} />
+                {loading ? 'Processing...' : (view === 'login' ? 'Sign In' : 'Create Account')}
+                {!loading && <ArrowRight size={16} />}
               </button>
             </form>
 

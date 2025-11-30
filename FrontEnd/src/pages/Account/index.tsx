@@ -1,22 +1,32 @@
 
 import React, { useState } from 'react';
-import { User, Package, LogOut, Truck, ChevronRight } from 'lucide-react';
+import { User, Package, LogOut, Truck, ChevronRight, Check } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { authService } from '../../services/auth';
 
 type Tab = 'profile' | 'orders';
 
 export const Account: React.FC = () => {
-  const { user, logout } = useAuth();
-  const { orders } = useShop(); // Changed: get orders from context
+  const { user, logout, token } = useAuth();
+  const { orders } = useShop();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>('orders');
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
 
   // Local state for editing profile
-  const [profileData, setProfileData] = useState(user || {
-    name: '', email: '', phone: '', address: '', city: '', zip: ''
+  const [profileData, setProfileData] = useState({
+    firstName: user?.first_name || '',
+    lastName: user?.last_name || '',
+    username: user?.username || '',
+    email: user?.email || '',
+    phone: user?.profile?.phone || '',
+    address: user?.profile?.address || '',
+    city: user?.profile?.city || '',
+    postalCode: user?.profile?.postal_code || ''
   });
 
   if (!user) {
@@ -28,6 +38,36 @@ export const Account: React.FC = () => {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleUpdateProfile = async () => {
+    if (!token) {
+      setSaveMessage('Error: Not authenticated. Please log in again.');
+      console.error('No auth token available');
+      return;
+    }
+
+    setSaving(true);
+    setSaveMessage('');
+
+    try {
+      console.log('Updating profile with token:', token.substring(0, 10) + '...');
+      await authService.updateProfileAddress(token, {
+        phone: profileData.phone,
+        address: profileData.address,
+        city: profileData.city,
+        postal_code: profileData.postalCode
+      });
+
+      setSaveMessage('✓ Data updated successfully!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Error updating data. Please try again.';
+      setSaveMessage(errorMessage);
+      console.error('Error updating profile:', error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const formatPrice = (price: number) => {
@@ -60,8 +100,8 @@ export const Account: React.FC = () => {
               <button
                 onClick={() => setActiveTab('orders')}
                 className={`w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'orders'
-                    ? 'bg-brand-bone text-brand-black'
-                    : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
+                  ? 'bg-brand-bone text-brand-black'
+                  : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
                   }`}
               >
                 <Package size={16} /> Recent Orders
@@ -69,8 +109,8 @@ export const Account: React.FC = () => {
               <button
                 onClick={() => setActiveTab('profile')}
                 className={`w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'profile'
-                    ? 'bg-brand-bone text-brand-black'
-                    : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
+                  ? 'bg-brand-bone text-brand-black'
+                  : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
                   }`}
               >
                 <User size={16} /> My Data
@@ -105,8 +145,8 @@ export const Account: React.FC = () => {
                         <div className="flex items-center gap-4 mb-1">
                           <span className="text-brand-bone font-bold text-lg">#{order.id}</span>
                           <span className={`text-[10px] font-bold uppercase px-2 py-0.5 border ${order.status === 'Delivered' ? 'border-green-500 text-green-500' :
-                              order.status === 'Shipped' ? 'border-blue-500 text-blue-500' :
-                                'border-yellow-500 text-yellow-500'
+                            order.status === 'Shipped' ? 'border-blue-500 text-blue-500' :
+                              'border-yellow-500 text-yellow-500'
                             }`}>
                             {order.status}
                           </span>
@@ -127,7 +167,7 @@ export const Account: React.FC = () => {
                           </div>
                           <div className="flex-1">
                             <h4 className="text-white text-sm font-bold uppercase leading-none mb-1">{item.name}</h4>
-                            <p className="text-xs text-neutral-500 uppercase">Size: {item.size} • Qty: {item.quantity}</p>
+                            <p className="text-xs text-neutral-500 uppercase">Size: {item.size} • Color: {item.color} • Qty: {item.quantity}</p>
                           </div>
                         </div>
                       ))}
@@ -165,10 +205,28 @@ export const Account: React.FC = () => {
                     </h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-xs uppercase text-neutral-500 mb-2">Full Name</label>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">Username</label>
                         <input
                           type="text"
-                          value={profileData.name}
+                          value={profileData.username}
+                          readOnly
+                          className="w-full bg-brand-dark/20 border border-brand-dark py-3 px-4 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors cursor-not-allowed opacity-70"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">First Name</label>
+                        <input
+                          type="text"
+                          value={profileData.firstName}
+                          readOnly
+                          className="w-full bg-brand-dark/20 border border-brand-dark py-3 px-4 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors cursor-not-allowed opacity-70"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">Last Name</label>
+                        <input
+                          type="text"
+                          value={profileData.lastName}
                           readOnly
                           className="w-full bg-brand-dark/20 border border-brand-dark py-3 px-4 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors cursor-not-allowed opacity-70"
                         />
@@ -220,11 +278,11 @@ export const Account: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <label className="block text-xs uppercase text-neutral-500 mb-2">Zip Code</label>
+                          <label className="block text-xs uppercase text-neutral-500 mb-2">Postal Code</label>
                           <input
                             type="text"
-                            value={profileData.zip}
-                            onChange={(e) => setProfileData({ ...profileData, zip: e.target.value })}
+                            value={profileData.postalCode}
+                            onChange={(e) => setProfileData({ ...profileData, postalCode: e.target.value })}
                             className="w-full bg-transparent border-b border-brand-dark py-2 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors"
                           />
                         </div>
@@ -233,9 +291,19 @@ export const Account: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end pt-6 border-t border-brand-dark">
-                  <button className="bg-white text-black px-8 py-3 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors">
-                    Update Data
+                <div className="flex justify-end items-center gap-4 pt-6 border-t border-brand-dark">
+                  {saveMessage && (
+                    <span className={`text-sm ${saveMessage.startsWith('✓') ? 'text-green-400' : 'text-red-400'}`}>
+                      {saveMessage}
+                    </span>
+                  )}
+                  <button
+                    onClick={handleUpdateProfile}
+                    disabled={saving}
+                    className="bg-white text-black px-8 py-3 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {saving ? 'Saving...' : 'Update Data'}
+                    {!saving && <Check size={16} />}
                   </button>
                 </div>
               </motion.div>

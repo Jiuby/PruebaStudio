@@ -48,12 +48,12 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 md:pt-24 bg-black/80 backdrop-blur-sm">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-brand-black border border-brand-dark w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col"
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="bg-brand-black border border-brand-dark w-full max-w-4xl max-h-[85vh] overflow-y-auto shadow-2xl flex flex-col"
         >
           {/* Header */}
           <div className="flex justify-between items-center p-8 border-b border-brand-dark bg-brand-dark/10">
@@ -98,18 +98,28 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
 
               {/* Order Totals */}
               <div className="bg-brand-dark/10 border border-brand-dark p-6">
-                <div className="flex justify-between text-sm text-neutral-400 mb-2">
-                  <span>Subtotal</span>
-                  <span>{formatPrice(order.total)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-neutral-400 mb-4">
-                  <span>Shipping</span>
-                  <span>Free</span>
-                </div>
-                <div className="flex justify-between text-white font-bold text-lg pt-4 border-t border-brand-dark">
-                  <span className="uppercase italic">Total</span>
-                  <span className="text-brand-bone">{formatPrice(order.total)}</span>
-                </div>
+                {(() => {
+                  // Calculate actual subtotal from items
+                  const itemsSubtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                  const shippingCost = order.total - itemsSubtotal;
+
+                  return (
+                    <>
+                      <div className="flex justify-between text-sm text-neutral-400 mb-2">
+                        <span>Subtotal</span>
+                        <span>{formatPrice(itemsSubtotal)}</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-neutral-400 mb-4">
+                        <span>Shipping</span>
+                        <span>{shippingCost === 0 ? 'Free' : formatPrice(shippingCost)}</span>
+                      </div>
+                      <div className="flex justify-between text-white font-bold text-lg pt-4 border-t border-brand-dark">
+                        <span className="uppercase italic">Total</span>
+                        <span className="text-brand-bone">{formatPrice(order.total)}</span>
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             </div>
 
@@ -131,6 +141,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                     <option value="Processing">Processing</option>
                     <option value="Shipped">Shipped</option>
                     <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white">
                     ▼
