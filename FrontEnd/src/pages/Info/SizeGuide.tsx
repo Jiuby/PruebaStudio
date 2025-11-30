@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Ruler } from 'lucide-react';
+import VisualGuideImg from '../../static/IMG/VisualGuide.png';
 
 type Category = 'Tees' | 'Hoodies' | 'Bottoms';
 
@@ -49,17 +50,17 @@ export const SizeGuide: React.FC = () => {
 
   return (
     <div className="bg-brand-black min-h-screen pt-24 pb-20 px-4 md:px-8">
-      
+
       {/* Header */}
       <div className="container mx-auto mb-16 text-center">
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-brand-bone uppercase tracking-[0.3em] text-xs font-bold mb-4"
         >
           Measurements
         </motion.p>
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
@@ -70,18 +71,17 @@ export const SizeGuide: React.FC = () => {
       </div>
 
       <div className="container mx-auto max-w-4xl">
-        
+
         {/* Category Tabs */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-8 py-3 text-sm font-bold uppercase tracking-widest border transition-all ${
-                activeCategory === cat
-                  ? 'bg-brand-bone text-brand-black border-brand-bone'
-                  : 'text-neutral-500 border-brand-dark hover:border-white hover:text-white'
-              }`}
+              className={`px-8 py-3 text-sm font-bold uppercase tracking-widest border transition-all ${activeCategory === cat
+                ? 'bg-brand-bone text-brand-black border-brand-bone'
+                : 'text-neutral-500 border-brand-dark hover:border-white hover:text-white'
+                }`}
             >
               {cat}
             </button>
@@ -152,13 +152,10 @@ export const SizeGuide: React.FC = () => {
             </ul>
           </div>
           <div className="bg-brand-dark/30 border border-brand-dark flex items-center justify-center p-8">
-             {/* Placeholder for a measuring diagram image */}
-             <div className="text-center">
-                <p className="text-neutral-500 text-xs uppercase tracking-widest mb-4">Visual Guide</p>
-                <div className="w-32 h-48 border-2 border-dashed border-neutral-700 mx-auto flex items-center justify-center">
-                  <span className="text-neutral-600 text-[10px] uppercase">Silhouette</span>
-                </div>
-             </div>
+            <div className="text-center w-full">
+              <p className="text-neutral-500 text-xs uppercase tracking-widest mb-4">Visual Guide</p>
+              <img src={VisualGuideImg} alt="Visual Measurement Guide" className="w-full h-auto object-contain max-h-[400px]" />
+            </div>
           </div>
         </div>
 
