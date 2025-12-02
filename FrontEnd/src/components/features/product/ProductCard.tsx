@@ -51,7 +51,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <img
           src={product.image}
           alt={product.name}
-          className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0 ${!inStock ? 'opacity-50' : ''}`}
+          className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${!inStock ? 'opacity-50' : ''}`}
         />
 
         {/* New Badge */}
