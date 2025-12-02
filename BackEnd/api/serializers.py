@@ -146,7 +146,11 @@ class ProductSerializer(serializers.ModelSerializer):
             for field in ['colors', 'details', 'sizes', 'availableSizes']:
                 if field in request.data and isinstance(request.data[field], str):
                     try:
-                        validated_data[field] = json.loads(request.data[field])
+                        value = json.loads(request.data[field])
+                        if field == 'availableSizes':
+                            validated_data['available_sizes'] = value
+                        else:
+                            validated_data[field] = value
                     except:
                         pass
         
@@ -181,7 +185,11 @@ class ProductSerializer(serializers.ModelSerializer):
             for field in ['colors', 'details', 'sizes', 'availableSizes']:
                 if field in request.data and isinstance(request.data[field], str):
                     try:
-                        validated_data[field] = json.loads(request.data[field])
+                        value = json.loads(request.data[field])
+                        if field == 'availableSizes':
+                            validated_data['available_sizes'] = value
+                        else:
+                            validated_data[field] = value
                     except:
                         pass
         
