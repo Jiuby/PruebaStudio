@@ -30,7 +30,7 @@ jobs:
 
     - name: Security Scan with Bandit
       run: |
-        bandit -r .
+        bandit -r . --exclude ./venv
 
     - name: Check Dependencies with Safety
       run: |
