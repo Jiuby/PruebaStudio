@@ -118,6 +118,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
               <tr className="border-b border-brand-dark text-neutral-500 text-xs font-bold uppercase tracking-widest">
                 <th className="pb-4 pl-4">Product</th>
                 <th className="pb-4">Category</th>
+                <th className="pb-4">Status</th>
                 <th className="pb-4">Price</th>
                 <th className="pb-4">Stock</th>
                 <th className="pb-4 pr-4 text-right">Actions</th>
@@ -126,7 +127,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
             <tbody>
               {paginatedProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-neutral-500 uppercase tracking-widest text-sm">
+                  <td colSpan={6} className="py-8 text-center text-neutral-500 uppercase tracking-widest text-sm">
                     No products found in this category
                   </td>
                 </tr>
@@ -145,6 +146,23 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
                       </div>
                     </td>
                     <td className="py-4 text-neutral-400 text-sm uppercase">{product.category}</td>
+                    <td className="py-4">
+                      <div className="flex flex-col gap-1 items-start">
+                        {product.isNew && (
+                          <span className="bg-brand-bone text-brand-black text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider">
+                            New
+                          </span>
+                        )}
+                        {product.isOneOfOne && (
+                          <span className="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider">
+                            1/1
+                          </span>
+                        )}
+                        {!product.isNew && !product.isOneOfOne && (
+                          <span className="text-neutral-600 text-[10px] uppercase">-</span>
+                        )}
+                      </div>
+                    </td>
                     <td className="py-4 text-white text-sm font-bold">
                       {product.originalPrice && product.originalPrice > product.price ? (
                         <div className="flex flex-col">
