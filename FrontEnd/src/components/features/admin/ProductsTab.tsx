@@ -146,7 +146,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
                     </td>
                     <td className="py-4 text-neutral-400 text-sm uppercase">{product.category}</td>
                     <td className="py-4 text-white text-sm font-bold">
-                      {product.originalPrice ? (
+                      {product.originalPrice && product.originalPrice > product.price ? (
                         <div className="flex flex-col">
                           <span className="text-red-500">{formatPrice(product.price)}</span>
                           <span className="text-[10px] text-neutral-500 line-through">{formatPrice(product.originalPrice)}</span>

@@ -37,7 +37,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
   const [newDetail, setNewDetail] = useState('');
   const [newColor, setNewColor] = useState('');
   const [newSize, setNewSize] = useState('');
-  const [discountPercentage, setDiscountPercentage] = useState<string>('');
+  const [discountPercentage, setDiscountPercentage] = useState<string>('0');
 
   useEffect(() => {
     if (productToEdit) {
@@ -56,7 +56,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         const discount = Math.round(((productToEdit.originalPrice - productToEdit.price) / productToEdit.originalPrice) * 100);
         setDiscountPercentage(discount.toString());
       } else {
-        setDiscountPercentage('');
+        setDiscountPercentage('0');
       }
     } else {
       setFormData({
@@ -75,7 +75,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         availableSizes: ['S', 'M', 'L', 'XL']
       });
       setImageFiles([null, null, null, null, null]);
-      setDiscountPercentage('');
+      setImageFiles([null, null, null, null, null]);
+      setDiscountPercentage('0');
     }
   }, [productToEdit, isOpen]);
 
@@ -92,13 +93,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
       const newPrice = Math.round(newOriginal * (1 - discount / 100));
       setFormData(prev => ({ ...prev, originalPrice: newOriginal, price: newPrice }));
     } else {
-      setFormData(prev => ({ ...prev, originalPrice: newOriginal }));
-      if (formData.price && formData.price < newOriginal) {
-        const discount = Math.round(((newOriginal - formData.price) / newOriginal) * 100);
-        setDiscountPercentage(discount.toString());
-      } else {
-        setDiscountPercentage('');
-      }
+      setFormData(prev => ({ ...prev, originalPrice: newOriginal, price: newOriginal }));
+      setDiscountPercentage('0');
     }
   };
 
@@ -108,7 +104,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
     const original = formData.originalPrice;
 
     if (original && original > 0) {
-      if (!val) {
+      if (!val || discount === 0) {
         setFormData(prev => ({ ...prev, price: original }));
       } else {
         const newPrice = Math.round(original * (1 - discount / 100));
@@ -125,7 +121,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
       const discount = Math.round(((original - newPrice) / original) * 100);
       setDiscountPercentage(discount.toString());
     } else {
-      setDiscountPercentage('');
+      setDiscountPercentage('0');
     }
   };
 
@@ -280,7 +276,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         colors: formData.colors && formData.colors.length > 0 ? formData.colors : ['Black'],
         sizes: formData.availableSizes && formData.availableSizes.length > 0 ? formData.availableSizes : ['S', 'M', 'L', 'XL'],
         availableSizes: formData.availableSizes && formData.availableSizes.length > 0 ? formData.availableSizes : ['S', 'M', 'L', 'XL'],
-        originalPrice: formData.originalPrice && formData.originalPrice > 0 ? formData.originalPrice : undefined,
+        originalPrice: formData.originalPrice && formData.originalPrice > (formData.price || 0) ? formData.originalPrice : undefined,
       };
 
       // Remove image fields when updating without new images
