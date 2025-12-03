@@ -1,0 +1,34 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'FrontEnd/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'FrontEnd/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./FrontEnd
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+        cache-dependency-path: './FrontEnd/package-lock.json'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build
