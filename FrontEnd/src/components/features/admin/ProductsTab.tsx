@@ -12,7 +12,7 @@ interface ProductsTabProps {
 }
 
 export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoOpenConsumed }) => {
-  const { products, deleteProduct, categories } = useShop();
+  const { products, deleteProduct, categories, patchProduct } = useShop();
 
   const [productFilterCategory, setProductFilterCategory] = useState('All');
   const [productCurrentPage, setProductCurrentPage] = useState(1);
@@ -147,20 +147,25 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
                     </td>
                     <td className="py-4 text-neutral-400 text-sm uppercase">{product.category}</td>
                     <td className="py-4">
-                      <div className="flex flex-col gap-1 items-start">
-                        {product.isNew && (
-                          <span className="bg-brand-bone text-brand-black text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider">
-                            New
-                          </span>
-                        )}
-                        {product.isOneOfOne && (
-                          <span className="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider">
-                            1/1
-                          </span>
-                        )}
-                        {!product.isNew && !product.isOneOfOne && (
-                          <span className="text-neutral-600 text-[10px] uppercase">-</span>
-                        )}
+                      <div className="flex flex-col gap-2 items-start">
+                        <button
+                          onClick={() => patchProduct(product.id, { isNew: !product.isNew })}
+                          className={`text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider border transition-colors ${product.isNew
+                              ? 'bg-brand-bone text-brand-black border-brand-bone hover:bg-transparent hover:text-brand-bone'
+                              : 'bg-transparent text-neutral-500 border-neutral-700 hover:border-brand-bone hover:text-brand-bone'
+                            }`}
+                        >
+                          New
+                        </button>
+                        <button
+                          onClick={() => patchProduct(product.id, { isOneOfOne: !product.isOneOfOne })}
+                          className={`text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider border transition-colors ${product.isOneOfOne
+                              ? 'bg-purple-600 text-white border-purple-600 hover:bg-transparent hover:text-purple-500'
+                              : 'bg-transparent text-neutral-500 border-neutral-700 hover:border-purple-500 hover:text-purple-500'
+                            }`}
+                        >
+                          1/1
+                        </button>
                       </div>
                     </td>
                     <td className="py-4 text-white text-sm font-bold">

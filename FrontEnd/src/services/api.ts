@@ -77,6 +77,11 @@ export const updateProduct = async (id: string, productData: any) => {
     return response.data;
 };
 
+export const patchProduct = async (id: string, productData: any) => {
+    const response = await api.patch(`/products/${id}/`, productData);
+    return response.data;
+};
+
 export const deleteProduct = async (id: string) => {
     await api.delete(`/products/${id}/`);
 };

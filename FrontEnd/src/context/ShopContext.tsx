@@ -34,6 +34,7 @@ interface ShopContextType {
   // Admin Actions
   addProduct: (product: Product | FormData) => void;
   updateProduct: (idOrProduct: string | Product, data?: any) => void;
+  patchProduct: (id: string, data: any) => void;
   deleteProduct: (id: string) => void;
   updateOrderStatus: (id: string, status: Order['status']) => void;
   addCategory: (category: string) => void;
@@ -303,6 +304,16 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const patchProduct = async (id: string, data: any) => {
+    try {
+      const result = await api.patchProduct(id, data);
+      setProducts((prev) => prev.map(p => p.id === id ? { ...p, ...result } : p));
+    } catch (error: any) {
+      console.error("Failed to patch product:", error);
+      alert(`Failed to update product: ${JSON.stringify(error.response?.data, null, 2)}`);
+    }
+  };
+
   const deleteProduct = async (id: string) => {
     try {
       await api.deleteProduct(id);
@@ -470,6 +481,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         reloadOrders,
         addProduct,
         updateProduct,
+        patchProduct,
         deleteProduct,
         updateOrderStatus,
         addCategory,
