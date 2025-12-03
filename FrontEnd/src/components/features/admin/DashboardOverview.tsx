@@ -99,10 +99,10 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
         {/* Revenue */}
         <div className="bg-brand-dark/20 border border-brand-dark p-6 relative overflow-hidden group">
           <div className="flex items-center justify-between mb-4 relative z-10">
-            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Total Revenue</h3>
+            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Monthly Revenue</h3>
             <div className="bg-brand-bone/10 p-2 rounded-full text-brand-bone"><DollarSign size={20} /></div>
           </div>
-          <p className="text-3xl font-black text-white relative z-10">{formatPrice(totalRevenue)}</p>
+          <p className="text-3xl font-black text-white relative z-10">{formatPrice(currentMonthRevenue)}</p>
           <div className="flex items-center gap-2 mt-2 relative z-10">
             <span className={`text-[10px] font-bold uppercase flex items-center gap-1 px-2 py-0.5 rounded-full ${isPositiveChange ? 'text-green-500 bg-green-500/10' : 'text-red-500 bg-red-500/10'}`}>
               {isPositiveChange ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
