@@ -61,6 +61,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         )}
 
+        {/* 1/1 Badge */}
+        {product.isOneOfOne && inStock && (
+          <div className="absolute top-2 left-2 mt-8 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">
+            1/1 Unique
+          </div>
+        )}
+
         {/* Sale Badge */}
         {isSale && inStock && (
           <div className="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">

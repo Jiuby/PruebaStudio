@@ -38,6 +38,7 @@ class Product(models.Model):
     is_new = models.BooleanField(default=True)
     description = models.TextField(blank=True)
     in_stock = models.BooleanField(default=True)
+    is_one_of_one = models.BooleanField(default=False)
     
     # Storing lists as JSON
     details = models.JSONField(default=list, blank=True)

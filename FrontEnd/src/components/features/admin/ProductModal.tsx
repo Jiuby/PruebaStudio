@@ -28,6 +28,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
     images: [],
     inStock: true,
     isNew: false,
+    isOneOfOne: false,
     details: [],
     colors: [],
     availableSizes: []
@@ -70,6 +71,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         images: [],
         inStock: true,
         isNew: false,
+        isOneOfOne: false,
         details: [],
         colors: [],
         availableSizes: ['S', 'M', 'L', 'XL']
@@ -246,6 +248,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
       data.append('description', formData.description || '');
       data.append('inStock', String(formData.inStock));
       data.append('isNew', String(formData.isNew));
+      data.append('isOneOfOne', String(formData.isOneOfOne));
 
       data.append('details', JSON.stringify(formData.details || []));
       data.append('colors', JSON.stringify(formData.colors || []));
@@ -641,6 +644,15 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     className="w-4 h-4 accent-brand-bone"
                   />
                   Mark as New
+                </label>
+                <label className="flex items-center gap-2 text-white text-sm font-bold uppercase cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.isOneOfOne}
+                    onChange={e => setFormData({ ...formData, isOneOfOne: e.target.checked })}
+                    className="w-4 h-4 accent-brand-bone"
+                  />
+                  1/1 Unique Item
                 </label>
               </div>
 

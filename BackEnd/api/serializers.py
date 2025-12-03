@@ -115,6 +115,7 @@ class ProductSerializer(serializers.ModelSerializer):
     originalPrice = serializers.DecimalField(source='original_price', max_digits=10, decimal_places=0, required=False, allow_null=True, write_only=True)
     isNew = serializers.BooleanField(source='is_new', required=False, write_only=True)
     inStock = serializers.BooleanField(source='in_stock', required=False, write_only=True)
+    isOneOfOne = serializers.BooleanField(source='is_one_of_one', required=False, write_only=True)
     availableSizes = serializers.JSONField(source='available_sizes', required=False, write_only=True)
     secondaryImage = serializers.ImageField(source='secondary_image', required=False, allow_null=True)
 
@@ -123,7 +124,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'price', 'originalPrice', 'category', 'collectionId',
             'image', 'secondaryImage', 'images', 'isNew', 'description', 'details',
-            'colors', 'sizes', 'inStock', 'availableSizes'
+            'colors', 'sizes', 'inStock', 'availableSizes', 'isOneOfOne'
         ]
     
     def to_representation(self, instance):
