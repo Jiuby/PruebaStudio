@@ -9,7 +9,7 @@ export const LatestDrops: React.FC = () => {
   const { products } = useShop();
 
   // Show first 4 items as "Latest" from context
-  const latestProducts = products.slice(0, 4);
+  const latestProducts = [...products].sort((a, b) => Number(b.id) - Number(a.id)).slice(0, 4);
 
   return (
     <section className="bg-brand-black py-20 px-4 md:px-8 border-b border-brand-dark">
