@@ -1,4 +1,4 @@
-name: Frontend CI
+name: Frontend Security
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - 'FrontEnd/**'
 
 jobs:
-  build:
+  security:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -32,6 +32,3 @@ jobs:
 
     - name: Security Audit
       run: npm audit --audit-level=high
-
-    - name: Build
-      run: npm run build

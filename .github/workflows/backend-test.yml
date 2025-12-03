@@ -1,4 +1,4 @@
-name: Backend CI
+name: Backend Test
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - 'BackEnd/**'
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,14 +29,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-    - name: Run Migrations (Check Integrity)
-      run: |
-        python manage.py migrate
-
-    - name: Install Test & Security Tools
-      run: |
-        pip install flake8 black bandit safety
+        pip install flake8 black
 
     - name: Lint with flake8
       run: |
@@ -48,14 +41,6 @@ jobs:
     - name: Check Formatting with Black
       run: |
         black --check .
-
-    - name: Security Scan with Bandit
-      run: |
-        bandit -r .
-
-    - name: Check Dependencies with Safety
-      run: |
-        safety check
 
     - name: Run Tests
       run: |
