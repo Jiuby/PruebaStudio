@@ -3,8 +3,6 @@ name: Frontend Security
 on:
   push:
     branches: [ '**' ]
-    paths:
-      - 'FrontEnd/**'
   pull_request:
     branches: [ main ]
     paths:

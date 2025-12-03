@@ -3,8 +3,6 @@ name: Backend Build
 on:
   push:
     branches: [ '**' ]
-    paths:
-      - 'BackEnd/**'
   pull_request:
     branches: [ main ]
     paths:
