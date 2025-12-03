@@ -46,6 +46,14 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
     updateOrderStatus(order.id, e.target.value as Order['status']);
   };
 
+  const getSecureImageUrl = (url: string) => {
+    if (!url) return '';
+    if (url.includes('localhost:8000')) {
+      return url.replace('http://localhost:8000', 'https://jiuby.pythonanywhere.com');
+    }
+    return url;
+  };
+
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 md:pt-24 bg-black/80 backdrop-blur-sm">
@@ -81,7 +89,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                   {order.items.map((item, idx) => (
                     <div key={idx} className="flex gap-4 bg-brand-dark/20 p-4 border border-brand-dark">
                       <div className="w-16 h-20 bg-brand-dark flex-shrink-0">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        <img src={getSecureImageUrl(item.image)} alt={item.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 flex justify-between items-start">
                         <div>
