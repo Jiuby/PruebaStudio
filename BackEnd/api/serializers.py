@@ -296,6 +296,11 @@ class OrderSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         items_data = validated_data.pop('items')
+        
+        # Ensure payment_verified is set (default to False if missing)
+        if 'payment_verified' not in validated_data:
+            validated_data['payment_verified'] = False
+            
         order = Order.objects.create(**validated_data)
         
         # Create order items
