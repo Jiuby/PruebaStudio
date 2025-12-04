@@ -81,6 +81,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Load Data from API
   useEffect(() => {
+    let isMounted = true;
+
     const loadData = async () => {
       setIsLoading(true);
       try {
@@ -91,6 +93,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           api.fetchSettings(),
           api.fetchCategories()
         ]);
+
+        if (!isMounted) return;
 
         setProducts(productsData);
         setCollections(collectionsData);
@@ -107,14 +111,14 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         // 2. Load Protected Data (Orders) - Fail silently if unauthorized
         try {
           const ordersData = await api.fetchOrders();
-          setOrders(ordersData);
+          if (isMounted) setOrders(ordersData);
         } catch (e: any) {
           console.log('Orders not accessible (guest or non-admin)');
           if (e.response && e.response.status === 401) {
             console.log("Session expired during load, logging out...");
-            logout();
+            if (isMounted) logout();
           }
-          setOrders([]);
+          if (isMounted) setOrders([]);
         }
 
         // 3. Load Protected Data (Users) - Fail silently if unauthorized
@@ -148,20 +152,24 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
               joinDate
             };
           });
-          setCustomers(userProfiles);
+          if (isMounted) setCustomers(userProfiles);
         } catch (e) {
           console.log('Users list not accessible (guest or non-admin)');
-          setCustomers([]); // Fallback to empty instead of mock
+          if (isMounted) setCustomers([]); // Fallback to empty instead of mock
         }
 
       } catch (error) {
         console.error("Failed to fetch public data from API:", error);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
     loadData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [authToken]);
 
   // Load user profile if token exists
