@@ -180,55 +180,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                   </div>
                 </div>
 
-                {/* Payment Verification Toggle */}
-                <div className="pt-4 border-t border-black/20">
-                  <h3 className="font-black uppercase italic text-sm mb-3 flex items-center gap-2">
-                    <CheckCircle size={16} /> Payment Verification
-                  </h3>
-                  <label className="flex items-center justify-between cursor-pointer group">
-                    <span className="text-xs font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100 transition-opacity">
-                      {order.paymentVerified ? 'Verified' : 'Pending Verification'}
-                    </span>
-                    <div className="relative">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={order.paymentVerified || false}
-                        onChange={(e) => {
-                          // We need to update the order with the new paymentVerified status
-                          // Since updateOrderStatus only handles status string, we might need to extend it or make a direct API call
-                          // For now, assuming updateOrderStatus can handle partial updates or we use a new method
-                          // Since I can't easily change the context right now without seeing it, I'll assume I need to make a direct API call here or update the context.
-                          // Let's try to update via API directly for this specific field if context doesn't support it, 
-                          // but better to stick to the pattern. 
-                          // The user wants this feature. I should probably check ShopContext.
-                          // For this step, I will add the UI and logic, assuming I might need to update context later.
-                          // Wait, I should check ShopContext first.
-                          // But I'll add the UI first.
-                          // Actually, I'll use a direct API call here for simplicity and then force a refresh or update local state.
-                          // But `updateOrderStatus` might only take the status string.
-                          // I'll implement a local handler for this toggle.
-                          const newStatus = e.target.checked;
-                          // Optimistic update
-                          // updateOrder(order.id, { paymentVerified: newStatus }); // Hypothetical
-                          // I'll leave the onChange empty for a second and check context in next step? No, I should do it right.
-                          // I'll assume I can call an API endpoint to patch the order.
-                          import('../../../services/api').then(api => {
-                            api.default.patch(`/orders/${order.id}/`, { paymentVerified: newStatus })
-                              .then(() => {
-                                // Trigger context refresh or local update
-                                // For now, reload window or rely on context polling if it exists?
-                                // Better: I'll just use the `updateOrderStatus` if I can modify it, but I can't modify context easily without reading it.
-                                // I'll just add the UI and a TODO comment or try to use api directly.
-                                window.location.reload(); // Brute force refresh for admin panel
-                              });
-                          });
-                        }}
-                      />
-                      <div className="w-11 h-6 bg-black/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
-                    </div>
-                  </label>
-                </div>
+
               </div>
 
               {/* Customer Info */}
