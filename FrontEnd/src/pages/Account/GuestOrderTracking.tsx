@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { trackOrder } from '../../services/api';
 import { Order } from '../../types';
-import { ArrowLeft, Package, CheckCircle, Clock, Truck } from 'lucide-react';
+import { ArrowLeft, Package, CheckCircle, Clock, Truck, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const GuestOrderTracking: React.FC = () => {
@@ -75,7 +75,13 @@ export const GuestOrderTracking: React.FC = () => {
 
   const steps = [
     { label: 'Order Placed', icon: Clock, completed: true, date: order.date },
-    { label: 'Processing', icon: Package, completed: true, date: getStepDate(order.date, 1) },
+    {
+      label: 'Payment Verification',
+      icon: ShieldCheck,
+      completed: !!order.paymentVerified,
+      date: order.paymentVerified ? 'Verified' : 'Pending'
+    },
+    { label: 'Processing', icon: Package, completed: !!order.paymentVerified, date: getStepDate(order.date, 1) },
     { label: 'Shipped', icon: Truck, completed: ['Shipped', 'Delivered'].includes(order.status), date: getStepDate(order.date, 3) },
     { label: 'Delivered', icon: CheckCircle, completed: order.status === 'Delivered', date: getStepDate(order.date, 6) },
   ];

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
-import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText, ShoppingBag, X } from 'lucide-react';
+import { ArrowLeft, MapPin, Package, CheckCircle, Clock, Truck, FileText, ShoppingBag, X, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import jsPDF from 'jspdf';
 import api from '../../services/api';
