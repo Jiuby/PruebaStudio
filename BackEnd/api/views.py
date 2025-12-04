@@ -11,6 +11,7 @@ from .serializers import (
     StoreSettingsSerializer, CategorySerializer, UserRegistrationSerializer,
     UserLoginSerializer, UserSerializer, UserProfileSerializer
 )
+from .utils import send_order_confirmation_email
 
 # ===== Authentication Views =====
 
@@ -157,7 +158,14 @@ class OrderViewSet(viewsets.ModelViewSet):
                     profile.save()
             except User.DoesNotExist:
                 # Customer is not a registered user, skip address assignment
+                # Customer is not a registered user, skip address assignment
                 pass
+            
+            # Send confirmation email
+            try:
+                send_order_confirmation_email(order)
+            except Exception as e:
+                print(f"Error sending confirmation email: {e}")
         
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
