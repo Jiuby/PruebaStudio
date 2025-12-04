@@ -162,7 +162,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     loadData();
-  }, []);
+  }, [authToken]);
 
   // Load user profile if token exists
   useEffect(() => {
