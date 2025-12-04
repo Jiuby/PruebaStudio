@@ -128,18 +128,18 @@ export const Checkout: React.FC = () => {
 
           {/* Left Column: Forms */}
           <div className="flex-1">
-            <h1 className="text-4xl font-black uppercase italic text-white mb-8">Checkout</h1>
+            <h1 className="text-4xl font-black uppercase italic text-white mb-8">Finalizar Compra</h1>
 
             <form onSubmit={handleSubmit} className="space-y-12">
 
               {/* Contact Info */}
               <section>
                 <h2 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4 mb-6">
-                  01. Contact Information
+                  01. Información de Contacto
                 </h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs uppercase text-neutral-500 mb-2">Email Address</label>
+                    <label className="block text-xs uppercase text-neutral-500 mb-2">Correo Electrónico</label>
                     <input
                       type="email"
                       name="email"
@@ -151,7 +151,7 @@ export const Checkout: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase text-neutral-500 mb-2">Phone Number</label>
+                    <label className="block text-xs uppercase text-neutral-500 mb-2">Número de Teléfono</label>
                     <input
                       type="tel"
                       name="phone"
@@ -168,12 +168,12 @@ export const Checkout: React.FC = () => {
               {/* Shipping Address */}
               <section>
                 <h2 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4 mb-6">
-                  02. Shipping Details
+                  02. Detalles de Envío
                 </h2>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs uppercase text-neutral-500 mb-2">First Name</label>
+                      <label className="block text-xs uppercase text-neutral-500 mb-2">Nombre</label>
                       <input
                         type="text"
                         name="firstName"
@@ -184,7 +184,7 @@ export const Checkout: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs uppercase text-neutral-500 mb-2">Last Name</label>
+                      <label className="block text-xs uppercase text-neutral-500 mb-2">Apellido</label>
                       <input
                         type="text"
                         name="lastName"
@@ -196,7 +196,7 @@ export const Checkout: React.FC = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs uppercase text-neutral-500 mb-2">Address</label>
+                    <label className="block text-xs uppercase text-neutral-500 mb-2">Dirección</label>
                     <input
                       type="text"
                       name="address"
@@ -204,12 +204,12 @@ export const Checkout: React.FC = () => {
                       value={formData.address}
                       onChange={handleInputChange}
                       className="w-full bg-brand-dark/20 border border-brand-dark py-3 px-4 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors"
-                      placeholder="STREET, APARTMENT, ETC."
+                      placeholder="CALLE, APARTAMENTO, ETC."
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs uppercase text-neutral-500 mb-2">City</label>
+                      <label className="block text-xs uppercase text-neutral-500 mb-2">Ciudad</label>
                       <input
                         type="text"
                         name="city"
@@ -220,7 +220,7 @@ export const Checkout: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs uppercase text-neutral-500 mb-2">Zip Code</label>
+                      <label className="block text-xs uppercase text-neutral-500 mb-2">Código Postal</label>
                       <input
                         type="text"
                         name="zip"
@@ -237,7 +237,7 @@ export const Checkout: React.FC = () => {
               {/* Payment */}
               <section>
                 <h2 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4 mb-6">
-                  03. Payment Method
+                  03. Método de Pago
                 </h2>
 
                 <div className="bg-brand-dark/20 border border-brand-dark p-6 mb-6 flex items-start gap-4">
@@ -258,7 +258,7 @@ export const Checkout: React.FC = () => {
                 disabled={loading}
                 className="w-full bg-white text-black h-14 font-black uppercase tracking-[0.2em] hover:bg-brand-bone transition-all mt-8 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Processing...' : `Confirm Order - ${formatPrice(orderTotal)}`}
+                {loading ? 'Procesando...' : `Confirmar Pedido - ${formatPrice(orderTotal)}`}
               </button>
 
             </form>
@@ -267,7 +267,7 @@ export const Checkout: React.FC = () => {
           {/* Right Column: Summary */}
           <div className="w-full lg:w-96 flex-shrink-0">
             <div className="sticky top-32 bg-brand-dark/10 border border-brand-dark p-6">
-              <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-6">Order Summary</h3>
+              <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-6">Resumen del Pedido</h3>
 
               <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {cart.map((item) => (
@@ -277,9 +277,9 @@ export const Checkout: React.FC = () => {
                     </div>
                     <div className="flex-1">
                       <h4 className="text-white text-xs font-bold uppercase leading-tight mb-1">{item.name}</h4>
-                      <p className="text-[10px] text-neutral-500 uppercase">Size: {item.size} • Color: {item.color}</p>
+                      <p className="text-[10px] text-neutral-500 uppercase">Talla: {item.size} • Color: {item.color}</p>
                       <div className="flex justify-between items-center mt-2">
-                        <span className="text-[10px] text-neutral-400">Qty: {item.quantity}</span>
+                        <span className="text-[10px] text-neutral-400">Cant: {item.quantity}</span>
                         <span className="text-xs text-brand-bone font-bold">{formatPrice(Number(item.price) * Number(item.quantity))}</span>
                       </div>
                     </div>
@@ -295,11 +295,11 @@ export const Checkout: React.FC = () => {
                   <span>{formatPrice(cartTotal)}</span>
                 </div>
                 <div className="flex justify-between text-neutral-400">
-                  <span>Shipping</span>
+                  <span>Envío</span>
                   <span className="flex items-center gap-2">
                     {shippingCost === 0 ? (
                       <>
-                        <span className="text-green-500 font-bold uppercase text-[10px]">Free</span>
+                        <span className="text-green-500 font-bold uppercase text-[10px]">Gratis</span>
                         <span className="line-through">{formatPrice(storeSettings.shippingFlatRate)}</span>
                       </>
                     ) : (
@@ -309,7 +309,7 @@ export const Checkout: React.FC = () => {
                 </div>
                 {cartTotal < storeSettings.freeShippingThreshold && shippingCost > 0 && (
                   <div className="text-[10px] text-brand-bone uppercase">
-                    Add {formatPrice(storeSettings.freeShippingThreshold - cartTotal)} more for free shipping
+                    Agrega {formatPrice(storeSettings.freeShippingThreshold - cartTotal)} más para envío gratis
                   </div>
                 )}
                 <div className="flex justify-between text-white font-bold pt-4 border-t border-brand-dark mt-4">
@@ -320,7 +320,7 @@ export const Checkout: React.FC = () => {
 
               <div className="mt-6 flex items-start gap-2 text-[10px] text-neutral-500 uppercase leading-tight">
                 <Truck size={14} className="flex-shrink-0" />
-                <p>Orders are processed within 24-48 hours. Shipping times vary by location.</p>
+                <p>Los pedidos se procesan en 24-48 horas. Los tiempos de envío varían según la ubicación.</p>
               </div>
 
             </div>

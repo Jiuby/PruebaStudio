@@ -7,23 +7,23 @@ export const Footer: React.FC = () => (
             <div className="col-span-1 md:col-span-2">
                 <h2 className="text-3xl font-black uppercase italic text-white mb-4">Goustty</h2>
                 <p className="text-neutral-500 text-sm max-w-md">
-                    Redefining urban aesthetic through oversized silhouettes and aggressive details.
-                    Born in the streets, made for the world.
+                    Redefiniendo la estética urbana a través de siluetas oversize y detalles agresivos.
+                    Nacido en las calles, hecho para el mundo.
                 </p>
             </div>
             <div>
-                <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-4">Help</h3>
+                <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-4">Ayuda</h3>
                 <ul className="space-y-2 text-neutral-500 text-sm">
-                    <li><Link to="/shipping" className="hover:text-brand-bone">Shipping Info</Link></li>
-                    <li><Link to="/returns" className="hover:text-brand-bone">Returns & Exchanges</Link></li>
-                    <li><Link to="/size-guide" className="hover:text-brand-bone">Size Guide</Link></li>
-                    <li><Link to="/contact" className="hover:text-brand-bone">Contact Us</Link></li>
-                    <li><Link to="/faq" className="hover:text-brand-bone">FAQ</Link></li>
+                    <li><Link to="/shipping" className="hover:text-brand-bone">Envíos</Link></li>
+                    <li><Link to="/returns" className="hover:text-brand-bone">Cambios y Devoluciones</Link></li>
+                    <li><Link to="/size-guide" className="hover:text-brand-bone">Guía de Tallas</Link></li>
+                    <li><Link to="/contact" className="hover:text-brand-bone">Contáctanos</Link></li>
+                    <li><Link to="/faq" className="hover:text-brand-bone">Preguntas Frecuentes</Link></li>
                     {/* Admin Link added for development */}
                 </ul>
             </div>
             <div>
-                <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-4">Social</h3>
+                <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-4">Redes</h3>
                 <ul className="space-y-2 text-neutral-500 text-sm">
                     <li><a href="#" className="hover:text-brand-bone">Instagram</a></li>
                     <li><a href="#" className="hover:text-brand-bone">TikTok</a></li>
@@ -31,7 +31,7 @@ export const Footer: React.FC = () => (
             </div>
         </div>
         <div className="container mx-auto mt-12 pt-8 border-t border-brand-dark flex flex-col md:flex-row justify-between items-center text-xs text-neutral-600">
-            <p>&copy; 2024 GOUSTTY. All rights reserved.</p>
+            <p>&copy; 2024 GOUSTTY. Todos los derechos reservados.</p>
             <p className="mt-2 md:mt-0">Cúcuta, Colombia.</p>
         </div>
     </footer>

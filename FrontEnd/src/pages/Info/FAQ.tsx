@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, HelpCircle } from 'lucide-react';
 
-type Category = 'General' | 'Shipping' | 'Returns' | 'Product';
+type Category = 'General' | 'Envíos' | 'Devoluciones' | 'Producto';
 
 interface Question {
   q: string;
@@ -18,63 +18,63 @@ export const FAQ: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<Category>('General');
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const categories: Category[] = ['General', 'Shipping', 'Returns', 'Product'];
+  const categories: Category[] = ['General', 'Envíos', 'Devoluciones', 'Producto'];
 
   const faqData: Record<Category, Question[]> = {
     General: [
       {
-        q: 'Where is GOUSTTY located?',
-        a: 'We are based in Cúcuta, Colombia. All our designs are conceptualized here, and we manufacture locally to ensure the highest quality control.'
+        q: '¿Dónde está ubicado GOUSTTY?',
+        a: 'Estamos ubicados en Cúcuta, Colombia. Todos nuestros diseños se conceptualizan aquí y fabricamos localmente para asegurar el más alto control de calidad.'
       },
       {
-        q: 'Do you have a physical store?',
-        a: 'Currently, we operate exclusively online. However, we occasionally host pop-up shops in major cities across Colombia. Follow our Instagram for updates.'
+        q: '¿Tienen tienda física?',
+        a: 'Actualmente, operamos exclusivamente en línea. Sin embargo, ocasionalmente organizamos tiendas pop-up en las principales ciudades de Colombia. Sigue nuestro Instagram para actualizaciones.'
       },
       {
-        q: 'How can I contact customer support?',
-        a: 'You can reach us via our Contact page or by emailing support@goustty.com. We typically respond within 24-48 hours.'
+        q: '¿Cómo puedo contactar a soporte al cliente?',
+        a: 'Puedes contactarnos a través de nuestra página de Contacto o enviando un correo a support@goustty.com. Normalmente respondemos en 24-48 horas.'
       }
     ],
-    Shipping: [
+    Envíos: [
       {
-        q: 'How long does shipping take?',
-        a: 'Local deliveries in Cúcuta are same-day or next-day. National shipments typically take 2-4 business days. International orders range from 5-10 business days via DHL.'
+        q: '¿Cuánto tarda el envío?',
+        a: 'Las entregas locales en Cúcuta son el mismo día o al día siguiente. Los envíos nacionales suelen tardar de 2 a 4 días hábiles. Los pedidos internacionales varían de 5 a 10 días hábiles vía DHL.'
       },
       {
-        q: 'Do you ship internationally?',
-        a: 'Yes, we ship worldwide. Shipping costs are calculated at checkout based on your location and the weight of your order.'
+        q: '¿Hacen envíos internacionales?',
+        a: 'Sí, enviamos a todo el mundo. Los costos de envío se calculan al finalizar la compra según tu ubicación y el peso de tu pedido.'
       },
       {
-        q: 'How can I track my order?',
-        a: 'Once your order ships, you will receive an email with a tracking number. You can also view the status in your Account Dashboard.'
+        q: '¿Cómo puedo rastrear mi pedido?',
+        a: 'Una vez que se envíe tu pedido, recibirás un correo electrónico con un número de rastreo. También puedes ver el estado en tu Panel de Cuenta.'
       }
     ],
-    Returns: [
+    Devoluciones: [
       {
-        q: 'What is your return policy?',
-        a: 'We accept returns within 30 days of delivery. Items must be unworn, unwashed, and have original tags attached. Final sale items cannot be returned.'
+        q: '¿Cuál es su política de devolución?',
+        a: 'Aceptamos devoluciones dentro de los 30 días posteriores a la entrega. Los artículos deben estar sin usar, sin lavar y con las etiquetas originales. Los artículos de venta final no se pueden devolver.'
       },
       {
-        q: 'Do you offer free returns?',
-        a: 'Returns are free for orders within Colombia. International customers are responsible for return shipping costs unless the item is defective.'
+        q: '¿Ofrecen devoluciones gratuitas?',
+        a: 'Las devoluciones son gratuitas para pedidos dentro de Colombia. Los clientes internacionales son responsables de los costos de envío de devolución a menos que el artículo esté defectuoso.'
       },
       {
-        q: 'How long do refunds take?',
-        a: 'Once we receive and inspect your return, refunds are processed to your original payment method within 5-7 business days.'
+        q: '¿Cuánto tardan los reembolsos?',
+        a: 'Una vez que recibamos e inspeccionemos tu devolución, los reembolsos se procesan a tu método de pago original dentro de 5-7 días hábiles.'
       }
     ],
-    Product: [
+    Producto: [
       {
-        q: 'How do your clothes fit?',
-        a: 'Most of our items are designed with an oversized, streetwear fit. If you prefer a more standard fit, we recommend sizing down. Please check our Size Guide for specific measurements.'
+        q: '¿Cómo es el ajuste de su ropa?',
+        a: 'La mayoría de nuestros artículos están diseñados con un ajuste oversize estilo streetwear. Si prefieres un ajuste más estándar, recomendamos elegir una talla menos. Por favor, consulta nuestra Guía de Tallas para medidas específicas.'
       },
       {
-        q: 'How should I wash my GOUSTTY items?',
-        a: 'To preserve the quality of the heavy cotton and prints, we recommend washing in cold water inside out and hanging to dry. Do not iron directly on prints.'
+        q: '¿Cómo debo lavar mis prendas GOUSTTY?',
+        a: 'Para preservar la calidad del algodón pesado y los estampados, recomendamos lavar en agua fría al revés y secar colgado. No planchar directamente sobre los estampados.'
       },
       {
-        q: 'Will you restock sold-out items?',
-        a: 'Some items are part of limited drops and will not be restocked. However, core collection items are restocked periodically. Sign up for our newsletter to be notified.'
+        q: '¿Repondrán artículos agotados?',
+        a: 'Algunos artículos son parte de lanzamientos limitados y no se repondrán. Sin embargo, los artículos de la colección principal se reponen periódicamente. Suscríbete a nuestro boletín para recibir notificaciones.'
       }
     ]
   };
@@ -85,39 +85,38 @@ export const FAQ: React.FC = () => {
 
   return (
     <div className="bg-brand-black min-h-screen pt-24 pb-20 px-4 md:px-8">
-      
+
       {/* Header */}
       <div className="container mx-auto mb-16 text-center">
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-brand-bone uppercase tracking-[0.3em] text-xs font-bold mb-4"
         >
-          Help Center
+          Centro de Ayuda
         </motion.p>
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
           className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter"
         >
-          Common Questions
+          Preguntas Comunes
         </motion.h1>
       </div>
 
       <div className="container mx-auto max-w-4xl">
-        
+
         {/* Categories */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => { setActiveCategory(cat); setOpenIndex(null); }}
-              className={`px-6 py-2 text-xs font-bold uppercase tracking-widest border transition-all ${
-                activeCategory === cat
-                  ? 'bg-brand-bone text-brand-black border-brand-bone'
-                  : 'text-neutral-500 border-brand-dark hover:border-white hover:text-white'
-              }`}
+              className={`px-6 py-2 text-xs font-bold uppercase tracking-widest border transition-all ${activeCategory === cat
+                ? 'bg-brand-bone text-brand-black border-brand-bone'
+                : 'text-neutral-500 border-brand-dark hover:border-white hover:text-white'
+                }`}
             >
               {cat}
             </button>
@@ -133,24 +132,23 @@ export const FAQ: React.FC = () => {
           className="space-y-4"
         >
           {faqData[activeCategory].map((item, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="bg-brand-dark/20 border border-brand-dark overflow-hidden transition-colors hover:border-neutral-700"
             >
               <button
                 onClick={() => toggleQuestion(index)}
                 className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
               >
-                <span className={`text-sm md:text-base font-bold uppercase tracking-wide pr-4 ${
-                  openIndex === index ? 'text-brand-bone' : 'text-white'
-                }`}>
+                <span className={`text-sm md:text-base font-bold uppercase tracking-wide pr-4 ${openIndex === index ? 'text-brand-bone' : 'text-white'
+                  }`}>
                   {item.q}
                 </span>
                 <span className={`flex-shrink-0 transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-brand-bone' : 'text-neutral-500'}`}>
                   {openIndex === index ? <Minus size={18} /> : <Plus size={18} />}
                 </span>
               </button>
-              
+
               <AnimatePresence>
                 {openIndex === index && (
                   <motion.div
@@ -172,10 +170,10 @@ export const FAQ: React.FC = () => {
         {/* Still Need Help */}
         <div className="mt-20 border-t border-brand-dark pt-12 text-center">
           <HelpCircle size={32} className="text-brand-bone mx-auto mb-4" />
-          <h3 className="text-white font-bold uppercase tracking-widest text-lg mb-2">Still have questions?</h3>
-          <p className="text-neutral-500 text-sm mb-6">Can't find the answer you're looking for? Please chat to our friendly team.</p>
+          <h3 className="text-white font-bold uppercase tracking-widest text-lg mb-2">¿Aún tienes preguntas?</h3>
+          <p className="text-neutral-500 text-sm mb-6">¿No encuentras la respuesta que buscas? Por favor chatea con nuestro amable equipo.</p>
           <a href="/#/contact" className="inline-block bg-white text-black px-8 py-3 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors">
-            Get in Touch
+            Contáctanos
           </a>
         </div>
 

@@ -1,21 +1,21 @@
 import React from 'react';
 
 const MARQUEE_CONTENT = [
-  "Worldwide Shipping",
+  "Envíos a Todo el Mundo",
   "♦",
-  "Unisex Collection",
+  "Colección Unisex",
   "♦",
-  "Premium Fabrics",
+  "Telas Premium",
   "♦",
-  "New Drop Available",
+  "Nuevo Lanzamiento Disponible",
   "♦",
-  "Worldwide Shipping",
+  "Envíos a Todo el Mundo",
   "♦",
-  "Unisex Collection",
+  "Colección Unisex",
   "♦",
-  "Premium Fabrics",
+  "Telas Premium",
   "♦",
-  "New Drop Available",
+  "Nuevo Lanzamiento Disponible",
   "♦"
 ];
 

@@ -32,19 +32,19 @@ export const OrdersTab: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <h2 className="text-3xl font-black uppercase italic text-white">Order Management</h2>
+      <h2 className="text-3xl font-black uppercase italic text-white">Gestión de Pedidos</h2>
 
       <div className="bg-brand-dark/10 border border-brand-dark p-6">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-brand-dark text-neutral-500 text-xs font-bold uppercase tracking-widest">
-                <th className="pb-4 pl-4">Order ID</th>
-                <th className="pb-4">Date</th>
-                <th className="pb-4">Customer</th>
+                <th className="pb-4 pl-4">ID de Pedido</th>
+                <th className="pb-4">Fecha</th>
+                <th className="pb-4">Cliente</th>
                 <th className="pb-4">Total</th>
-                <th className="pb-4">Status</th>
-                <th className="pb-4 pr-4 text-right">Actions</th>
+                <th className="pb-4">Estado</th>
+                <th className="pb-4 pr-4 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -55,7 +55,7 @@ export const OrdersTab: React.FC = () => {
                   <td className="py-4 text-white text-sm">
                     {order.customerEmail ? (
                       <span title={order.customerEmail}>{order.customerEmail}</span>
-                    ) : 'Guest User'}
+                    ) : 'Usuario Invitado'}
                   </td>
                   <td className="py-4 text-white font-bold text-sm">{formatPrice(order.total)}</td>
                   <td className="py-4">
@@ -74,16 +74,16 @@ export const OrdersTab: React.FC = () => {
                         onChange={(e) => updateOrderStatus(order.id, e.target.value as Order['status'])}
                         className="bg-brand-black border border-brand-dark text-white text-[10px] p-2 uppercase font-bold focus:border-brand-bone outline-none hidden md:block"
                       >
-                        <option value="Processing">Processing</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
+                        <option value="Processing">Procesando</option>
+                        <option value="Shipped">Enviado</option>
+                        <option value="Delivered">Entregado</option>
+                        <option value="Cancelled">Cancelado</option>
                       </select>
 
                       <button
                         onClick={() => setSelectedOrder(order)}
                         className="p-2 bg-brand-bone text-brand-black hover:bg-white transition-colors rounded-sm"
-                        title="View Details"
+                        title="Ver Detalles"
                       >
                         <Eye size={16} />
                       </button>
@@ -106,7 +106,7 @@ export const OrdersTab: React.FC = () => {
               <ChevronLeft size={16} />
             </button>
             <span className="text-xs font-bold text-neutral-500 uppercase">
-              Page {orderCurrentPage} of {totalOrderPages}
+              Página {orderCurrentPage} de {totalOrderPages}
             </span>
             <button
               onClick={() => handleOrderPageChange(orderCurrentPage + 1)}

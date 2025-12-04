@@ -44,7 +44,7 @@ export const CartSidebar: React.FC = () => {
             className="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-brand-black border-l border-brand-dark z-50 flex flex-col shadow-2xl"
           >
             <div className="flex items-center justify-between p-6 border-b border-brand-dark">
-              <h2 className="text-xl font-bold uppercase tracking-wider text-brand-light">Your Bag ({cart.length})</h2>
+              <h2 className="text-xl font-bold uppercase tracking-wider text-brand-light">Tu Bolsa ({cart.length})</h2>
               <button onClick={toggleCart} className="text-brand-bone hover:text-white transition-colors">
                 <X size={24} />
               </button>
@@ -54,7 +54,7 @@ export const CartSidebar: React.FC = () => {
               {cart.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-neutral-500 space-y-4">
                   <ShoppingBag size={48} strokeWidth={1} />
-                  <p className="uppercase tracking-widest text-sm">Your bag is empty</p>
+                  <p className="uppercase tracking-widest text-sm">Tu bolsa está vacía</p>
                 </div>
               ) : (
                 cart.map((item) => (
@@ -65,7 +65,7 @@ export const CartSidebar: React.FC = () => {
                     <div className="flex-1 flex flex-col justify-between py-1">
                       <div>
                         <h3 className="font-bold text-sm uppercase text-brand-light leading-tight">{item.name}</h3>
-                        <p className="text-xs text-brand-bone mt-1 uppercase">Size: {item.size}</p>
+                        <p className="text-xs text-brand-bone mt-1 uppercase">Talla: {item.size}</p>
                         <p className="text-xs text-brand-bone uppercase">Color: {item.color}</p>
                         <div className="flex items-center gap-3 mt-2">
                           <div className="flex items-center border border-brand-dark bg-brand-black/50">
@@ -91,7 +91,7 @@ export const CartSidebar: React.FC = () => {
                         onClick={() => removeFromCart(item.id, item.size)}
                         className="text-xs text-neutral-500 hover:text-red-500 uppercase tracking-wider text-left transition-colors w-fit"
                       >
-                        Remove
+                        Eliminar
                       </button>
                     </div>
                   </div>
@@ -105,12 +105,12 @@ export const CartSidebar: React.FC = () => {
                   <span className="uppercase text-sm tracking-widest text-neutral-400">Subtotal</span>
                   <span className="font-bold text-xl">{formatPrice(cartTotal)}</span>
                 </div>
-                <p className="text-xs text-neutral-500 text-center">Shipping calculated at checkout.</p>
+                <p className="text-xs text-neutral-500 text-center">Envío calculado al pagar.</p>
                 <button
                   onClick={handleCheckout}
                   className="w-full bg-brand-bone text-brand-black py-4 font-bold uppercase tracking-widest hover:bg-white transition-colors"
                 >
-                  Checkout
+                  Pagar
                 </button>
               </div>
             )}

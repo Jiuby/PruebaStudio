@@ -37,7 +37,7 @@ export const Hero: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-6xl md:text-8xl lg:text-9xl font-black text-white uppercase italic tracking-tighter mb-6 leading-none"
         >
-          Urban<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-bone to-white">Chaos</span>
+          Caos<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-bone to-white">Urbano</span>
         </motion.h1>
 
         <motion.div
@@ -49,7 +49,7 @@ export const Hero: React.FC = () => {
             to="/shop"
             className="group relative px-8 py-4 bg-transparent border border-white text-white font-bold uppercase tracking-widest overflow-hidden hover:text-brand-black transition-colors duration-300 inline-block"
           >
-            <span className="relative z-10">Shop Collection</span>
+            <span className="relative z-10">Ver Colección</span>
             <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-in-out"></div>
           </Link>
         </motion.div>
@@ -57,7 +57,7 @@ export const Hero: React.FC = () => {
 
       <div className="absolute bottom-8 right-8 hidden md:block">
         <p className="text-neutral-500 text-xs uppercase tracking-widest text-right">
-          Scroll to Explore<br />
+          Desliza para Explorar<br />
           ▼
         </p>
       </div>

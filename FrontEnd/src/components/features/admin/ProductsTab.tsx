@@ -34,7 +34,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
   }, [autoOpenModal, onAutoOpenConsumed]);
 
   const handleDeleteProduct = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
       deleteProduct(id);
     }
   };
@@ -70,8 +70,8 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-black uppercase italic text-white mb-2">Product Management</h2>
-          <p className="text-neutral-500 text-xs uppercase tracking-widest">{filteredProducts.length} Products Found</p>
+          <h2 className="text-3xl font-black uppercase italic text-white mb-2">Gestión de Productos</h2>
+          <p className="text-neutral-500 text-xs uppercase tracking-widest">{filteredProducts.length} Productos Encontrados</p>
         </div>
 
         <div className="flex gap-4">
@@ -82,7 +82,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
               onChange={(e) => { setProductFilterCategory(e.target.value); setProductCurrentPage(1); }}
               className="bg-brand-dark/30 border border-brand-dark text-white text-xs font-bold uppercase p-3 pr-8 focus:outline-none focus:border-brand-bone appearance-none cursor-pointer min-w-[150px] h-full"
             >
-              <option value="All">All Categories</option>
+              <option value="All">Todas las Categorías</option>
               {categories.map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
@@ -96,7 +96,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
             onClick={() => setIsCategoryModalOpen(true)}
             className="bg-brand-dark border border-brand-dark text-white px-4 py-3 font-bold uppercase tracking-widest text-xs hover:bg-brand-dark/50 transition-colors flex items-center gap-2"
           >
-            <Layers size={16} /> Categories
+            <Layers size={16} /> Categorías
           </button>
 
           <button
@@ -106,7 +106,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
             }}
             className="bg-brand-bone text-brand-black px-6 py-3 font-bold uppercase tracking-widest text-xs hover:bg-white transition-colors flex items-center gap-2"
           >
-            <Plus size={16} /> Add Product
+            <Plus size={16} /> Agregar Producto
           </button>
         </div>
       </div>
@@ -116,19 +116,19 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-brand-dark text-neutral-500 text-xs font-bold uppercase tracking-widest">
-                <th className="pb-4 pl-4">Product</th>
-                <th className="pb-4">Category</th>
-                <th className="pb-4">Status</th>
-                <th className="pb-4">Price</th>
+                <th className="pb-4 pl-4">Producto</th>
+                <th className="pb-4">Categoría</th>
+                <th className="pb-4">Estado</th>
+                <th className="pb-4">Precio</th>
                 <th className="pb-4">Stock</th>
-                <th className="pb-4 pr-4 text-right">Actions</th>
+                <th className="pb-4 pr-4 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {paginatedProducts.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-neutral-500 uppercase tracking-widest text-sm">
-                    No products found in this category
+                    No se encontraron productos en esta categoría
                   </td>
                 </tr>
               ) : (
@@ -151,17 +151,17 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
                         <button
                           onClick={() => patchProduct(product.id, { isNew: !product.isNew })}
                           className={`text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider border transition-colors ${product.isNew
-                              ? 'bg-brand-bone text-brand-black border-brand-bone hover:bg-transparent hover:text-brand-bone'
-                              : 'bg-transparent text-neutral-500 border-neutral-700 hover:border-brand-bone hover:text-brand-bone'
+                            ? 'bg-brand-bone text-brand-black border-brand-bone hover:bg-transparent hover:text-brand-bone'
+                            : 'bg-transparent text-neutral-500 border-neutral-700 hover:border-brand-bone hover:text-brand-bone'
                             }`}
                         >
-                          New
+                          Nuevo
                         </button>
                         <button
                           onClick={() => patchProduct(product.id, { isOneOfOne: !product.isOneOfOne })}
                           className={`text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider border transition-colors ${product.isOneOfOne
-                              ? 'bg-purple-600 text-white border-purple-600 hover:bg-transparent hover:text-purple-500'
-                              : 'bg-transparent text-neutral-500 border-neutral-700 hover:border-purple-500 hover:text-purple-500'
+                            ? 'bg-purple-600 text-white border-purple-600 hover:bg-transparent hover:text-purple-500'
+                            : 'bg-transparent text-neutral-500 border-neutral-700 hover:border-purple-500 hover:text-purple-500'
                             }`}
                         >
                           1/1
@@ -180,9 +180,9 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
                     </td>
                     <td className="py-4">
                       {product.inStock ? (
-                        <span className="text-green-500 text-[10px] font-bold uppercase flex items-center gap-1"><Check size={12} /> In Stock</span>
+                        <span className="text-green-500 text-[10px] font-bold uppercase flex items-center gap-1"><Check size={12} /> En Stock</span>
                       ) : (
-                        <span className="text-red-500 text-[10px] font-bold uppercase flex items-center gap-1"><X size={12} /> Sold Out</span>
+                        <span className="text-red-500 text-[10px] font-bold uppercase flex items-center gap-1"><X size={12} /> Agotado</span>
                       )}
                     </td>
                     <td className="py-4 pr-4 text-right">
@@ -217,7 +217,7 @@ export const ProductsTab: React.FC<ProductsTabProps> = ({ autoOpenModal, onAutoO
               <ChevronLeft size={16} />
             </button>
             <span className="text-xs font-bold text-neutral-500 uppercase">
-              Page {productCurrentPage} of {totalPages}
+              Página {productCurrentPage} de {totalPages}
             </span>
             <button
               onClick={() => handlePageChange(productCurrentPage + 1)}

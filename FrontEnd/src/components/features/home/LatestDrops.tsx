@@ -17,17 +17,17 @@ export const LatestDrops: React.FC = () => {
         <div className="flex justify-between items-end mb-12">
           <div>
             <h2 className="text-4xl md:text-6xl font-black uppercase text-white italic tracking-tighter mb-2">
-              Latest Drops
+              Últimos lanzamientos
             </h2>
             <p className="text-neutral-500 uppercase tracking-widest text-xs">
-              Fresh from the lab
+              Fresco del laboratorio
             </p>
           </div>
           <Link
             to="/shop"
             className="hidden md:flex items-center gap-2 text-white font-bold uppercase text-xs tracking-widest hover:text-brand-bone transition-colors"
           >
-            View All <ArrowRight size={16} />
+            Ver Todo <ArrowRight size={16} />
           </Link>
         </div>
 
@@ -42,7 +42,7 @@ export const LatestDrops: React.FC = () => {
             to="/shop"
             className="inline-flex items-center gap-2 text-white font-bold uppercase text-xs tracking-widest border border-brand-dark px-8 py-4 hover:bg-brand-bone hover:text-black transition-colors"
           >
-            View All Drops <ArrowRight size={16} />
+            Ver Todos los Lanzamientos <ArrowRight size={16} />
           </Link>
         </div>
       </div>

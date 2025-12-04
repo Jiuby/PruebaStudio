@@ -83,15 +83,15 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
     <div className="space-y-8 animate-fade-in pb-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-black uppercase italic text-white">Command Center</h2>
-          <p className="text-neutral-500 text-xs uppercase tracking-widest">Store Performance Overview</p>
+          <h2 className="text-3xl font-black uppercase italic text-white">Centro de Comando</h2>
+          <p className="text-neutral-500 text-xs uppercase tracking-widest">Resumen de Rendimiento de la Tienda</p>
         </div>
         <div className="flex gap-4">
           <button
             onClick={onQuickAdd}
             className="bg-brand-dark/30 border border-brand-dark text-white px-4 py-3 text-xs font-bold uppercase tracking-widest hover:bg-brand-dark transition-colors flex items-center gap-2"
           >
-            <Plus size={16} /> Quick Product
+            <Plus size={16} /> Producto Rápido
           </button>
         </div>
       </div>
@@ -101,7 +101,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
         {/* Revenue */}
         <div className="bg-brand-dark/20 border border-brand-dark p-6 relative overflow-hidden group">
           <div className="flex items-center justify-between mb-4 relative z-10">
-            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Monthly Revenue</h3>
+            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Ingresos Mensuales</h3>
             <div className="bg-brand-bone/10 p-2 rounded-full text-brand-bone"><DollarSign size={20} /></div>
           </div>
           <p className="text-3xl font-black text-white relative z-10">{formatPrice(currentMonthRevenue)}</p>
@@ -110,7 +110,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
               {isPositiveChange ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
               {revenueChangePercentage > 0 ? '+' : ''}{revenueChangePercentage.toFixed(1)}%
             </span>
-            <span className="text-neutral-600 text-[10px] uppercase">vs last month</span>
+            <span className="text-neutral-600 text-[10px] uppercase">vs mes anterior</span>
           </div>
           <div className="absolute -right-6 -bottom-6 text-brand-bone/5 transform rotate-12 group-hover:scale-110 transition-transform duration-500">
             <DollarSign size={120} />
@@ -120,42 +120,42 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
         {/* Pending Actions (Urgent) */}
         <div className="bg-brand-dark/20 border border-brand-dark p-6 relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Orders To Fulfill</h3>
+            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Pedidos por Cumplir</h3>
             <div className={`p-2 rounded-full ${processingOrders.length > 0 ? 'bg-yellow-500/10 text-yellow-500' : 'bg-green-500/10 text-green-500'}`}>
               <Clock size={20} />
             </div>
           </div>
           <p className="text-3xl font-black text-white">{processingOrders.length}</p>
           <p className="text-neutral-500 text-[10px] uppercase mt-2">
-            Requires immediate attention
+            Requiere atención inmediata
           </p>
         </div>
 
         {/* Average Order Value */}
         <div className="bg-brand-dark/20 border border-brand-dark p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Avg. Order Value</h3>
+            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Valor Promedio de Pedido</h3>
             <div className="bg-blue-500/10 p-2 rounded-full text-blue-500"><ShoppingBag size={20} /></div>
           </div>
           <p className="text-3xl font-black text-white">{formatPrice(avgOrderValue)}</p>
-          <p className="text-neutral-500 text-[10px] uppercase mt-2">Based on {totalOrders} orders</p>
+          <p className="text-neutral-500 text-[10px] uppercase mt-2">Basado en {totalOrders} pedidos</p>
         </div>
 
         {/* Customers */}
         <div className="bg-brand-dark/20 border border-brand-dark p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Total Customers</h3>
+            <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Total de Clientes</h3>
             <div className="bg-purple-500/10 p-2 rounded-full text-purple-500"><Package size={20} /></div>
           </div>
           <p className="text-3xl font-black text-white">{customers.length}</p>
-          <p className="text-neutral-500 text-[10px] uppercase mt-2">+2 New this week</p>
+          <p className="text-neutral-500 text-[10px] uppercase mt-2">+2 Nuevos esta semana</p>
         </div>
       </div>
 
       {/* 2. Order Fulfillment Pipeline (Full Width) */}
       <div className="bg-brand-dark/10 border border-brand-dark p-8">
         <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-8 flex items-center gap-2">
-          <Truck size={18} /> Order Fulfillment Pipeline
+          <Truck size={18} /> Flujo de Cumplimiento de Pedidos
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -165,7 +165,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
               <span className="text-yellow-500 bg-yellow-500/10 p-2 rounded-full"><Clock size={20} /></span>
               <span className="text-3xl font-black text-white">{processingOrders.length}</span>
             </div>
-            <h4 className="text-neutral-400 font-bold uppercase text-xs tracking-wider">Processing</h4>
+            <h4 className="text-neutral-400 font-bold uppercase text-xs tracking-wider">Procesando</h4>
             <div className="w-full bg-brand-dark h-1 mt-4">
               <div className="bg-yellow-500 h-1" style={{ width: `${(processingOrders.length / totalOrders) * 100}%` }}></div>
             </div>
@@ -177,7 +177,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
               <span className="text-blue-500 bg-blue-500/10 p-2 rounded-full"><Truck size={20} /></span>
               <span className="text-3xl font-black text-white">{shippedOrders.length}</span>
             </div>
-            <h4 className="text-neutral-400 font-bold uppercase text-xs tracking-wider">In Transit</h4>
+            <h4 className="text-neutral-400 font-bold uppercase text-xs tracking-wider">En Tránsito</h4>
             <div className="w-full bg-brand-dark h-1 mt-4">
               <div className="bg-blue-500 h-1" style={{ width: `${(shippedOrders.length / totalOrders) * 100}%` }}></div>
             </div>
@@ -189,7 +189,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
               <span className="text-green-500 bg-green-500/10 p-2 rounded-full"><CheckCircle size={20} /></span>
               <span className="text-3xl font-black text-white">{deliveredOrders.length}</span>
             </div>
-            <h4 className="text-neutral-400 font-bold uppercase text-xs tracking-wider">Completed</h4>
+            <h4 className="text-neutral-400 font-bold uppercase text-xs tracking-wider">Completado</h4>
             <div className="w-full bg-brand-dark h-1 mt-4">
               <div className="bg-green-500 h-1" style={{ width: `${(deliveredOrders.length / totalOrders) * 100}%` }}></div>
             </div>
@@ -198,7 +198,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
 
         {/* Quick Recent Orders */}
         <div className="mt-12 pt-8 border-t border-brand-dark">
-          <h4 className="text-neutral-500 font-bold uppercase text-xs tracking-widest mb-6">Latest Orders</h4>
+          <h4 className="text-neutral-500 font-bold uppercase text-xs tracking-widest mb-6">Últimos Pedidos</h4>
           <div className="space-y-3">
             {orders.slice(0, 5).map(order => (
               <button
@@ -209,8 +209,8 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
                 <div className="flex items-center gap-6">
                   <span className="text-brand-bone font-bold text-sm group-hover:scale-110 transition-transform">#{order.id}</span>
                   <div className="flex flex-col">
-                    <span className="text-white text-xs font-bold uppercase">{order.items.length} Items</span>
-                    <span className="text-[10px] text-neutral-500">{order.customerEmail || 'Guest User'}</span>
+                    <span className="text-white text-xs font-bold uppercase">{order.items.length} Artículos</span>
+                    <span className="text-[10px] text-neutral-500">{order.customerEmail || 'Usuario Invitado'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-6">

@@ -24,10 +24,10 @@ export const SettingsTab: React.FC = () => {
    return (
       <div className="space-y-6 animate-fade-in max-w-4xl">
          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-black uppercase italic text-white">Store Settings</h2>
+            <h2 className="text-3xl font-black uppercase italic text-white">Configuración de la Tienda</h2>
             {settingsSaved && (
                <div className="flex items-center gap-2 text-green-500 text-xs font-bold uppercase animate-fade-in">
-                  <Check size={16} /> Changes Saved
+                  <Check size={16} /> Cambios Guardados
                </div>
             )}
          </div>
@@ -37,11 +37,11 @@ export const SettingsTab: React.FC = () => {
             <div className="bg-brand-dark/10 border border-brand-dark p-8">
                <div className="flex items-center gap-3 mb-6 border-b border-brand-dark pb-4">
                   <Truck size={20} className="text-brand-bone" />
-                  <h3 className="text-white font-bold uppercase tracking-widest text-sm">Shipping Configuration</h3>
+                  <h3 className="text-white font-bold uppercase tracking-widest text-sm">Configuración de Envío</h3>
                </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                     <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Standard Shipping Rate</label>
+                     <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Tarifa de Envío Estándar</label>
                      <input
                         type="number"
                         value={settingsFormData.shippingFlatRate}
@@ -50,7 +50,7 @@ export const SettingsTab: React.FC = () => {
                      />
                   </div>
                   <div>
-                     <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Free Shipping Threshold</label>
+                     <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Umbral de Envío Gratis</label>
                      <input
                         type="number"
                         value={settingsFormData.freeShippingThreshold}
@@ -65,12 +65,12 @@ export const SettingsTab: React.FC = () => {
             <div className="bg-brand-dark/10 border border-brand-dark p-8">
                <div className="flex items-center gap-3 mb-6 border-b border-brand-dark pb-4">
                   <ShieldAlert size={20} className="text-brand-bone" />
-                  <h3 className="text-white font-bold uppercase tracking-widest text-sm">System</h3>
+                  <h3 className="text-white font-bold uppercase tracking-widest text-sm">Sistema</h3>
                </div>
                <div className="flex items-center justify-between">
                   <div>
-                     <h4 className="text-white font-bold text-sm uppercase">Maintenance Mode</h4>
-                     <p className="text-neutral-500 text-xs">Disable the public storefront temporarily.</p>
+                     <h4 className="text-white font-bold text-sm uppercase">Modo Mantenimiento</h4>
+                     <p className="text-neutral-500 text-xs">Deshabilitar la tienda pública temporalmente.</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                      <input
@@ -89,7 +89,7 @@ export const SettingsTab: React.FC = () => {
                   type="submit"
                   className="bg-brand-bone text-brand-black px-8 py-4 font-black uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2"
                >
-                  <Save size={18} /> Save Settings
+                  <Save size={18} /> Guardar Configuración
                </button>
             </div>
          </form>

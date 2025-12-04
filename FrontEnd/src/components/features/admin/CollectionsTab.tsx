@@ -26,7 +26,7 @@ export const CollectionsTab: React.FC = () => {
   };
 
   const handleDeleteCollection = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this collection?')) {
+    if (window.confirm('¿Estás seguro de que deseas eliminar esta colección?')) {
       deleteCollection(id);
     }
   };
@@ -34,12 +34,12 @@ export const CollectionsTab: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-black uppercase italic text-white">Collections</h2>
+        <h2 className="text-3xl font-black uppercase italic text-white">Colecciones</h2>
         <button
           onClick={() => { setEditingCollection(null); setIsCollectionModalOpen(true); }}
           className="bg-brand-bone text-brand-black px-6 py-3 font-bold uppercase tracking-widest text-xs hover:bg-white transition-colors flex items-center gap-2"
         >
-          <Plus size={16} /> Add Collection
+          <Plus size={16} /> Agregar Colección
         </button>
       </div>
 
@@ -52,28 +52,28 @@ export const CollectionsTab: React.FC = () => {
                 <button
                   onClick={() => handleManageProducts(collection)}
                   className="bg-brand-bone text-brand-black p-3 rounded-full hover:bg-white transition-colors"
-                  title="Manage Products"
+                  title="Gestionar Productos"
                 >
                   <Package size={20} />
                 </button>
                 <button
                   onClick={() => handleEditCollection(collection)}
                   className="bg-white text-black p-3 rounded-full hover:bg-gray-200 transition-colors"
-                  title="Edit Details"
+                  title="Editar Detalles"
                 >
                   <Edit2 size={20} />
                 </button>
                 <button
                   onClick={() => handleDeleteCollection(collection.id)}
                   className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
-                  title="Delete"
+                  title="Eliminar"
                 >
                   <Trash2 size={20} />
                 </button>
               </div>
               <div className="absolute bottom-4 left-4">
                 <span className="bg-brand-black/80 text-brand-bone text-[10px] font-bold px-2 py-1 uppercase tracking-widest">
-                  {collection.category ? collection.category : 'Mixed Collection'}
+                  {collection.category ? collection.category : 'Colección Mixta'}
                 </span>
               </div>
             </div>

@@ -1,5 +1,4 @@
 
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { ProductCard } from '../../components/features/product/ProductCard';
 import { useShop } from '../../context/ShopContext';
@@ -8,10 +7,10 @@ import { Filter, X, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 
 const PRICE_RANGES = [
-  { label: 'All Prices', value: 'all' },
-  { label: 'Under $50,000', value: 'under-50' },
+  { label: 'Todos los Precios', value: 'all' },
+  { label: 'Menos de $50,000', value: 'under-50' },
   { label: '$50,000 - $100,000', value: '50-100' },
-  { label: 'Over $100,000', value: 'over-100' }
+  { label: 'Más de $100,000', value: 'over-100' }
 ];
 
 const ITEMS_PER_PAGE = 9;
@@ -163,10 +162,10 @@ export const Shop: React.FC = () => {
         {/* Header */}
         <div className="mb-12 border-b border-brand-dark pb-8">
           <h1 className="text-5xl md:text-7xl font-black uppercase text-white italic tracking-tighter mb-4">
-            {activeCollection ? activeCollection.title : (selectedCategory === 'All' ? 'Shop All' : selectedCategory)}
+            {activeCollection ? activeCollection.title : (selectedCategory === 'All' ? 'Ver Todo' : selectedCategory)}
           </h1>
           <p className="text-neutral-500 uppercase tracking-widest text-xs">
-            {activeCollection ? `Collection • ${activeCollection.subtitle}` : `${filteredProducts.length} Products Available`}
+            {activeCollection ? `Colección • ${activeCollection.subtitle}` : `${filteredProducts.length} Productos Disponibles`}
           </p>
         </div>
 
@@ -176,7 +175,7 @@ export const Shop: React.FC = () => {
           <div className="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-fit space-y-10">
             {/* Category */}
             <div>
-              <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Categories</h3>
+              <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Categorías</h3>
               <div className="space-y-3">
                 {categories.map(cat => (
                   <button
@@ -195,7 +194,7 @@ export const Shop: React.FC = () => {
 
             {/* Price */}
             <div>
-              <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Price</h3>
+              <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Precio</h3>
               <div className="space-y-3">
                 {PRICE_RANGES.map(range => (
                   <button
@@ -213,7 +212,7 @@ export const Shop: React.FC = () => {
 
             {/* Size */}
             <div>
-              <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Size</h3>
+              <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Talla</h3>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedSize('all')}
@@ -222,7 +221,7 @@ export const Shop: React.FC = () => {
                     : 'text-neutral-500 border-neutral-800 hover:border-white'
                     }`}
                 >
-                  All
+                  Todos
                 </button>
                 {availableSizes.map(size => (
                   <button
@@ -249,7 +248,7 @@ export const Shop: React.FC = () => {
                     }`}
                   title="All Colors"
                 >
-                  <span className="text-[10px] font-bold">ALL</span>
+                  <span className="text-[10px] font-bold">TODOS</span>
                 </button>
                 {availableColors.map(color => (
                   <button
@@ -268,12 +267,12 @@ export const Shop: React.FC = () => {
 
             {/* Sort */}
             <div>
-              <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Sort By</h3>
+              <h3 className="text-white font-bold uppercase tracking-widest text-xs mb-6 border-b border-brand-dark pb-2">Ordenar Por</h3>
               <div className="space-y-3">
                 {[
-                  { label: 'Featured', value: 'featured' },
-                  { label: 'Price: Low to High', value: 'price-asc' },
-                  { label: 'Price: High to Low', value: 'price-desc' },
+                  { label: 'Destacados', value: 'featured' },
+                  { label: 'Precio: Menor a Mayor', value: 'price-asc' },
+                  { label: 'Precio: Mayor a Menor', value: 'price-desc' },
                 ].map(opt => (
                   <button
                     key={opt.value}
@@ -294,7 +293,7 @@ export const Shop: React.FC = () => {
               onClick={clearFilters}
               className="text-xs text-neutral-500 hover:text-red-500 uppercase tracking-widest underline decoration-dashed underline-offset-4"
             >
-              Clear All Filters
+              Limpiar Filtros
             </button>
           </div>
 
@@ -304,10 +303,10 @@ export const Shop: React.FC = () => {
               onClick={() => setShowMobileFilters(true)}
               className="flex items-center gap-2 text-white font-bold uppercase text-xs tracking-widest border border-brand-dark px-4 py-3"
             >
-              <Filter size={14} /> Filter & Sort
+              <Filter size={14} /> Filtrar y Ordenar
             </button>
             <span className="text-brand-bone font-bold uppercase text-xs">
-              {filteredProducts.length} Results
+              {filteredProducts.length} Resultados
             </span>
           </div>
 
@@ -315,7 +314,7 @@ export const Shop: React.FC = () => {
           {showMobileFilters && (
             <div className="fixed inset-0 z-50 bg-brand-black flex flex-col p-6 animate-fade-in">
               <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-black uppercase italic text-white">Filters</h2>
+                <h2 className="text-2xl font-black uppercase italic text-white">Filtros</h2>
                 <button onClick={() => setShowMobileFilters(false)} className="text-white">
                   <X size={24} />
                 </button>
@@ -324,7 +323,7 @@ export const Shop: React.FC = () => {
               <div className="space-y-8 flex-1 overflow-y-auto pr-2">
                 {/* Category */}
                 <div>
-                  <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Category</h3>
+                  <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Categoría</h3>
                   <div className="grid grid-cols-2 gap-3">
                     {categories.map(cat => (
                       <button
@@ -343,7 +342,7 @@ export const Shop: React.FC = () => {
 
                 {/* Price */}
                 <div>
-                  <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Price</h3>
+                  <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Precio</h3>
                   <div className="space-y-3">
                     {PRICE_RANGES.map(range => (
                       <button
@@ -362,7 +361,7 @@ export const Shop: React.FC = () => {
 
                 {/* Size */}
                 <div>
-                  <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Size</h3>
+                  <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Talla</h3>
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => setSelectedSize('all')}
@@ -371,7 +370,7 @@ export const Shop: React.FC = () => {
                         : 'text-neutral-400 border-brand-dark'
                         }`}
                     >
-                      All
+                      Todos
                     </button>
                     {availableSizes.map(size => (
                       <button
@@ -397,7 +396,7 @@ export const Shop: React.FC = () => {
                       className={`w-10 h-10 rounded-full border flex items-center justify-center ${selectedColor === 'all' ? 'border-brand-bone text-brand-bone' : 'border-neutral-700 text-neutral-500'
                         }`}
                     >
-                      <span className="text-[10px] font-bold">ALL</span>
+                      <span className="text-[10px] font-bold">TODOS</span>
                     </button>
                     {availableColors.map(color => (
                       <button
@@ -416,12 +415,12 @@ export const Shop: React.FC = () => {
 
                 {/* Sort */}
                 <div>
-                  <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Sort</h3>
+                  <h3 className="text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">Ordenar</h3>
                   <div className="space-y-3">
                     {[
-                      { label: 'Featured', value: 'featured' },
-                      { label: 'Price: Low to High', value: 'price-asc' },
-                      { label: 'Price: High to Low', value: 'price-desc' },
+                      { label: 'Destacados', value: 'featured' },
+                      { label: 'Precio: Menor a Mayor', value: 'price-asc' },
+                      { label: 'Precio: Mayor a Menor', value: 'price-desc' },
                     ].map(opt => (
                       <button
                         key={opt.value}
@@ -443,13 +442,13 @@ export const Shop: React.FC = () => {
                   onClick={clearFilters}
                   className="flex-1 py-4 border border-brand-dark text-white font-bold uppercase tracking-widest hover:bg-brand-dark transition-colors"
                 >
-                  Clear
+                  Limpiar
                 </button>
                 <button
                   onClick={() => setShowMobileFilters(false)}
                   className="flex-[2] bg-white text-black py-4 font-bold uppercase tracking-widest"
                 >
-                  View {filteredProducts.length} Results
+                  Ver {filteredProducts.length} Resultados
                 </button>
               </div>
             </div>
@@ -465,12 +464,12 @@ export const Shop: React.FC = () => {
 
             {filteredProducts.length === 0 && (
               <div className="text-center py-20 border border-dashed border-brand-dark bg-brand-dark/10">
-                <p className="text-neutral-500 uppercase tracking-widest mb-4">No products found matching your filters.</p>
+                <p className="text-neutral-500 uppercase tracking-widest mb-4">No se encontraron productos con estos filtros.</p>
                 <button
                   onClick={clearFilters}
                   className="text-brand-bone underline uppercase text-xs font-bold hover:text-white transition-colors"
                 >
-                  Clear All Filters
+                  Limpiar Filtros
                 </button>
               </div>
             )}

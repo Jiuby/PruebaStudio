@@ -55,7 +55,7 @@ export const OrderDetails: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-brand-black flex items-center justify-center text-white">
-        <p>Loading order details...</p>
+        <p>Cargando detalles del pedido...</p>
       </div>
     );
   }
@@ -64,9 +64,9 @@ export const OrderDetails: React.FC = () => {
     return (
       <div className="min-h-screen bg-brand-black flex items-center justify-center text-white">
         <div className="text-center">
-          <h2 className="text-4xl font-black uppercase mb-4">Order Not Found</h2>
-          <p className="text-neutral-500 mb-4">{error || 'This order does not exist or you do not have permission to view it.'}</p>
-          <Link to="/account" className="text-brand-bone underline uppercase tracking-widest text-sm">Return to Dashboard</Link>
+          <h2 className="text-4xl font-black uppercase mb-4">Pedido No Encontrado</h2>
+          <p className="text-neutral-500 mb-4">{error || 'Este pedido no existe o no tienes permiso para verlo.'}</p>
+          <Link to="/account" className="text-brand-bone underline uppercase tracking-widest text-sm">Volver al Panel</Link>
         </div>
       </div>
     );
@@ -98,20 +98,20 @@ export const OrderDetails: React.FC = () => {
     // Invoice Title
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(16);
-    doc.text('INVOICE', 150, 25);
+    doc.text('FACTURA', 150, 25);
 
     // Order Info
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Order #${order.id}`, 20, 55);
-    doc.text(`Date: ${order.date}`, 20, 62);
-    doc.text(`Status: ${order.status}`, 20, 69);
+    doc.text(`Pedido #${order.id}`, 20, 55);
+    doc.text(`Fecha: ${order.date}`, 20, 62);
+    doc.text(`Estado: ${order.status}`, 20, 69);
 
     // Customer Info
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('BILL TO:', 20, 85);
+    doc.text('FACTURAR A:', 20, 85);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
     doc.text(order.customerName, 20, 93);
@@ -129,9 +129,9 @@ export const OrderDetails: React.FC = () => {
     doc.rect(20, yPos - 7, 170, 10, 'F');
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
-    doc.text('ITEM', 25, yPos);
-    doc.text('QTY', 110, yPos);
-    doc.text('PRICE', 135, yPos);
+    doc.text('ARTÍCULO', 25, yPos);
+    doc.text('CANT', 110, yPos);
+    doc.text('PRECIO', 135, yPos);
     doc.text('TOTAL', 165, yPos);
 
     // Items
@@ -153,11 +153,11 @@ export const OrderDetails: React.FC = () => {
     doc.text('Subtotal:', 120, yPos);
     doc.text(formatPrice(itemsSubtotal), 165, yPos);
     yPos += 7;
-    doc.text('Shipping:', 120, yPos);
-    doc.text(shippingCost === 0 ? 'FREE' : formatPrice(shippingCost), 165, yPos);
+    doc.text('Envío:', 120, yPos);
+    doc.text(shippingCost === 0 ? 'GRATIS' : formatPrice(shippingCost), 165, yPos);
     yPos += 7;
-    doc.text('Taxes:', 120, yPos);
-    doc.text('Included', 165, yPos);
+    doc.text('Impuestos:', 120, yPos);
+    doc.text('Incluido', 165, yPos);
 
     // Grand Total
     yPos += 10;
@@ -173,7 +173,7 @@ export const OrderDetails: React.FC = () => {
     doc.setTextColor(128, 128, 128);
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
-    doc.text('Thank you for your purchase!', 105, 280, { align: 'center' });
+    doc.text('¡Gracias por tu compra!', 105, 280, { align: 'center' });
     doc.text('GOUSTTY - Premium Streetwear', 105, 285, { align: 'center' });
 
     // Save
@@ -220,47 +220,47 @@ export const OrderDetails: React.FC = () => {
   // Timeline Logic
   const steps = order.status === 'Cancelled' ? [
     {
-      label: 'Order Placed',
+      label: 'Pedido Realizado',
       icon: Clock,
       completed: true,
       date: order.date,
-      info: 'Order received.'
+      info: 'Pedido recibido.'
     },
     {
-      label: 'Cancelled',
+      label: 'Cancelado',
       icon: X,
       completed: true,
       date: order.date,
-      info: 'Order has been cancelled.'
+      info: 'El pedido ha sido cancelado.'
     }
   ] : [
     {
-      label: 'Order Placed',
+      label: 'Pedido Realizado',
       icon: Clock,
       completed: true,
       date: order.date,
-      info: 'Order received and confirmed.'
+      info: 'Pedido recibido y confirmado.'
     },
     {
-      label: 'Processing',
+      label: 'Procesando',
       icon: Package,
       completed: true,
       date: getStepDate(order.date, 1),
-      info: 'Your items are being packed.'
+      info: 'Tus artículos están siendo empacados.'
     },
     {
-      label: 'Shipped',
+      label: 'Enviado',
       icon: Truck,
       completed: ['Shipped', 'Delivered'].includes(order.status),
       date: getStepDate(order.date, 3),
-      info: 'Handed over to logistics partner.'
+      info: 'Entregado al socio logístico.'
     },
     {
-      label: 'Delivered',
+      label: 'Entregado',
       icon: CheckCircle,
       completed: order.status === 'Delivered',
       date: getStepDate(order.date, 6),
-      info: 'Package delivered successfully.'
+      info: 'Paquete entregado exitosamente.'
     },
   ];
 
@@ -270,15 +270,15 @@ export const OrderDetails: React.FC = () => {
       {/* Breadcrumb / Back */}
       <div className="container mx-auto mb-8">
         <button onClick={() => navigate('/account')} className="flex items-center text-neutral-500 hover:text-white transition-colors text-xs uppercase tracking-widest gap-2 mb-6">
-          <ArrowLeft size={16} /> Back to Orders
+          <ArrowLeft size={16} /> Volver a Pedidos
         </button>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-brand-dark pb-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter leading-none mb-2">
-              Order #{order.id}
+              Pedido #{order.id}
             </h1>
             <p className="text-neutral-500 uppercase tracking-widest text-xs">
-              Current Status: <span className="text-brand-bone font-bold">{order.status}</span>
+              Estado Actual: <span className="text-brand-bone font-bold">{order.status}</span>
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -286,7 +286,7 @@ export const OrderDetails: React.FC = () => {
               onClick={downloadInvoice}
               className="border border-brand-bone text-brand-bone px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-brand-bone hover:text-black transition-colors flex items-center gap-2"
             >
-              <FileText size={14} /> Download Invoice
+              <FileText size={14} /> Descargar Factura
             </button>
           </div>
         </div>
@@ -313,7 +313,7 @@ export const OrderDetails: React.FC = () => {
 
           {/* Status Timeline */}
           <section className="bg-brand-dark/20 border border-brand-dark p-8">
-            <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-8">Order Timeline</h3>
+            <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-8">Línea de Tiempo del Pedido</h3>
             <div className="relative">
               {/* Timeline Items */}
               <div className="flex flex-col md:flex-row justify-between relative gap-8 md:gap-0">
@@ -363,7 +363,7 @@ export const OrderDetails: React.FC = () => {
           {/* Items List */}
           <section>
             <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-6 pb-2 border-b border-brand-dark">
-              Items Ordered ({order.items.length})
+              Artículos Pedidos ({order.items.length})
             </h3>
             <div className="space-y-6">
               {order.items.map((item, idx) => (
@@ -386,8 +386,8 @@ export const OrderDetails: React.FC = () => {
                       </h4>
                       <div className="space-y-1 text-xs text-neutral-400 uppercase tracking-wide">
                         {item.color && <p>Color: <span className="text-white">{item.color}</span></p>}
-                        <p>Size: <span className="text-white">{item.size}</span></p>
-                        <p>Qty: <span className="text-white">{item.quantity}</span></p>
+                        <p>Talla: <span className="text-white">{item.size}</span></p>
+                        <p>Cant: <span className="text-white">{item.quantity}</span></p>
                       </div>
                     </div>
                     <div className="mt-4 md:mt-0 text-right">
@@ -407,7 +407,7 @@ export const OrderDetails: React.FC = () => {
             {/* Shipping Info */}
             <div>
               <h3 className="flex items-center gap-2 text-brand-bone font-bold uppercase tracking-widest text-xs mb-4">
-                <MapPin size={14} /> Shipping Address
+                <MapPin size={14} /> Dirección de Envío
               </h3>
               <div className="text-sm text-neutral-400 leading-relaxed">
                 <p className="text-white font-bold uppercase">{order.customerName}</p>
@@ -438,12 +438,12 @@ export const OrderDetails: React.FC = () => {
                       <span>{formatPrice(itemsSubtotal)}</span>
                     </div>
                     <div className="flex justify-between text-sm text-neutral-400">
-                      <span>Shipping</span>
-                      <span>{shippingCost === 0 ? 'Free' : formatPrice(shippingCost)}</span>
+                      <span>Envío</span>
+                      <span>{shippingCost === 0 ? 'Gratis' : formatPrice(shippingCost)}</span>
                     </div>
                     <div className="flex justify-between text-sm text-neutral-400">
-                      <span>Taxes</span>
-                      <span>Included</span>
+                      <span>Impuestos</span>
+                      <span>Incluido</span>
                     </div>
                     <div className="border-t border-brand-dark pt-3 mt-3 flex justify-between items-center">
                       <span className="text-white font-black uppercase italic text-lg">Total</span>
@@ -458,7 +458,7 @@ export const OrderDetails: React.FC = () => {
               onClick={handleBuyAgain}
               className="w-full bg-white text-black py-4 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors flex items-center justify-center gap-2"
             >
-              <ShoppingBag size={16} /> Buy Again
+              <ShoppingBag size={16} /> Comprar de Nuevo
             </button>
 
           </div>

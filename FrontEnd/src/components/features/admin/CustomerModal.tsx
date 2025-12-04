@@ -43,9 +43,9 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({ customer, onClose 
           >
             <div className="flex justify-between items-center mb-4 border-b border-brand-dark pb-2">
               <div>
-                <h2 className="text-2xl font-black uppercase italic text-white mb-1">Customer History</h2>
+                <h2 className="text-2xl font-black uppercase italic text-white mb-1">Historial del Cliente</h2>
                 <p className="text-neutral-500 text-xs uppercase tracking-widest">
-                  Orders for <span className="text-brand-bone">{customer.name}</span>
+                  Pedidos de <span className="text-brand-bone">{customer.name}</span>
                 </p>
               </div>
               <button onClick={onClose} className="text-neutral-500 hover:text-white"><X size={24} /></button>
@@ -55,17 +55,17 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({ customer, onClose 
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-brand-dark text-neutral-500 text-xs font-bold uppercase tracking-widest">
-                    <th className="pb-2 pr-4">Order ID</th>
-                    <th className="pb-2 pr-4">Date</th>
-                    <th className="pb-2 pr-4">Items</th>
+                    <th className="pb-2 pr-4">ID Pedido</th>
+                    <th className="pb-2 pr-4">Fecha</th>
+                    <th className="pb-2 pr-4">Artículos</th>
                     <th className="pb-2 pr-4">Total</th>
-                    <th className="pb-2">Status</th>
+                    <th className="pb-2">Estado</th>
                   </tr>
                 </thead>
                 <tbody className="text-base">
                   {paginatedOrders.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-8 text-center text-neutral-500 uppercase">No orders found for this customer.</td>
+                      <td colSpan={5} className="py-8 text-center text-neutral-500 uppercase">No se encontraron pedidos para este cliente.</td>
                     </tr>
                   ) : (
                     paginatedOrders.map(order => (
@@ -73,14 +73,14 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({ customer, onClose 
                         <td className="py-3 pr-4 text-brand-bone font-bold">#{order.id}</td>
                         <td className="py-3 pr-4 text-neutral-400 uppercase text-sm">{order.date}</td>
                         <td className="py-3 pr-4 text-white">
-                          {order.items.length} {order.items.length === 1 ? 'Item' : 'Items'}
+                          {order.items.length} {order.items.length === 1 ? 'Artículo' : 'Artículos'}
                         </td>
                         <td className="py-3 pr-4 text-white font-bold">{formatPrice(Number(order.total))}</td>
                         <td className="py-3">
                           <span className={`px-2 py-1 text-xs font-bold uppercase border ${order.status === 'Delivered' ? 'border-green-500 text-green-500' :
-                              order.status === 'Shipped' ? 'border-blue-500 text-blue-500' :
-                                order.status === 'Cancelled' ? 'border-red-500 text-red-500' :
-                                  'border-yellow-500 text-yellow-500'
+                            order.status === 'Shipped' ? 'border-blue-500 text-blue-500' :
+                              order.status === 'Cancelled' ? 'border-red-500 text-red-500' :
+                                'border-yellow-500 text-yellow-500'
                             }`}>
                             {order.status}
                           </span>
@@ -96,7 +96,7 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({ customer, onClose 
             {totalPages > 1 && (
               <div className="flex items-center justify-between mt-6 pt-4 border-t border-brand-dark">
                 <p className="text-neutral-500 text-sm">
-                  Showing {startIndex + 1}-{Math.min(startIndex + ORDERS_PER_PAGE, customerOrders.length)} of {customerOrders.length} orders
+                  Mostrando {startIndex + 1}-{Math.min(startIndex + ORDERS_PER_PAGE, customerOrders.length)} de {customerOrders.length} pedidos
                 </p>
                 <div className="flex items-center gap-2">
                   <button
@@ -107,7 +107,7 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({ customer, onClose 
                     <ChevronLeft size={16} />
                   </button>
                   <span className="text-white text-sm font-bold">
-                    Page {currentPage} of {totalPages}
+                    Página {currentPage} de {totalPages}
                   </span>
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}

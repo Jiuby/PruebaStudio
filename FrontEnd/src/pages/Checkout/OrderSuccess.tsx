@@ -35,15 +35,15 @@ export const OrderSuccess: React.FC = () => {
         </div>
 
         <h1 className="text-4xl md:text-6xl font-black uppercase text-white italic tracking-tighter mb-4">
-          Order Confirmed
+          Pedido Confirmado
         </h1>
 
         <p className="text-neutral-500 uppercase tracking-widest text-sm mb-2">
-          Order #{orderId}
+          Pedido #{orderId}
         </p>
 
         <p className="text-neutral-400 max-w-md mx-auto mb-8">
-          Thank you for your purchase. We have received your order and will begin processing it shortly. You will receive an email confirmation at <span className="text-white font-bold">{email}</span>.
+          Gracias por tu compra. Hemos recibido tu pedido y comenzaremos a procesarlo pronto. Recibirás una confirmación por correo electrónico en <span className="text-white font-bold">{email}</span>.
         </p>
 
         <div className="bg-brand-dark/20 border border-brand-dark p-6 mb-12 max-w-lg mx-auto text-left">
@@ -63,7 +63,7 @@ export const OrderSuccess: React.FC = () => {
               to={`/account/order/${orderId}`}
               className="px-8 py-4 border border-brand-dark text-white font-bold uppercase tracking-widest hover:bg-brand-dark transition-colors flex items-center gap-2"
             >
-              <Package size={16} /> View In Dashboard
+              <Package size={16} /> Ver en el Panel
             </Link>
           ) : (
             <div className="flex flex-col gap-3">
@@ -71,10 +71,10 @@ export const OrderSuccess: React.FC = () => {
                 to={trackingLink}
                 className="px-8 py-4 bg-brand-dark/30 border border-brand-dark text-brand-bone font-bold uppercase tracking-widest hover:bg-brand-dark transition-colors flex items-center gap-2"
               >
-                <Package size={16} /> Track My Order
+                <Package size={16} /> Rastrear Mi Pedido
               </Link>
               <p className="text-[10px] text-neutral-600 uppercase max-w-xs mx-auto">
-                Save this link to track your order without an account.
+                Guarda este enlace para rastrear tu pedido sin una cuenta.
               </p>
             </div>
           )}
@@ -83,7 +83,7 @@ export const OrderSuccess: React.FC = () => {
             to="/"
             className="px-8 py-4 bg-white text-black font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors flex items-center justify-center gap-2"
           >
-            Continue Shopping <ArrowRight size={16} />
+            Seguir Comprando <ArrowRight size={16} />
           </Link>
         </div>
       </motion.div>

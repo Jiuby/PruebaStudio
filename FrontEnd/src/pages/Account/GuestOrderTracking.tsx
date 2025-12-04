@@ -20,7 +20,7 @@ export const GuestOrderTracking: React.FC = () => {
 
     const fetchOrder = async () => {
       if (!id || !emailParam) {
-        setError("Missing Order ID or Email.");
+        setError("Falta ID de Pedido o Correo.");
         setLoading(false);
         return;
       }
@@ -30,7 +30,7 @@ export const GuestOrderTracking: React.FC = () => {
         setOrder(data);
       } catch (err) {
         console.error(err);
-        setError("Order not found or email does not match.");
+        setError("Pedido no encontrado o el correo no coincide.");
       } finally {
         setLoading(false);
       }
@@ -42,7 +42,7 @@ export const GuestOrderTracking: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-brand-black flex items-center justify-center text-white pt-24">
-        <p>Loading order details...</p>
+        <p>Cargando detalles del pedido...</p>
       </div>
     );
   }
@@ -51,9 +51,9 @@ export const GuestOrderTracking: React.FC = () => {
     return (
       <div className="min-h-screen bg-brand-black flex items-center justify-center text-white pt-24">
         <div className="text-center">
-          <h2 className="text-4xl font-black uppercase mb-4">Order Not Found</h2>
-          <p className="text-neutral-500 mb-8">{error || "Check your link or Order ID."}</p>
-          <Link to="/" className="text-brand-bone underline uppercase tracking-widest text-sm">Return Home</Link>
+          <h2 className="text-4xl font-black uppercase mb-4">Pedido No Encontrado</h2>
+          <p className="text-neutral-500 mb-8">{error || "Verifica tu enlace o ID de Pedido."}</p>
+          <Link to="/" className="text-brand-bone underline uppercase tracking-widest text-sm">Volver al Inicio</Link>
         </div>
       </div>
     );
@@ -74,16 +74,16 @@ export const GuestOrderTracking: React.FC = () => {
   };
 
   const steps = [
-    { label: 'Order Placed', icon: Clock, completed: true, date: order.date },
+    { label: 'Pedido Realizado', icon: Clock, completed: true, date: order.date },
     {
-      label: 'Payment Verification',
+      label: 'Verificación de Pago',
       icon: ShieldCheck,
       completed: !!order.paymentVerified,
-      date: order.paymentVerified ? 'Verified' : 'Pending'
+      date: order.paymentVerified ? 'Verificado' : 'Pendiente'
     },
-    { label: 'Processing', icon: Package, completed: !!order.paymentVerified, date: getStepDate(order.date, 1) },
-    { label: 'Shipped', icon: Truck, completed: ['Shipped', 'Delivered'].includes(order.status), date: getStepDate(order.date, 3) },
-    { label: 'Delivered', icon: CheckCircle, completed: order.status === 'Delivered', date: getStepDate(order.date, 6) },
+    { label: 'Procesando', icon: Package, completed: !!order.paymentVerified, date: getStepDate(order.date, 1) },
+    { label: 'Enviado', icon: Truck, completed: ['Shipped', 'Delivered'].includes(order.status), date: getStepDate(order.date, 3) },
+    { label: 'Entregado', icon: CheckCircle, completed: order.status === 'Delivered', date: getStepDate(order.date, 6) },
   ];
 
   return (
@@ -93,23 +93,23 @@ export const GuestOrderTracking: React.FC = () => {
         {/* Header */}
         <div className="mb-12 text-center">
           <Link to="/" className="inline-flex items-center text-neutral-500 hover:text-white transition-colors text-xs uppercase tracking-widest gap-2 mb-8">
-            <ArrowLeft size={16} /> Return to Home
+            <ArrowLeft size={16} /> Volver al Inicio
           </Link>
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter leading-none mb-4">
-            Order Status
+            Estado del Pedido
           </h1>
           <p className="text-neutral-500 uppercase tracking-widest text-sm mb-4">
-            Tracking #{order.id}
+            Rastreo #{order.id}
           </p>
 
           <div className="flex justify-center">
             {order.paymentVerified ? (
               <span className="bg-green-500/20 text-green-400 border border-green-500/50 px-3 py-1 rounded text-xs font-bold flex items-center gap-2 uppercase tracking-wider">
-                <CheckCircle size={14} /> Payment Verified
+                <CheckCircle size={14} /> Pago Verificado
               </span>
             ) : (
               <span className="bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 px-3 py-1 rounded text-xs font-bold flex items-center gap-2 uppercase tracking-wider">
-                <Clock size={14} /> Payment Pending Verification
+                <Clock size={14} /> Pago Pendiente de Verificación
               </span>
             )}
           </div>
@@ -145,7 +145,7 @@ export const GuestOrderTracking: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Items */}
           <div className="space-y-6">
-            <h3 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4">Items Ordered</h3>
+            <h3 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4">Artículos Pedidos</h3>
             <div className="space-y-4">
               {order.items.map((item, idx) => (
                 <motion.div
@@ -160,7 +160,7 @@ export const GuestOrderTracking: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <h4 className="text-white text-xs font-bold uppercase mb-1">{item.name}</h4>
-                    <p className="text-[10px] text-neutral-500 uppercase">Size: {item.size} • Color: {item.color} • Qty: {item.quantity}</p>
+                    <p className="text-[10px] text-neutral-500 uppercase">Talla: {item.size} • Color: {item.color} • Cant: {item.quantity}</p>
                     <p className="text-brand-bone font-bold text-sm mt-2">{formatPrice(item.price)}</p>
                   </div>
                 </motion.div>
@@ -170,10 +170,10 @@ export const GuestOrderTracking: React.FC = () => {
 
           {/* Summary */}
           <div className="space-y-6">
-            <h3 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4">Shipping & Total</h3>
+            <h3 className="text-white font-bold uppercase tracking-widest text-sm border-b border-brand-dark pb-4">Envío y Total</h3>
             <div className="bg-brand-dark/20 p-6 border border-brand-dark">
               <div className="mb-6">
-                <p className="text-[10px] text-neutral-500 uppercase font-bold mb-1">Shipping To</p>
+                <p className="text-[10px] text-neutral-500 uppercase font-bold mb-1">Enviar A</p>
                 <p className="text-white text-sm font-bold uppercase">{order.customerName}</p>
                 <p className="text-neutral-400 text-xs uppercase">
                   {order.shippingDetails?.address}<br />
@@ -186,8 +186,8 @@ export const GuestOrderTracking: React.FC = () => {
                   <span>{formatPrice(order.total)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-neutral-400">
-                  <span>Shipping</span>
-                  <span>Free</span>
+                  <span>Envío</span>
+                  <span>Gratis</span>
                 </div>
                 <div className="flex justify-between text-white font-bold text-lg pt-2 mt-2 border-t border-brand-dark/50">
                   <span className="uppercase">Total</span>

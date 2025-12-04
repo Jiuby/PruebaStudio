@@ -315,7 +315,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
             className="bg-brand-black border border-brand-dark p-8 w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl"
           >
             <div className="flex justify-between items-center mb-8 border-b border-brand-dark pb-4">
-              <h2 className="text-2xl font-black uppercase italic text-white">{productToEdit ? 'Edit Product' : 'New Product'}</h2>
+              <h2 className="text-2xl font-black uppercase italic text-white">{productToEdit ? 'Editar Producto' : 'Nuevo Producto'}</h2>
               <button onClick={onClose} className="text-neutral-500 hover:text-white"><X size={24} /></button>
             </div>
 
@@ -323,7 +323,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
               {/* Top Row: Name and Category */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Product Name</label>
+                  <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Nombre del Producto</label>
                   <input
                     type="text"
                     required
@@ -333,7 +333,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                   />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Category</label>
+                  <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Categoría</label>
                   <select
                     value={formData.category}
                     onChange={e => setFormData({ ...formData, category: e.target.value })}
@@ -348,13 +348,13 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
 
               {/* Row 2: Collection */}
               <div>
-                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Collection</label>
+                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Colección</label>
                 <select
                   value={formData.collectionId || ''}
                   onChange={e => setFormData({ ...formData, collectionId: e.target.value })}
                   className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone"
                 >
-                  <option value="">Select Collection (Optional)</option>
+                  <option value="">Seleccionar Colección (Opcional)</option>
                   {collections.map(col => (
                     <option key={col.id} value={col.id}>{col.title}</option>
                   ))}
@@ -364,7 +364,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
               {/* Image Upload Section */}
               <div className="bg-brand-dark/10 p-6 border border-brand-dark">
                 <h3 className="text-white font-bold uppercase text-xs tracking-widest border-b border-brand-dark pb-2 mb-4 flex items-center gap-2">
-                  <ImageIcon size={14} /> Product Images (Max 5)
+                  <ImageIcon size={14} /> Imágenes del Producto (Máx 5)
                 </h3>
 
                 {/* Main Image */}
@@ -372,7 +372,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                   <ImageUpload
                     image={formData.images?.[0] || formData.image}
                     onImageChange={handleMainImageChange}
-                    label="Main Image (Cover)"
+                    label="Imagen Principal (Portada)"
                   />
                 </div>
 
@@ -383,14 +383,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                       <ImageUpload
                         image={formData.images?.[idx]}
                         onImageChange={(base64, file) => handleGalleryImageChange(idx, base64, file)}
-                        label={`View ${idx + 1}`}
+                        label={`Vista ${idx + 1}`}
                       />
                       {formData.images?.[idx] && (
                         <button
                           type="button"
                           onClick={() => handleRemoveImage(idx)}
                           className="absolute top-6 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
-                          title="Remove Image"
+                          title="Eliminar Imagen"
                         >
                           <X size={12} />
                         </button>
@@ -403,12 +403,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
               {/* Pricing Section */}
               <div className="bg-brand-dark/10 p-6 border border-brand-dark">
                 <h3 className="text-white font-bold uppercase text-xs tracking-widest border-b border-brand-dark pb-2 mb-4 flex items-center gap-2">
-                  <DollarSign size={14} /> Pricing & Discounts
+                  <DollarSign size={14} /> Precios y Descuentos
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
                   <div>
-                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Original Price</label>
+                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Precio Original</label>
                     <input
                       type="number"
                       value={formData.originalPrice || ''}
@@ -418,7 +418,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Discount %</label>
+                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">% Descuento</label>
                     <div className="relative">
                       <input
                         type="number"
@@ -431,7 +431,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Sale Price (Final)</label>
+                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Precio de Venta (Final)</label>
                     <input
                       type="number"
                       required
@@ -450,7 +450,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                       <span className="text-red-500 font-bold bg-red-500/10 px-2 py-1 border border-red-500/20">-{discountPercentage}% OFF</span>
                     </div>
                     <div className="text-right">
-                      <p className="text-[10px] uppercase text-neutral-500 mb-1">Customer Pays</p>
+                      <p className="text-[10px] uppercase text-neutral-500 mb-1">Cliente Paga</p>
                       <p className="text-xl font-black text-white">{formatPrice(formData.price!)}</p>
                     </div>
                   </div>
@@ -458,7 +458,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Description</label>
+                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Descripción</label>
                 <textarea
                   rows={3}
                   value={formData.description}
@@ -470,7 +470,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
               {/* Colors Management */}
               <div className="bg-brand-dark/10 p-4 border border-brand-dark">
                 <label className="block text-xs uppercase font-bold text-neutral-500 mb-3 flex items-center gap-2">
-                  <Palette size={14} /> Product Colors
+                  <Palette size={14} /> Colores del Producto
                 </label>
 
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -487,7 +487,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     </span>
                   ))}
                   {(!formData.colors || formData.colors.length === 0) && (
-                    <p className="text-neutral-600 text-[10px] italic">No colors added.</p>
+                    <p className="text-neutral-600 text-[10px] italic">No se han agregado colores.</p>
                   )}
                 </div>
 
@@ -496,7 +496,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     type="text"
                     value={newColor}
                     onChange={(e) => setNewColor(e.target.value)}
-                    placeholder="Add color (e.g. 'Black', 'Neon Green')"
+                    placeholder="Agregar color (ej. 'Negro', 'Verde Neón')"
                     className="flex-1 bg-brand-dark/30 border border-brand-dark p-2 text-white text-xs focus:outline-none focus:border-brand-bone"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -511,7 +511,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     disabled={!newColor.trim()}
                     className="bg-brand-bone text-brand-black px-4 text-xs font-bold uppercase disabled:opacity-50"
                   >
-                    Add
+                    Agregar
                   </button>
                 </div>
               </div>
@@ -520,12 +520,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
               <div className="bg-brand-dark/10 p-4 border border-brand-dark">
                 <div className="flex justify-between items-center mb-3">
                   <label className="block text-xs uppercase font-bold text-neutral-500 flex items-center gap-2">
-                    <Ruler size={14} /> Available Sizes
+                    <Ruler size={14} /> Tallas Disponibles
                   </label>
                   <div className="flex gap-2">
                     <button type="button" onClick={() => addPresetSizes('tops')} className="text-[10px] uppercase font-bold text-brand-bone hover:text-white border border-brand-bone px-2 py-0.5">S-XL</button>
                     <button type="button" onClick={() => addPresetSizes('bottoms')} className="text-[10px] uppercase font-bold text-brand-bone hover:text-white border border-brand-bone px-2 py-0.5">30-36</button>
-                    <button type="button" onClick={() => addPresetSizes('onesize')} className="text-[10px] uppercase font-bold text-brand-bone hover:text-white border border-brand-bone px-2 py-0.5">One Size</button>
+                    <button type="button" onClick={() => addPresetSizes('onesize')} className="text-[10px] uppercase font-bold text-brand-bone hover:text-white border border-brand-bone px-2 py-0.5">Talla Única</button>
                   </div>
                 </div>
 
@@ -543,7 +543,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     </span>
                   ))}
                   {(!formData.availableSizes || formData.availableSizes.length === 0) && (
-                    <p className="text-neutral-600 text-[10px] italic">No sizes added. (Product will show as Sold Out if empty)</p>
+                    <p className="text-neutral-600 text-[10px] italic">No se han agregado tallas. (El producto se mostrará como Agotado si está vacío)</p>
                   )}
                 </div>
 
@@ -552,7 +552,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     type="text"
                     value={newSize}
                     onChange={(e) => setNewSize(e.target.value)}
-                    placeholder="Add size (e.g. 'M', '32', 'One Size')"
+                    placeholder="Agregar talla (ej. 'M', '32', 'Talla Única')"
                     className="flex-1 bg-brand-dark/30 border border-brand-dark p-2 text-white text-xs focus:outline-none focus:border-brand-bone"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -567,7 +567,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     disabled={!newSize.trim()}
                     className="bg-brand-bone text-brand-black px-4 text-xs font-bold uppercase disabled:opacity-50"
                   >
-                    Add
+                    Agregar
                   </button>
                 </div>
               </div>
@@ -575,7 +575,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
               {/* Details Management */}
               <div className="bg-brand-dark/10 p-4 border border-brand-dark">
                 <label className="block text-xs uppercase font-bold text-neutral-500 mb-3 flex items-center gap-2">
-                  <List size={14} /> Product Details (Bullet Points)
+                  <List size={14} /> Detalles del Producto (Puntos)
                 </label>
 
                 <div className="space-y-2 mb-4">
@@ -597,7 +597,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     </div>
                   ))}
                   {(!formData.details || formData.details.length === 0) && (
-                    <p className="text-neutral-600 text-[10px] italic">No details added yet.</p>
+                    <p className="text-neutral-600 text-[10px] italic">No se han agregado detalles aún.</p>
                   )}
                 </div>
 
@@ -606,7 +606,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     type="text"
                     value={newDetail}
                     onChange={(e) => setNewDetail(e.target.value)}
-                    placeholder="Add a new bullet point (e.g. '100% Cotton')"
+                    placeholder="Agregar nuevo punto (ej. '100% Algodón')"
                     className="flex-1 bg-brand-dark/30 border border-brand-dark p-2 text-white text-xs focus:outline-none focus:border-brand-bone"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -621,7 +621,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     disabled={!newDetail.trim()}
                     className="bg-brand-bone text-brand-black px-4 text-xs font-bold uppercase disabled:opacity-50"
                   >
-                    Add
+                    Agregar
                   </button>
                 </div>
               </div>
@@ -634,7 +634,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     onChange={e => setFormData({ ...formData, inStock: e.target.checked })}
                     className="w-4 h-4 accent-brand-bone"
                   />
-                  In Stock
+                  En Stock
                 </label>
                 <label className="flex items-center gap-2 text-white text-sm font-bold uppercase cursor-pointer">
                   <input
@@ -643,7 +643,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     onChange={e => setFormData({ ...formData, isNew: e.target.checked })}
                     className="w-4 h-4 accent-brand-bone"
                   />
-                  Mark as New
+                  Marcar como Nuevo
                 </label>
                 <label className="flex items-center gap-2 text-white text-sm font-bold uppercase cursor-pointer">
                   <input
@@ -652,12 +652,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
                     onChange={e => setFormData({ ...formData, isOneOfOne: e.target.checked })}
                     className="w-4 h-4 accent-brand-bone"
                   />
-                  1/1 Unique Item
+                  Artículo Único 1/1
                 </label>
               </div>
 
               <button type="submit" className="w-full bg-brand-bone text-brand-black py-4 font-black uppercase tracking-widest hover:bg-white transition-colors">
-                {productToEdit ? 'Update Product' : 'Create Product'}
+                {productToEdit ? 'Actualizar Producto' : 'Crear Producto'}
               </button>
             </form>
           </motion.div>

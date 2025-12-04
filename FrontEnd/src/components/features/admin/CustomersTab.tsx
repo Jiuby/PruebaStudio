@@ -21,7 +21,7 @@ export const CustomersTab: React.FC = () => {
    };
 
    const handleDeleteCustomer = (id: string) => {
-      if (window.confirm('Are you sure you want to delete this customer? This action cannot be undone.')) {
+      if (window.confirm('¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer.')) {
          deleteCustomer(id);
       }
    };
@@ -36,18 +36,18 @@ export const CustomersTab: React.FC = () => {
 
    return (
       <div className="space-y-6 animate-fade-in">
-         <h2 className="text-3xl font-black uppercase italic text-white">Customers</h2>
+         <h2 className="text-3xl font-black uppercase italic text-white">Clientes</h2>
 
          <div className="bg-brand-dark/10 border border-brand-dark p-6">
             <div className="overflow-x-auto">
                <table className="w-full text-left">
                   <thead>
                      <tr className="border-b border-brand-dark text-neutral-500 text-xs font-bold uppercase tracking-widest">
-                        <th className="pb-4 pl-4">Customer</th>
-                        <th className="pb-4">Location</th>
-                        <th className="pb-4">Stats</th>
-                        <th className="pb-4">Joined</th>
-                        <th className="pb-4 pr-4 text-right">Actions</th>
+                        <th className="pb-4 pl-4">Cliente</th>
+                        <th className="pb-4">Ubicación</th>
+                        <th className="pb-4">Estadísticas</th>
+                        <th className="pb-4">Unido</th>
+                        <th className="pb-4 pr-4 text-right">Acciones</th>
                      </tr>
                   </thead>
                   <tbody>
@@ -78,7 +78,7 @@ export const CustomersTab: React.FC = () => {
                               <td className="py-4">
                                  <div className="flex flex-col">
                                     <span className="text-white font-bold text-sm">{formatPrice(totalSpent)}</span>
-                                    <span className="text-[10px] text-neutral-500 uppercase">{customerOrders.length} Orders</span>
+                                    <span className="text-[10px] text-neutral-500 uppercase">{customerOrders.length} Pedidos</span>
                                  </div>
                               </td>
                               <td className="py-4">
@@ -91,14 +91,14 @@ export const CustomersTab: React.FC = () => {
                                     <button
                                        onClick={() => setViewingCustomer(customer)}
                                        className="p-2 text-neutral-400 hover:text-brand-bone transition-colors"
-                                       title="View Orders"
+                                       title="Ver Pedidos"
                                     >
                                        <ShoppingBag size={16} />
                                     </button>
                                     <button
                                        onClick={() => handleDeleteCustomer(customer.id)}
                                        className="p-2 text-neutral-400 hover:text-red-500 transition-colors"
-                                       title="Delete Customer"
+                                       title="Eliminar Cliente"
                                     >
                                        <Trash2 size={16} />
                                     </button>
@@ -122,7 +122,7 @@ export const CustomersTab: React.FC = () => {
                      <ChevronLeft size={16} />
                   </button>
                   <span className="text-xs font-bold text-neutral-500 uppercase">
-                     Page {customerCurrentPage} of {totalCustomerPages}
+                     Página {customerCurrentPage} de {totalCustomerPages}
                   </span>
                   <button
                      onClick={() => handleCustomerPageChange(customerCurrentPage + 1)}

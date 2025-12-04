@@ -57,21 +57,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* New Badge */}
         {product.isNew && inStock && (
           <div className="absolute top-2 left-2 bg-brand-bone text-brand-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">
-            New Drop
+            Nuevo
           </div>
         )}
 
         {/* 1/1 Badge */}
         {product.isOneOfOne && inStock && (
           <div className="absolute top-2 left-2 mt-8 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">
-            1/1 Unique
+            1/1 Único
           </div>
         )}
 
         {/* Sale Badge */}
         {isSale && inStock && (
           <div className="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest z-10">
-            SALE
+            OFERTA
           </div>
         )}
 
@@ -79,7 +79,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {!inStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-20">
             <div className="bg-brand-black border border-white text-white text-xs font-bold px-4 py-2 uppercase tracking-[0.2em] transform -rotate-12">
-              Sold Out
+              Agotado
             </div>
           </div>
         )}
@@ -88,7 +88,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {inStock && (
           <div className="absolute bottom-0 left-0 w-full bg-brand-black/90 backdrop-blur-sm p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
             <div className="flex justify-between items-center mb-3">
-              <span className="text-xs uppercase text-neutral-400">Select Size</span>
+              <span className="text-xs uppercase text-neutral-400">Seleccionar Talla</span>
             </div>
             <div className="flex gap-2 mb-3">
               {sizes.map(size => {
@@ -123,7 +123,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               onClick={handleAddToCart}
               className="w-full bg-white text-black py-2 font-bold uppercase text-xs tracking-widest hover:bg-brand-bone transition-colors flex items-center justify-center gap-2"
             >
-              <Plus size={14} /> Add to Cart
+              <Plus size={14} /> Añadir
             </button>
           </div>
         )}

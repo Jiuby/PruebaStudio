@@ -33,7 +33,7 @@ export const AdminDashboard: React.FC = () => {
       <div className="min-h-screen bg-brand-black flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-brand-dark border-t-brand-bone rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-brand-bone font-bold uppercase tracking-widest animate-pulse">Loading Dashboard...</p>
+          <p className="text-brand-bone font-bold uppercase tracking-widest animate-pulse">Cargando Panel...</p>
         </div>
       </div>
     );

@@ -25,7 +25,7 @@ export const AdminLogin: React.FC = () => {
       if (success) {
         navigate('/admin');
       } else {
-        setError('Invalid credentials. Access denied.');
+        setError('Credenciales inválidas. Acceso denegado.');
         setLoading(false);
       }
     }, 1000);
@@ -52,7 +52,7 @@ export const AdminLogin: React.FC = () => {
             Goustty<br />
             <span className="text-brand-bone">Command</span>
           </h1>
-          <p className="text-neutral-500 text-xs uppercase tracking-[0.2em]">Authorized Personnel Only</p>
+          <p className="text-neutral-500 text-xs uppercase tracking-[0.2em]">Solo Personal Autorizado</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -68,7 +68,7 @@ export const AdminLogin: React.FC = () => {
           )}
 
           <div>
-            <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Admin ID</label>
+            <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">ID de Admin</label>
             <input
               type="email"
               value={email}
@@ -80,7 +80,7 @@ export const AdminLogin: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Passcode</label>
+            <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Código de Acceso</label>
             <input
               type="password"
               value={password}
@@ -96,13 +96,13 @@ export const AdminLogin: React.FC = () => {
             disabled={loading}
             className="w-full bg-brand-bone text-brand-black py-4 font-black uppercase tracking-[0.2em] hover:bg-white transition-all flex items-center justify-center gap-2 mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Authenticating...' : 'Access System'} {!loading && <ArrowRight size={16} />}
+            {loading ? 'Autenticando...' : 'Acceder al Sistema'} {!loading && <ArrowRight size={16} />}
           </button>
         </form>
 
         <div className="mt-8 text-center">
           <button onClick={() => navigate('/')} className="text-neutral-600 hover:text-neutral-400 text-xs uppercase tracking-widest transition-colors">
-            ← Return to Store
+            ← Volver a la Tienda
           </button>
         </div>
       </motion.div>

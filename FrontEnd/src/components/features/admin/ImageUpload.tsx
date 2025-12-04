@@ -65,7 +65,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ image, onImageChange, 
             <img src={image} alt="Preview" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <span className="text-white font-bold uppercase text-xs tracking-widest flex items-center gap-2 border border-white px-4 py-2">
-                <Upload size={16} /> Change Image
+                <Upload size={16} /> Cambiar Imagen
               </span>
             </div>
           </>
@@ -74,8 +74,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ image, onImageChange, 
             <div className="w-12 h-12 rounded-full bg-brand-dark border border-brand-dark/50 flex items-center justify-center mx-auto mb-3 text-neutral-400 group-hover:text-brand-bone transition-colors">
               <ImageIcon size={24} />
             </div>
-            <p className="text-neutral-400 text-xs font-bold uppercase tracking-widest mb-1 group-hover:text-white transition-colors">Click to Upload</p>
-            <p className="text-neutral-600 text-[10px] uppercase">or drag and drop image here</p>
+            <p className="text-neutral-400 text-xs font-bold uppercase tracking-widest mb-1 group-hover:text-white transition-colors">Clic para Subir</p>
+            <p className="text-neutral-600 text-[10px] uppercase">o arrastra y suelta la imagen aquí</p>
           </div>
         )}
       </div>

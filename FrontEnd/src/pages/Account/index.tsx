@@ -42,7 +42,7 @@ export const Account: React.FC = () => {
 
   const handleUpdateProfile = async () => {
     if (!token) {
-      setSaveMessage('Error: Not authenticated. Please log in again.');
+      setSaveMessage('Error: No autenticado. Por favor inicia sesión de nuevo.');
       console.error('No auth token available');
       return;
     }
@@ -59,10 +59,10 @@ export const Account: React.FC = () => {
         postal_code: profileData.postalCode
       });
 
-      setSaveMessage('✓ Data updated successfully!');
+      setSaveMessage('✓ ¡Datos actualizados exitosamente!');
       setTimeout(() => setSaveMessage(''), 3000);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Error updating data. Please try again.';
+      const errorMessage = error instanceof Error ? error.message : 'Error actualizando datos. Por favor intenta de nuevo.';
       setSaveMessage(errorMessage);
       console.error('Error updating profile:', error);
     } finally {
@@ -85,10 +85,10 @@ export const Account: React.FC = () => {
         {/* Header */}
         <div className="mb-12 border-b border-brand-dark pb-8">
           <h1 className="text-4xl md:text-6xl font-black uppercase text-white italic tracking-tighter mb-4">
-            My Dashboard
+            Mi Panel
           </h1>
           <p className="text-neutral-500 uppercase tracking-widest text-xs">
-            Logged in as <span className="text-brand-bone">{user.email}</span>
+            Conectado como <span className="text-brand-bone">{user.email}</span>
           </p>
         </div>
 
@@ -104,7 +104,7 @@ export const Account: React.FC = () => {
                   : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
                   }`}
               >
-                <Package size={16} /> Recent Orders
+                <Package size={16} /> Pedidos Recientes
               </button>
               <button
                 onClick={() => setActiveTab('profile')}
@@ -113,7 +113,7 @@ export const Account: React.FC = () => {
                   : 'text-neutral-400 hover:text-white hover:bg-brand-dark/50'
                   }`}
               >
-                <User size={16} /> My Data
+                <User size={16} /> Mis Datos
               </button>
 
               <div className="h-px bg-brand-dark my-2"></div>
@@ -121,7 +121,7 @@ export const Account: React.FC = () => {
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-4 text-xs font-bold uppercase tracking-widest text-red-500 hover:bg-red-500/10 transition-colors"
               >
-                <LogOut size={16} /> Log Out
+                <LogOut size={16} /> Cerrar Sesión
               </button>
             </div>
           </div>
@@ -137,7 +137,7 @@ export const Account: React.FC = () => {
                 transition={{ duration: 0.3 }}
                 className="space-y-6"
               >
-                <h3 className="text-white font-bold uppercase tracking-widest text-xl mb-6">Recent Purchases</h3>
+                <h3 className="text-white font-bold uppercase tracking-widest text-xl mb-6">Compras Recientes</h3>
                 {orders.map((order) => (
                   <div key={order.id} className="border border-brand-dark bg-brand-dark/10 p-6 group hover:border-brand-bone/50 transition-colors">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-brand-dark pb-4">
@@ -155,7 +155,7 @@ export const Account: React.FC = () => {
                       </div>
                       <div className="mt-2 md:mt-0 text-right">
                         <p className="text-white font-bold">{formatPrice(order.total)}</p>
-                        <p className="text-xs text-neutral-500 uppercase">{order.items.length} Items</p>
+                        <p className="text-xs text-neutral-500 uppercase">{order.items.length} Artículos</p>
                       </div>
                     </div>
 
@@ -168,9 +168,9 @@ export const Account: React.FC = () => {
                           <div className="flex-1">
                             <h4 className="text-white text-sm font-bold uppercase leading-none mb-1">{item.name}</h4>
                             <p className="text-xs text-neutral-500 uppercase">
-                              Size: {item.size}
+                              Talla: {item.size}
                               {item.color && ` • Color: ${item.color}`}
-                              {' • Qty: '}{item.quantity}
+                              {' • Cant: '}{item.quantity}
                             </p>
                           </div>
                         </div>
@@ -179,13 +179,13 @@ export const Account: React.FC = () => {
 
                     <div className="mt-6 pt-4 border-t border-brand-dark flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <span className="text-xs text-neutral-500 uppercase flex items-center gap-2">
-                        <Truck size={14} /> Track Order
+                        <Truck size={14} /> Rastrear Pedido
                       </span>
                       <button
                         onClick={() => navigate(`/account/order/${order.id}`)}
                         className="text-xs text-white uppercase font-bold flex items-center gap-1 hover:text-brand-bone transition-colors"
                       >
-                        View Details <ChevronRight size={14} />
+                        Ver Detalles <ChevronRight size={14} />
                       </button>
                     </div>
                   </div>
@@ -200,16 +200,16 @@ export const Account: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <h3 className="text-white font-bold uppercase tracking-widest text-xl mb-8">Personal Data</h3>
+                <h3 className="text-white font-bold uppercase tracking-widest text-xl mb-8">Datos Personales</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                   <div className="space-y-6">
                     <h3 className="text-neutral-500 font-bold uppercase tracking-widest text-xs border-b border-brand-dark pb-2">
-                      Contact Info
+                      Información de Contacto
                     </h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-xs uppercase text-neutral-500 mb-2">Username</label>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">Nombre de Usuario</label>
                         <input
                           type="text"
                           value={profileData.username}
@@ -218,7 +218,7 @@ export const Account: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs uppercase text-neutral-500 mb-2">First Name</label>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">Nombre</label>
                         <input
                           type="text"
                           value={profileData.firstName}
@@ -227,7 +227,7 @@ export const Account: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs uppercase text-neutral-500 mb-2">Last Name</label>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">Apellido</label>
                         <input
                           type="text"
                           value={profileData.lastName}
@@ -236,7 +236,7 @@ export const Account: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs uppercase text-neutral-500 mb-2">Email Address</label>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">Correo Electrónico</label>
                         <input
                           type="email"
                           value={profileData.email}
@@ -245,7 +245,7 @@ export const Account: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs uppercase text-neutral-500 mb-2">Phone Number</label>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">Número de Teléfono</label>
                         <input
                           type="tel"
                           value={profileData.phone}
@@ -259,11 +259,11 @@ export const Account: React.FC = () => {
 
                   <div className="space-y-6">
                     <h3 className="text-neutral-500 font-bold uppercase tracking-widest text-xs border-b border-brand-dark pb-2">
-                      Shipping Details
+                      Detalles de Envío
                     </h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-xs uppercase text-neutral-500 mb-2">Address</label>
+                        <label className="block text-xs uppercase text-neutral-500 mb-2">Dirección</label>
                         <input
                           type="text"
                           value={profileData.address}
@@ -273,7 +273,7 @@ export const Account: React.FC = () => {
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-xs uppercase text-neutral-500 mb-2">City</label>
+                          <label className="block text-xs uppercase text-neutral-500 mb-2">Ciudad</label>
                           <input
                             type="text"
                             value={profileData.city}
@@ -282,7 +282,7 @@ export const Account: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <label className="block text-xs uppercase text-neutral-500 mb-2">Postal Code</label>
+                          <label className="block text-xs uppercase text-neutral-500 mb-2">Código Postal</label>
                           <input
                             type="text"
                             value={profileData.postalCode}
@@ -306,7 +306,7 @@ export const Account: React.FC = () => {
                     disabled={saving}
                     className="bg-white text-black px-8 py-3 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
-                    {saving ? 'Saving...' : 'Update Data'}
+                    {saving ? 'Guardando...' : 'Actualizar Datos'}
                     {!saving && <Check size={16} />}
                   </button>
                 </div>
@@ -315,6 +315,6 @@ export const Account: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };

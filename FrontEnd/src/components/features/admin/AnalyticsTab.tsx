@@ -168,54 +168,54 @@ export const AnalyticsTab: React.FC = () => {
 
    return (
       <div className="space-y-8 animate-fade-in pb-12">
-         <h2 className="text-3xl font-black uppercase italic text-white">Analytics Dashboard</h2>
+         <h2 className="text-3xl font-black uppercase italic text-white">Panel de Analíticas</h2>
 
          {/* 1. Global High Level Metrics (Cards) */}
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Best Selling Category */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Best-Selling Category</h3>
+                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Categoría Más Vendida</h3>
                   <Tag size={20} className="text-purple-500" />
                </div>
                <p className="text-2xl font-black text-white uppercase truncate" title={bestCategory}>{bestCategory}</p>
-               <p className="text-[10px] text-neutral-500 mt-1 uppercase">Top performer this month</p>
+               <p className="text-[10px] text-neutral-500 mt-1 uppercase">Mejor rendimiento este mes</p>
             </div>
 
             {/* Total Sales x Month */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Monthly Sales</h3>
+                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Ventas Mensuales</h3>
                   <DollarSign size={20} className="text-brand-bone" />
                </div>
                <p className="text-2xl font-black text-white">{formatPrice(thisMonthRevenue)}</p>
                <div className={`mt-2 text-[10px] font-bold uppercase flex items-center gap-1 ${revenueGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                   {revenueGrowth >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                  {Math.abs(revenueGrowth).toFixed(1)}% vs last month
+                  {Math.abs(revenueGrowth).toFixed(1)}% vs mes anterior
                </div>
             </div>
 
             {/* Total Orders x Month */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Monthly Orders</h3>
+                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Pedidos Mensuales</h3>
                   <ShoppingBag size={20} className="text-blue-500" />
                </div>
                <p className="text-2xl font-black text-white">{thisMonthCount}</p>
                <div className={`mt-2 text-[10px] font-bold uppercase flex items-center gap-1 ${ordersGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                   {ordersGrowth >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                  {Math.abs(ordersGrowth).toFixed(1)}% vs last month
+                  {Math.abs(ordersGrowth).toFixed(1)}% vs mes anterior
                </div>
             </div>
 
             {/* Units Sold This Month */}
             <div className="bg-brand-dark/20 border border-brand-dark p-6">
                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Units Sold</h3>
+                  <h3 className="text-neutral-500 font-bold uppercase text-xs tracking-widest">Unidades Vendidas</h3>
                   <Package size={20} className="text-green-500" />
                </div>
                <p className="text-2xl font-black text-white">{unitsSoldThisMonth}</p>
-               <p className="text-[10px] text-neutral-500 mt-1 uppercase">Items shipped this month</p>
+               <p className="text-[10px] text-neutral-500 mt-1 uppercase">Artículos enviados este mes</p>
             </div>
          </div>
 
@@ -223,7 +223,7 @@ export const AnalyticsTab: React.FC = () => {
          <div className="bg-brand-dark/10 border border-brand-dark p-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
                <h3 className="text-white font-bold uppercase tracking-widest text-lg flex items-center gap-2">
-                  <DollarSign size={20} className="text-brand-bone" /> Detailed Sales Analysis
+                  <DollarSign size={20} className="text-brand-bone" /> Análisis Detallado de Ventas
                </h3>
 
                {/* Filters */}
@@ -235,7 +235,7 @@ export const AnalyticsTab: React.FC = () => {
                         : 'text-neutral-400 border-brand-dark hover:border-white'
                         }`}
                   >
-                     Last 7 Days
+                     Últimos 7 Días
                   </button>
                   <button
                      onClick={() => setFilterType('monthly')}
@@ -244,7 +244,7 @@ export const AnalyticsTab: React.FC = () => {
                         : 'text-neutral-400 border-brand-dark hover:border-white'
                         }`}
                   >
-                     Last 30 Days
+                     Últimos 30 Días
                   </button>
                   <button
                      onClick={() => setFilterType('all')}
@@ -253,7 +253,7 @@ export const AnalyticsTab: React.FC = () => {
                         : 'text-neutral-400 border-brand-dark hover:border-white'
                         }`}
                   >
-                     All Time
+                     Todo el Tiempo
                   </button>
                   <button
                      onClick={() => setFilterType('custom')}
@@ -262,7 +262,7 @@ export const AnalyticsTab: React.FC = () => {
                         : 'text-neutral-400 border-brand-dark hover:border-white'
                         }`}
                   >
-                     <Calendar size={14} /> Custom
+                     <Calendar size={14} /> Personalizado
                   </button>
                </div>
             </div>
@@ -271,7 +271,7 @@ export const AnalyticsTab: React.FC = () => {
             {filterType === 'custom' && (
                <div className="flex items-center gap-4 mb-8 bg-brand-dark/20 p-4 w-fit border border-brand-dark">
                   <div>
-                     <label className="block text-[10px] uppercase font-bold text-neutral-500 mb-1">Start Date</label>
+                     <label className="block text-[10px] uppercase font-bold text-neutral-500 mb-1">Fecha de Inicio</label>
                      <input
                         type="date"
                         value={customStartDate}
@@ -281,7 +281,7 @@ export const AnalyticsTab: React.FC = () => {
                   </div>
                   <span className="text-neutral-500 mt-4">-</span>
                   <div>
-                     <label className="block text-[10px] uppercase font-bold text-neutral-500 mb-1">End Date</label>
+                     <label className="block text-[10px] uppercase font-bold text-neutral-500 mb-1">Fecha de Fin</label>
                      <input
                         type="date"
                         value={customEndDate}
@@ -295,13 +295,13 @@ export const AnalyticsTab: React.FC = () => {
             {/* Filtered Stats Display */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                <div className="bg-brand-black border border-brand-dark p-8 flex flex-col justify-center items-center text-center">
-                  <span className="text-neutral-500 font-bold uppercase text-xs tracking-widest mb-2">Total Sales ({filterType === 'custom' ? 'Range' : filterType})</span>
+                  <span className="text-neutral-500 font-bold uppercase text-xs tracking-widest mb-2">Ventas Totales ({filterType === 'custom' ? 'Rango' : filterType})</span>
                   <span className="text-5xl md:text-6xl font-black text-white tracking-tighter">
                      {formatPrice(periodRevenue)}
                   </span>
                </div>
                <div className="bg-brand-black border border-brand-dark p-8 flex flex-col justify-center items-center text-center">
-                  <span className="text-neutral-500 font-bold uppercase text-xs tracking-widest mb-2">Orders Placed ({filterType === 'custom' ? 'Range' : filterType})</span>
+                  <span className="text-neutral-500 font-bold uppercase text-xs tracking-widest mb-2">Pedidos Realizados ({filterType === 'custom' ? 'Rango' : filterType})</span>
                   <span className="text-5xl md:text-6xl font-black text-brand-bone tracking-tighter">
                      {periodOrdersCount}
                   </span>
@@ -312,21 +312,21 @@ export const AnalyticsTab: React.FC = () => {
          {/* 3. Top Selling Products (Filtered by Period) */}
          <div className="bg-brand-dark/10 border border-brand-dark p-8">
             <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-6 flex items-center gap-2">
-               Top Products <span className="text-neutral-500">({filterType === 'custom' ? 'Selected Range' : filterType})</span>
+               Productos Top <span className="text-neutral-500">({filterType === 'custom' ? 'Rango Seleccionado' : filterType})</span>
             </h3>
             <div className="overflow-x-auto">
                <table className="w-full text-left">
                   <thead>
                      <tr className="border-b border-brand-dark text-neutral-500 text-xs font-bold uppercase tracking-widest">
-                        <th className="pb-4">Product</th>
-                        <th className="pb-4">Category</th>
-                        <th className="pb-4 text-right">Units Sold</th>
-                        <th className="pb-4 text-right">Revenue</th>
+                        <th className="pb-4">Producto</th>
+                        <th className="pb-4">Categoría</th>
+                        <th className="pb-4 text-right">Unidades Vendidas</th>
+                        <th className="pb-4 text-right">Ingresos</th>
                      </tr>
                   </thead>
                   <tbody className="text-sm">
                      {topProducts.length === 0 ? (
-                        <tr><td colSpan={4} className="py-8 text-center text-neutral-500 uppercase">No sales data for this period.</td></tr>
+                        <tr><td colSpan={4} className="py-8 text-center text-neutral-500 uppercase">No hay datos de ventas para este periodo.</td></tr>
                      ) : (
                         topProducts.map((p, i) => (
                            <tr key={i} className="border-b border-brand-dark/50 hover:bg-brand-dark/10 transition-colors">
@@ -346,7 +346,7 @@ export const AnalyticsTab: React.FC = () => {
          <div className="bg-brand-dark/20 border border-brand-dark p-8">
             <div className="flex justify-between items-center mb-8">
                <h3 className="text-white font-bold uppercase tracking-widest text-sm flex items-center gap-2">
-                  <BarChart3 size={18} className="text-brand-bone" /> Monthly Earnings (Last 6 Months)
+                  <BarChart3 size={18} className="text-brand-bone" /> Ingresos Mensuales (Últimos 6 Meses)
                </h3>
             </div>
 

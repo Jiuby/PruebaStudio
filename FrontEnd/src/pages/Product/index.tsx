@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../../context/ShopContext';
@@ -54,8 +53,8 @@ export const ProductDetails: React.FC = () => {
     return (
       <div className="min-h-screen bg-brand-black flex items-center justify-center text-white">
         <div className="text-center">
-          <h2 className="text-4xl font-black uppercase mb-4">Product Not Found</h2>
-          <Link to="/" className="text-brand-bone underline uppercase tracking-widest text-sm">Return Home</Link>
+          <h2 className="text-4xl font-black uppercase mb-4">Producto No Encontrado</h2>
+          <Link to="/" className="text-brand-bone underline uppercase tracking-widest text-sm">Volver al Inicio</Link>
         </div>
       </div>
     );
@@ -117,10 +116,10 @@ export const ProductDetails: React.FC = () => {
       {/* Breadcrumb */}
       <div className="container mx-auto mb-8">
         <button onClick={() => navigate(-1)} className="flex items-center text-neutral-500 hover:text-white transition-colors text-xs uppercase tracking-widest gap-2 mb-6">
-          <ArrowLeft size={16} /> Back
+          <ArrowLeft size={16} /> Volver
         </button>
         <div className="text-xs uppercase tracking-widest text-neutral-500">
-          <Link to="/" className="hover:text-white">Home</Link> / <Link to={`/shop?category=${product.category}`} className="text-white hover:text-brand-bone transition-colors">{product.category}</Link> / {product.name}
+          <Link to="/" className="hover:text-white">Inicio</Link> / <Link to={`/shop?category=${product.category}`} className="text-white hover:text-brand-bone transition-colors">{product.category}</Link> / {product.name}
         </div>
       </div>
 
@@ -145,14 +144,14 @@ export const ProductDetails: React.FC = () => {
             {/* New Drop Badge */}
             {product.isNew && inStock && (
               <div className="absolute top-4 left-4 bg-brand-bone text-brand-black text-xs font-bold px-3 py-1 uppercase tracking-widest z-10">
-                New Drop
+                Nuevo Lanzamiento
               </div>
             )}
 
             {/* Sale Badge */}
             {isSale && inStock && (
               <div className="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 uppercase tracking-widest z-10">
-                SALE
+                OFERTA
               </div>
             )}
 
@@ -160,7 +159,7 @@ export const ProductDetails: React.FC = () => {
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                 <div className="bg-brand-black border border-white text-white text-xl font-bold px-6 py-3 uppercase tracking-[0.2em] transform -rotate-12">
-                  Sold Out
+                  Agotado
                 </div>
               </div>
             )}
@@ -212,7 +211,7 @@ export const ProductDetails: React.FC = () => {
                     exit={{ opacity: 0, x: 10 }}
                     className="absolute right-full top-1/2 -translate-y-1/2 mr-2 bg-brand-bone text-brand-black text-[10px] font-bold uppercase px-2 py-1 tracking-widest whitespace-nowrap"
                   >
-                    Link Copied
+                    Enlace Copiado
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -230,7 +229,7 @@ export const ProductDetails: React.FC = () => {
             )}
             {isSale && (
               <span className="bg-red-600/20 text-red-500 text-xs font-bold px-2 py-1 uppercase tracking-widest border border-red-600/50">
-                Save {Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)}%
+                Ahorra {Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)}%
               </span>
             )}
           </div>
@@ -246,7 +245,7 @@ export const ProductDetails: React.FC = () => {
             {/* Color Selection */}
             {product.colors && product.colors.length > 0 && (
               <div>
-                <span className="text-xs font-bold uppercase text-white tracking-widest mb-3 block">Select Color</span>
+                <span className="text-xs font-bold uppercase text-white tracking-widest mb-3 block">Seleccionar Color</span>
                 <div className="flex flex-wrap gap-3">
                   {product.colors.map((color) => (
                     <button
@@ -267,9 +266,9 @@ export const ProductDetails: React.FC = () => {
             {/* Size */}
             <div>
               <div className="flex justify-between mb-3">
-                <span className="text-xs font-bold uppercase text-white tracking-widest">Select Size</span>
+                <span className="text-xs font-bold uppercase text-white tracking-widest">Seleccionar Talla</span>
                 <Link to="/size-guide" className="flex items-center gap-1 text-xs text-neutral-500 hover:text-white transition-colors uppercase tracking-wider">
-                  <Ruler size={14} /> Size Guide
+                  <Ruler size={14} /> Guía de Tallas
                 </Link>
               </div>
               <div className="grid grid-cols-4 gap-3">
@@ -301,7 +300,7 @@ export const ProductDetails: React.FC = () => {
 
             {/* Quantity */}
             <div>
-              <span className="text-xs font-bold uppercase text-white tracking-widest mb-3 block">Quantity</span>
+              <span className="text-xs font-bold uppercase text-white tracking-widest mb-3 block">Cantidad</span>
               <div className="flex items-center border border-neutral-800 w-32 h-12">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -330,9 +329,9 @@ export const ProductDetails: React.FC = () => {
               }`}
           >
             {inStock ? (
-              <>Add To Bag <span className="group-hover:translate-x-1 transition-transform">→</span></>
+              <>Añadir al Carrito <span className="group-hover:translate-x-1 transition-transform">→</span></>
             ) : (
-              'Sold Out'
+              'Agotado'
             )}
           </button>
 
@@ -344,14 +343,14 @@ export const ProductDetails: React.FC = () => {
                 className={`pb-4 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'details' ? 'text-brand-bone border-b-2 border-brand-bone' : 'text-neutral-500 hover:text-white'
                   }`}
               >
-                Details
+                Detalles
               </button>
               <button
                 onClick={() => setActiveTab('shipping')}
                 className={`pb-4 text-xs font-bold uppercase tracking-widest transition-colors ${activeTab === 'shipping' ? 'text-brand-bone border-b-2 border-brand-bone' : 'text-neutral-500 hover:text-white'
                   }`}
               >
-                Shipping
+                Envíos
               </button>
             </div>
 
@@ -364,11 +363,11 @@ export const ProductDetails: React.FC = () => {
                     ))
                   ) : (
                     <>
-                      <li>Heavyweight cotton blend</li>
-                      <li>Oversized, boxy fit</li>
-                      <li>Signature lightning embroidery</li>
-                      <li>Designed in Cúcuta, Colombia</li>
-                      <li>Care: Cold wash, hang dry</li>
+                      <li>Mezcla de algodón pesado</li>
+                      <li>Ajuste oversize y cuadrado</li>
+                      <li>Bordado de rayo característico</li>
+                      <li>Diseñado en Cúcuta, Colombia</li>
+                      <li>Cuidado: Lavar en frío, secar colgado</li>
                     </>
                   )}
                 </ul>
@@ -376,11 +375,11 @@ export const ProductDetails: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <Truck size={18} className="text-brand-bone mt-1" />
-                    <p>Free standard shipping in Colombia on orders over $200.000 COP. International shipping available.</p>
+                    <p>Envío estándar gratuito en Colombia por compras superiores a $200.000 COP. Envíos internacionales disponibles.</p>
                   </div>
                   <div className="flex items-start gap-3">
                     <ShieldCheck size={18} className="text-brand-bone mt-1" />
-                    <p>30-day return policy for unworn items with original tags attached.</p>
+                    <p>Política de devolución de 30 días para artículos sin usar con etiquetas originales.</p>
                   </div>
                 </div>
               )}
@@ -392,7 +391,7 @@ export const ProductDetails: React.FC = () => {
       {/* Related Products */}
       {relatedProducts.length > 0 && (
         <div className="container mx-auto border-t border-brand-dark pt-16">
-          <h2 className="text-2xl font-black uppercase text-white mb-8 italic">You May Also Like</h2>
+          <h2 className="text-2xl font-black uppercase text-white mb-8 italic">También te podría gustar</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
             {relatedProducts.map(p => (
               <ProductCard key={p.id} product={p} />

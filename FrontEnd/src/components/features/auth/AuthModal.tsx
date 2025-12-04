@@ -121,10 +121,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
             <div className="mb-8 text-center">
               <h2 className="text-3xl font-black uppercase italic text-white mb-2">
-                {view === 'login' ? 'Welcome Back' : 'Join The Cult'}
+                {view === 'login' ? 'Bienvenido de Nuevo' : 'Únete al Culto'}
               </h2>
               <p className="text-neutral-500 text-xs uppercase tracking-widest">
-                {view === 'login' ? 'Access your orders & data' : 'Create an account'}
+                {view === 'login' ? 'Accede a tus pedidos y datos' : 'Crear una cuenta'}
               </p>
             </div>
 
@@ -140,36 +140,36 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               {view === 'register' && (
                 <>
                   <div>
-                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Username</label>
+                    <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Nombre de Usuario</label>
                     <input
                       type="text"
                       required
                       value={formData.username}
                       onChange={e => setFormData({ ...formData, username: e.target.value })}
                       className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
-                      placeholder="ENTER USERNAME"
+                      placeholder="INGRESA USUARIO"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">First Name</label>
+                      <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Nombre</label>
                       <input
                         type="text"
                         value={formData.firstName}
                         onChange={e => setFormData({ ...formData, firstName: e.target.value })}
                         className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
-                        placeholder="FIRST"
+                        placeholder="NOMBRE"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Last Name</label>
+                      <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Apellido</label>
                       <input
                         type="text"
                         value={formData.lastName}
                         onChange={e => setFormData({ ...formData, lastName: e.target.value })}
                         className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
-                        placeholder="LAST"
+                        placeholder="APELLIDO"
                       />
                     </div>
                   </div>
@@ -177,19 +177,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               )}
 
               <div>
-                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Email</label>
+                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Correo Electrónico</label>
                 <input
                   type="email"
                   required
                   value={formData.email}
                   onChange={e => setFormData({ ...formData, email: e.target.value })}
                   className="w-full bg-brand-dark/30 border border-brand-dark p-3 text-white focus:outline-none focus:border-brand-bone transition-colors"
-                  placeholder="ENTER EMAIL"
+                  placeholder="INGRESA CORREO"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Password</label>
+                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Contraseña</label>
                 <input
                   type="password"
                   required
@@ -216,7 +216,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
               {view === 'register' && (
                 <div>
-                  <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Confirm Password</label>
+                  <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Confirmar Contraseña</label>
                   <input
                     type="password"
                     required
@@ -233,7 +233,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 disabled={loading}
                 className="w-full bg-brand-bone text-brand-black font-black uppercase py-4 tracking-widest hover:bg-white transition-colors flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Processing...' : (view === 'login' ? 'Sign In' : 'Create Account')}
+                {loading ? 'Procesando...' : (view === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta')}
                 {!loading && <ArrowRight size={16} />}
               </button>
             </form>
@@ -243,7 +243,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 onClick={() => setView(view === 'login' ? 'register' : 'login')}
                 className="text-xs uppercase tracking-widest text-neutral-500 hover:text-brand-bone transition-colors border-b border-transparent hover:border-brand-bone pb-1"
               >
-                {view === 'login' ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+                {view === 'login' ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia Sesión"}
               </button>
             </div>
           </motion.div>

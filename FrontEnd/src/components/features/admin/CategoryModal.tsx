@@ -36,7 +36,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose })
     };
 
     const handleDelete = (category: string) => {
-        if (window.confirm(`Delete category "${category}"?`)) {
+        if (window.confirm(`¿Eliminar categoría "${category}"?`)) {
             deleteCategory(category);
         }
     };
@@ -52,14 +52,14 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose })
                         className="bg-brand-black border border-brand-dark p-8 w-full max-w-lg shadow-2xl mb-20"
                     >
                         <div className="flex justify-between items-center mb-8 border-b border-brand-dark pb-4">
-                            <h2 className="text-2xl font-black uppercase italic text-white">Manage Categories</h2>
+                            <h2 className="text-2xl font-black uppercase italic text-white">Gestionar Categorías</h2>
                             <button onClick={onClose} className="text-neutral-500 hover:text-white"><X size={24} /></button>
                         </div>
 
                         <div className="space-y-6">
                             {/* Add New Category */}
                             <div className="bg-brand-dark/20 p-4 border border-brand-dark">
-                                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Add New Category</label>
+                                <label className="block text-xs uppercase font-bold text-neutral-500 mb-2">Agregar Nueva Categoría</label>
                                 <div className="flex gap-2">
                                     <input
                                         type="text"
@@ -103,14 +103,14 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose })
                                                     <button
                                                         onClick={() => handleStartEdit(category)}
                                                         className="text-neutral-500 hover:text-brand-bone p-2"
-                                                        title="Edit"
+                                                        title="Editar"
                                                     >
                                                         <Edit2 size={14} />
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(category)}
                                                         className="text-neutral-500 hover:text-red-500 p-2"
-                                                        title="Delete"
+                                                        title="Eliminar"
                                                     >
                                                         <Trash2 size={14} />
                                                     </button>
@@ -120,7 +120,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose })
                                     </div>
                                 ))}
                                 {categories.length <= 1 && (
-                                    <p className="text-neutral-500 text-center text-xs italic py-4">No categories found.</p>
+                                    <p className="text-neutral-500 text-center text-xs italic py-4">No se encontraron categorías.</p>
                                 )}
                             </div>
                         </div>

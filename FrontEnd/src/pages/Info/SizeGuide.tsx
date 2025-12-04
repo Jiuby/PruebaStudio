@@ -4,47 +4,47 @@ import { motion } from 'framer-motion';
 import { Ruler } from 'lucide-react';
 import VisualGuideImg from '../../static/IMG/VisualGuide.png';
 
-type Category = 'Tees' | 'Hoodies' | 'Bottoms';
+type Category = 'Camisetas' | 'Hoodies' | 'Pantalones';
 
 export const SizeGuide: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [activeCategory, setActiveCategory] = useState<Category>('Tees');
+  const [activeCategory, setActiveCategory] = useState<Category>('Camisetas');
 
-  const categories: Category[] = ['Tees', 'Hoodies', 'Bottoms'];
+  const categories: Category[] = ['Camisetas', 'Hoodies', 'Pantalones'];
 
   const sizeData = {
-    Tees: {
-      headers: ['Size', 'Chest (cm)', 'Length (cm)', 'Shoulder (cm)'],
+    Camisetas: {
+      headers: ['Talla', 'Pecho (cm)', 'Largo (cm)', 'Hombro (cm)'],
       rows: [
         ['S', '110', '72', '52'],
         ['M', '116', '74', '54'],
         ['L', '122', '76', '56'],
         ['XL', '128', '78', '58']
       ],
-      note: 'Our tees are designed with an oversized, boxy fit. Size down for a more standard fit.'
+      note: 'Nuestras camisetas tienen un diseño oversize y cuadrado. Elige una talla menos para un ajuste más estándar.'
     },
     Hoodies: {
-      headers: ['Size', 'Chest (cm)', 'Length (cm)', 'Sleeve (cm)'],
+      headers: ['Talla', 'Pecho (cm)', 'Largo (cm)', 'Manga (cm)'],
       rows: [
         ['S', '120', '68', '62'],
         ['M', '126', '70', '63'],
         ['L', '132', '72', '64'],
         ['XL', '138', '74', '65']
       ],
-      note: 'Hoodies feature dropped shoulders and a wide body. The length is slightly cropped to sit at the waist.'
+      note: 'Los hoodies tienen hombros caídos y cuerpo ancho. El largo es ligeramente corto para ajustarse a la cintura.'
     },
-    Bottoms: {
-      headers: ['Size', 'Waist (cm)', 'Length (cm)', 'Thigh (cm)'],
+    Pantalones: {
+      headers: ['Talla', 'Cintura (cm)', 'Largo (cm)', 'Muslo (cm)'],
       rows: [
         ['S (30)', '76', '104', '64'],
         ['M (32)', '81', '106', '66'],
         ['L (34)', '86', '108', '68'],
         ['XL (36)', '91', '110', '70']
       ],
-      note: 'Pants are baggy fit. Waist is true to size but legs are loose.'
+      note: 'Los pantalones son de corte holgado. La cintura es fiel a la talla pero las piernas son sueltas.'
     }
   };
 
@@ -58,7 +58,7 @@ export const SizeGuide: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-brand-bone uppercase tracking-[0.3em] text-xs font-bold mb-4"
         >
-          Measurements
+          Medidas
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, scale: 0.95 }}
@@ -66,7 +66,7 @@ export const SizeGuide: React.FC = () => {
           transition={{ delay: 0.1 }}
           className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter"
         >
-          Find Your Fit
+          Encuentra tu Talla
         </motion.h1>
       </div>
 
@@ -98,7 +98,7 @@ export const SizeGuide: React.FC = () => {
         >
           <div className="flex items-center gap-3 mb-8">
             <Ruler className="text-brand-bone" size={24} />
-            <h2 className="text-2xl font-black text-white uppercase italic">{activeCategory} Size Chart</h2>
+            <h2 className="text-2xl font-black text-white uppercase italic">{activeCategory} Guía de Tallas</h2>
           </div>
 
           <div className="overflow-x-auto">
@@ -127,7 +127,7 @@ export const SizeGuide: React.FC = () => {
           </div>
 
           <p className="mt-8 text-sm text-neutral-400 italic bg-brand-black/50 p-4 border-l-2 border-brand-bone">
-            <span className="font-bold text-white not-italic uppercase tracking-wide mr-2">Note:</span>
+            <span className="font-bold text-white not-italic uppercase tracking-wide mr-2">Nota:</span>
             {sizeData[activeCategory].note}
           </p>
         </motion.div>
@@ -135,25 +135,25 @@ export const SizeGuide: React.FC = () => {
         {/* Measuring Guide */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-brand-dark pt-12">
           <div>
-            <h3 className="text-white font-bold uppercase tracking-widest text-lg mb-6">How To Measure</h3>
+            <h3 className="text-white font-bold uppercase tracking-widest text-lg mb-6">Cómo Medir</h3>
             <ul className="space-y-6">
               <li>
-                <h4 className="text-brand-bone font-bold uppercase text-xs mb-1">Chest</h4>
-                <p className="text-sm text-neutral-400">Measure around the fullest part of your chest, keeping the measuring tape horizontal.</p>
+                <h4 className="text-brand-bone font-bold uppercase text-xs mb-1">Pecho</h4>
+                <p className="text-sm text-neutral-400">Mide alrededor de la parte más ancha de tu pecho, manteniendo la cinta métrica horizontal.</p>
               </li>
               <li>
-                <h4 className="text-brand-bone font-bold uppercase text-xs mb-1">Waist</h4>
-                <p className="text-sm text-neutral-400">Measure around the narrowest part of your waist (typically the small of your back and where your body bends side to side).</p>
+                <h4 className="text-brand-bone font-bold uppercase text-xs mb-1">Cintura</h4>
+                <p className="text-sm text-neutral-400">Mide alrededor de la parte más estrecha de tu cintura (típicamente la parte baja de la espalda y donde tu cuerpo se dobla de lado a lado).</p>
               </li>
               <li>
-                <h4 className="text-brand-bone font-bold uppercase text-xs mb-1">Hips</h4>
-                <p className="text-sm text-neutral-400">Measure around the fullest part of your hips.</p>
+                <h4 className="text-brand-bone font-bold uppercase text-xs mb-1">Caderas</h4>
+                <p className="text-sm text-neutral-400">Mide alrededor de la parte más ancha de tus caderas.</p>
               </li>
             </ul>
           </div>
           <div className="bg-brand-dark/30 border border-brand-dark flex items-center justify-center p-8">
             <div className="text-center w-full">
-              <p className="text-neutral-500 text-xs uppercase tracking-widest mb-4">Visual Guide</p>
+              <p className="text-neutral-500 text-xs uppercase tracking-widest mb-4">Guía Visual</p>
               <img src={VisualGuideImg} alt="Visual Measurement Guide" className="w-full h-auto object-contain max-h-[400px]" />
             </div>
           </div>

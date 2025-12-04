@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, User, Package, Calendar, Mail, Phone, Truck, CheckCircle } from 'lucide-react';
@@ -27,7 +26,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
   // Derived display values
   const displayName = shipping
     ? `${shipping.firstName} ${shipping.lastName}`
-    : (registeredCustomer?.name || order.customerName || 'Guest');
+    : (registeredCustomer?.name || order.customerName || 'Invitado');
 
   const displayPhone = shipping?.phone || registeredCustomer?.phone || 'N/A';
   const displayAddress = shipping?.address || registeredCustomer?.address || 'N/A';
@@ -58,7 +57,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
           {/* Header */}
           <div className="flex justify-between items-center p-8 border-b border-brand-dark bg-brand-dark/10">
             <div>
-              <h2 className="text-2xl font-black uppercase italic text-white mb-1">Order Details</h2>
+              <h2 className="text-2xl font-black uppercase italic text-white mb-1">Detalles del Pedido</h2>
               <div className="flex items-center gap-4 text-xs">
                 <span className="text-brand-bone font-bold uppercase tracking-widest">#{order.id}</span>
                 <span className="text-neutral-500 uppercase flex items-center gap-1"><Calendar size={12} /> {order.date}</span>
@@ -75,7 +74,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
             <div className="lg:col-span-2 space-y-8">
               <div>
                 <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-6 flex items-center gap-2">
-                  <Package size={16} className="text-brand-bone" /> Items Ordered ({order.items.length})
+                  <Package size={16} className="text-brand-bone" /> Artículos Pedidos ({order.items.length})
                 </h3>
                 <div className="space-y-4">
                   {order.items.map((item, idx) => (
@@ -87,8 +86,8 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                         <div>
                           <h4 className="text-white text-sm font-bold uppercase leading-tight mb-1">{item.name}</h4>
                           {item.color && <p className="text-[10px] text-neutral-400 uppercase">Color: {item.color}</p>}
-                          <p className="text-[10px] text-neutral-400 uppercase">Size: {item.size}</p>
-                          <p className="text-[10px] text-neutral-400 uppercase">Qty: {item.quantity}</p>
+                          <p className="text-[10px] text-neutral-400 uppercase">Talla: {item.size}</p>
+                          <p className="text-[10px] text-neutral-400 uppercase">Cant: {item.quantity}</p>
                         </div>
                         <p className="text-white font-bold text-sm">{formatPrice(item.price)}</p>
                       </div>
@@ -111,8 +110,8 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                         <span>{formatPrice(itemsSubtotal)}</span>
                       </div>
                       <div className="flex justify-between text-sm text-neutral-400 mb-4">
-                        <span>Shipping</span>
-                        <span>{shippingCost === 0 ? 'Free' : formatPrice(shippingCost)}</span>
+                        <span>Envío</span>
+                        <span>{shippingCost === 0 ? 'Gratis' : formatPrice(shippingCost)}</span>
                       </div>
                       <div className="flex justify-between text-white font-bold text-lg pt-4 border-t border-brand-dark">
                         <span className="uppercase italic">Total</span>
@@ -131,19 +130,19 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
               <div className="bg-brand-bone text-brand-black p-6 space-y-6">
                 <div>
                   <h3 className="font-black uppercase italic text-lg mb-4 flex items-center gap-2">
-                    <Truck size={20} /> Update Status
+                    <Truck size={20} /> Actualizar Estado
                   </h3>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-2 opacity-70">Current Status</p>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-2 opacity-70">Estado Actual</p>
                   <div className="relative">
                     <select
                       value={order.status}
                       onChange={handleStatusChange}
                       className="w-full bg-black text-white p-3 font-bold uppercase text-sm border-none outline-none appearance-none cursor-pointer hover:bg-neutral-900 transition-colors focus:ring-2 focus:ring-white/20"
                     >
-                      <option value="Processing">Processing</option>
-                      <option value="Shipped">Shipped</option>
-                      <option value="Delivered">Delivered</option>
-                      <option value="Cancelled">Cancelled</option>
+                      <option value="Processing">Procesando</option>
+                      <option value="Shipped">Enviado</option>
+                      <option value="Delivered">Entregado</option>
+                      <option value="Cancelled">Cancelado</option>
                     </select>
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white">
                       ▼
@@ -153,11 +152,11 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                   {/* Payment Verification Toggle */}
                   <div className="bg-brand-bone text-brand-black p-6 mt-4">
                     <h3 className="font-black uppercase italic text-sm mb-3 flex items-center gap-2">
-                      <CheckCircle size={16} /> Payment Verification
+                      <CheckCircle size={16} /> Verificación de Pago
                     </h3>
                     <label className="flex items-center justify-between cursor-pointer group">
                       <span className="text-xs font-bold uppercase tracking-widest opacity-80 group-hover:opacity-100 transition-opacity">
-                        {order.paymentVerified ? 'Verified' : 'Pending Verification'}
+                        {order.paymentVerified ? 'Verificado' : 'Pendiente de Verificación'}
                       </span>
                       <div className="relative">
                         <input
@@ -179,32 +178,30 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                     </label>
                   </div>
                 </div>
-
-
               </div>
 
               {/* Customer Info */}
               <div className="bg-brand-dark/20 border border-brand-dark p-6 space-y-6">
                 <div className="flex justify-between items-start border-b border-brand-dark pb-2">
                   <h3 className="text-white font-bold uppercase tracking-widest text-sm flex items-center gap-2">
-                    <User size={16} className="text-brand-bone" /> Customer Details
+                    <User size={16} className="text-brand-bone" /> Detalles del Cliente
                   </h3>
                   {registeredCustomer ? (
                     <span className="bg-brand-bone text-brand-black text-[10px] font-bold px-1 uppercase flex items-center gap-1">
-                      <CheckCircle size={10} /> Member
+                      <CheckCircle size={10} /> Miembro
                     </span>
                   ) : (
-                    <span className="bg-neutral-700 text-neutral-300 text-[10px] font-bold px-1 uppercase">Guest</span>
+                    <span className="bg-neutral-700 text-neutral-300 text-[10px] font-bold px-1 uppercase">Invitado</span>
                   )}
                 </div>
 
                 <div className="space-y-3">
                   <div>
-                    <p className="text-[10px] text-neutral-500 uppercase font-bold">Name</p>
+                    <p className="text-[10px] text-neutral-500 uppercase font-bold">Nombre</p>
                     <p className="text-white text-sm font-bold uppercase">{displayName}</p>
                   </div>
                   <div>
-                    <p className="text-[10px] text-neutral-500 uppercase font-bold">Contact</p>
+                    <p className="text-[10px] text-neutral-500 uppercase font-bold">Contacto</p>
                     <div className="flex items-center gap-2 text-neutral-300 text-xs mt-1">
                       <Mail size={12} /> <span className="truncate">{order.customerEmail}</span>
                     </div>
@@ -218,7 +215,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
 
                 <div className="pt-4 border-t border-brand-dark">
                   <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-3 flex items-center gap-2">
-                    <MapPin size={14} className="text-brand-bone" /> Shipping Address
+                    <MapPin size={14} className="text-brand-bone" /> Dirección de Envío
                   </h4>
                   <div className="text-xs text-neutral-400 leading-relaxed uppercase">
                     {displayAddress !== 'N/A' ? (
@@ -228,7 +225,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                         <p>{displayZip}</p>
                       </>
                     ) : (
-                      <p className="text-neutral-600 italic">No shipping address provided.</p>
+                      <p className="text-neutral-600 italic">No se proporcionó dirección de envío.</p>
                     )}
                   </div>
                 </div>
@@ -242,7 +239,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
               onClick={onClose}
               className="bg-white text-black px-8 py-3 font-bold uppercase tracking-widest hover:bg-brand-bone transition-colors text-xs"
             >
-              Close Details
+              Cerrar Detalles
             </button>
           </div>
         </motion.div>

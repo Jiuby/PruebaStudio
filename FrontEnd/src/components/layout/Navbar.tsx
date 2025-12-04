@@ -52,9 +52,9 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest text-neutral-400">
-            <Link to="/shop" className="hover:text-brand-bone transition-colors">Shop</Link>
-            <Link to="/collections" className="hover:text-brand-bone transition-colors">Collections</Link>
-            <Link to="/about" className="hover:text-brand-bone transition-colors">About</Link>
+            <Link to="/shop" className="hover:text-brand-bone transition-colors">Tienda</Link>
+            <Link to="/collections" className="hover:text-brand-bone transition-colors">Colecciones</Link>
+            <Link to="/about" className="hover:text-brand-bone transition-colors">Nosotros</Link>
           </div>
 
           {/* Logo */}
@@ -94,15 +94,15 @@ export const Navbar: React.FC = () => {
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-20 bg-brand-black pt-24 px-6 md:hidden flex flex-col space-y-8">
-          <Link to="/shop" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-black uppercase text-white hover:text-brand-bone">Shop All</Link>
-          <Link to="/collections" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-black uppercase text-white hover:text-brand-bone">Collections</Link>
-          <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-black uppercase text-white hover:text-brand-bone">About Us</Link>
+          <Link to="/shop" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-black uppercase text-white hover:text-brand-bone">Tienda</Link>
+          <Link to="/collections" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-black uppercase text-white hover:text-brand-bone">Colecciones</Link>
+          <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-black uppercase text-white hover:text-brand-bone">Nosotros</Link>
           <div className="mt-auto pb-12 border-t border-brand-dark pt-8">
-            <p className="text-neutral-500 uppercase tracking-widest text-xs mb-4">Account</p>
+            <p className="text-neutral-500 uppercase tracking-widest text-xs mb-4">Cuenta</p>
             {isAuthenticated ? (
               <>
-                <Link to="/account" onClick={() => setMobileMenuOpen(false)} className="text-white font-bold block mb-2 text-xl uppercase italic">My Dashboard</Link>
-                <Link to="/account" onClick={() => setMobileMenuOpen(false)} className="text-neutral-400 text-sm block">Orders & Data</Link>
+                <Link to="/account" onClick={() => setMobileMenuOpen(false)} className="text-white font-bold block mb-2 text-xl uppercase italic">Mi Panel</Link>
+                <Link to="/account" onClick={() => setMobileMenuOpen(false)} className="text-neutral-400 text-sm block">Pedidos y Datos</Link>
               </>
             ) : (
               <button
@@ -112,7 +112,7 @@ export const Navbar: React.FC = () => {
                 }}
                 className="text-white font-bold block text-xl uppercase italic"
               >
-                Log In / Sign Up
+                Log In / Registrarse
               </button>
             )}
           </div>
