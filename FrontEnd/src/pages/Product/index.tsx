@@ -375,7 +375,7 @@ export const ProductDetails: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <Truck size={18} className="text-brand-bone mt-1" />
-                    <p>Envío estándar gratuito en Colombia por compras superiores a $200.000 COP. Envíos internacionales disponibles.</p>
+                    <p>Envío estándar gratuito en Colombia por compras superiores a $200.000 COP.</p>
                   </div>
                   <div className="flex items-start gap-3">
                     <ShieldCheck size={18} className="text-brand-bone mt-1" />

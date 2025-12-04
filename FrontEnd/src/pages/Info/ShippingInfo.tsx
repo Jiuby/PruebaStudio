@@ -25,14 +25,6 @@ export const ShippingInfo: React.FC = () => {
       time: '2-4 Días Hábiles',
       cost: '$12.000 COP',
       desc: 'Usamos Interrapidisimo y Coordinadora. Envío gratis en pedidos superiores a $200.000 COP.'
-    },
-    {
-      icon: Globe,
-      title: 'Internacional',
-      subtitle: 'Resto del Mundo',
-      time: '5-10 Días Hábiles',
-      cost: 'Calculado al Pagar',
-      desc: 'Enviado vía DHL Express. Los impuestos y aranceles internacionales son responsabilidad del cliente al momento de la entrega.'
     }
   ];
 
@@ -60,7 +52,7 @@ export const ShippingInfo: React.FC = () => {
 
       {/* Main Grid */}
       <div className="container mx-auto mb-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {shippingMethods.map((method, index) => {
             const Icon = method.icon;
             return (
@@ -131,7 +123,7 @@ export const ShippingInfo: React.FC = () => {
               </li>
               <li className="flex gap-3">
                 <span className="text-brand-bone font-bold">•</span>
-                <span>Los clientes internacionales son responsables de todos los aranceles e impuestos aduaneros.</span>
+                <span>Si tu pedido incluye artículos disponibles y en preventa, todo el pedido se enviará cuando el artículo en preventa esté listo.</span>
               </li>
             </ul>
           </div>

@@ -42,7 +42,7 @@ export const FAQ: React.FC = () => {
       },
       {
         q: '¿Hacen envíos internacionales?',
-        a: 'Sí, enviamos a todo el mundo. Los costos de envío se calculan al finalizar la compra según tu ubicación y el peso de tu pedido.'
+        a: 'Para más información sobre envíos internacionales, por favor contáctanos a través de WhatsApp.'
       },
       {
         q: '¿Cómo puedo rastrear mi pedido?',
@@ -74,7 +74,7 @@ export const FAQ: React.FC = () => {
       },
       {
         q: '¿Repondrán artículos agotados?',
-        a: 'Algunos artículos son parte de lanzamientos limitados y no se repondrán. Sin embargo, los artículos de la colección principal se reponen periódicamente. Suscríbete a nuestro boletín para recibir notificaciones.'
+        a: 'Algunos artículos son parte de lanzamientos limitados y no se repondrán. Sin embargo, los artículos de la colección principal se reponen periódicamente.'
       }
     ]
   };
