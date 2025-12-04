@@ -14,19 +14,19 @@ export const MaintenancePage: React.FC = () => {
 
                 <div className="space-y-4">
                     <h1 className="text-5xl md:text-7xl font-black uppercase italic text-white">
-                        Under Maintenance
+                        En Mantenimiento
                     </h1>
                     <div className="h-1 w-32 bg-brand-bone mx-auto"></div>
                 </div>
 
                 <p className="text-neutral-400 text-lg md:text-xl max-w-xl mx-auto">
-                    We're currently upgrading our systems to serve you better.
-                    Please check back soon.
+                    Estamos actualizando nuestros sistemas para servirte mejor.
+                    Por favor, vuelve pronto.
                 </p>
 
                 <div className="pt-8">
                     <p className="text-neutral-600 text-sm uppercase tracking-widest">
-                        GOUSTTY | We'll be back shortly
+                        GOUSTTY | Volveremos pronto
                     </p>
                 </div>
             </div>
