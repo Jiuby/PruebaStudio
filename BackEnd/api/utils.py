@@ -42,7 +42,7 @@ def send_order_confirmation_email(order):
     <body>
         <div class="container">
             <div class="header">
-                <a href="https://carameldye.com" class="logo">Caramel Dye</a>
+                <a href="https://prueba-studio.vercel.app/#/" class="logo">Caramel Dye</a>
             </div>
             <div class="content">
                 <h1>¡Gracias por tu compra!</h1>
@@ -81,7 +81,7 @@ def send_order_confirmation_email(order):
                 </p>
 
                 <div style="text-align: center;">
-                    <a href="https://carameldye.com/account/orders" class="button">Ver mi Pedido</a>
+                    <a href="https://prueba-studio.vercel.app/#/track-order?id={order.id}&email={order.customer_email}" class="button">Ver mi Pedido</a>
                 </div>
             </div>
             <div class="footer">
