@@ -69,6 +69,7 @@ class Order(models.Model):
     
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Processing')
+    payment_verified = models.BooleanField(default=False)
     total = models.DecimalField(max_digits=12, decimal_places=0)
     
     customer_name = models.CharField(max_length=200, blank=True, null=True)

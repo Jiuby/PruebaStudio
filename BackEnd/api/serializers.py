@@ -288,10 +288,11 @@ class OrderSerializer(serializers.ModelSerializer):
     shippingDetails = serializers.JSONField(source='shipping_details')
     customerName = serializers.CharField(source='customer_name')
     customerEmail = serializers.EmailField(source='customer_email')
+    paymentVerified = serializers.BooleanField(source='payment_verified', required=False)
 
     class Meta:
         model = Order
-        fields = ['id', 'date', 'status', 'total', 'items', 'customerName', 'customerEmail', 'shippingDetails']
+        fields = ['id', 'date', 'status', 'paymentVerified', 'total', 'items', 'customerName', 'customerEmail', 'shippingDetails']
     
     def create(self, validated_data):
         items_data = validated_data.pop('items')

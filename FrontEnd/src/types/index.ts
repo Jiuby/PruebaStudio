@@ -78,6 +78,7 @@ export interface Order {
   id: string;
   date: string;
   status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
+  paymentVerified?: boolean;
   total: number;
   items: OrderItem[];
   customerName?: string;
