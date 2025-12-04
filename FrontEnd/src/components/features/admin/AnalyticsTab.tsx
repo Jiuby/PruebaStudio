@@ -81,6 +81,9 @@ export const AnalyticsTab: React.FC = () => {
       today.setHours(23, 59, 59, 999);
 
       return orders.filter(order => {
+         // Always exclude cancelled orders first
+         if (order.status === 'Cancelled') return false;
+
          const orderDate = new Date(order.date);
 
          if (filterType === 'all') return true;
@@ -106,8 +109,6 @@ export const AnalyticsTab: React.FC = () => {
             end.setHours(23, 59, 59, 999); // Include the full end day
             return orderDate >= start && orderDate <= end;
          }
-
-         if (order.status === 'Cancelled') return false;
 
          return true;
       });

@@ -330,8 +330,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const updateOrderStatus = async (id: string, status: Order['status']) => {
     try {
-      const updatedOrder = await api.updateOrderStatus(id, status);
-      setOrders((prev) => prev.map(o => o.id === id ? updatedOrder : o));
+      await api.updateOrderStatus(id, status);
+      await reloadOrders();
     } catch (error) {
       console.error("Failed to update order status:", error);
     }
