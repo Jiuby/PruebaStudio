@@ -13,6 +13,7 @@ interface ShopContextType {
   customers: UserProfile[];
   storeSettings: StoreSettings;
   isCartOpen: boolean;
+  isLoading: boolean;
   // Auth
   user: User | null;
   isAuthenticated: boolean;
@@ -67,6 +68,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Auth State
   const [user, setUser] = useState<User | null>(null);
@@ -80,6 +82,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Load Data from API
   useEffect(() => {
     const loadData = async () => {
+      setIsLoading(true);
       try {
         // 1. Load Public Data (Products, Collections, Settings, Categories)
         const [productsData, collectionsData, settingsData, categoriesData] = await Promise.all([
@@ -153,6 +156,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       } catch (error) {
         console.error("Failed to fetch public data from API:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -470,6 +475,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         customers,
         storeSettings,
         isCartOpen,
+        isLoading,
         addToCart,
         removeFromCart,
         updateQuantity,

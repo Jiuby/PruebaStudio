@@ -10,7 +10,10 @@ import { OrdersTab } from '../../components/features/admin/OrdersTab';
 import { CustomersTab } from '../../components/features/admin/CustomersTab';
 import { SettingsTab } from '../../components/features/admin/SettingsTab';
 
+import { useShop } from '../../context/ShopContext';
+
 export const AdminDashboard: React.FC = () => {
+  const { isLoading } = useShop();
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
   const [quickAddMode, setQuickAddMode] = useState(false);
 
@@ -22,6 +25,19 @@ export const AdminDashboard: React.FC = () => {
   const handleAutoOpenConsumed = () => {
     setQuickAddMode(false);
   };
+
+
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-brand-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-brand-dark border-t-brand-bone rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-brand-bone font-bold uppercase tracking-widest animate-pulse">Loading Dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-brand-black flex flex-col md:flex-row pt-0">

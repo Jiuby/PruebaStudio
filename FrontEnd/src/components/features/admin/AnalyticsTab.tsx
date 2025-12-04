@@ -31,12 +31,12 @@ export const AnalyticsTab: React.FC = () => {
 
    const thisMonthOrders = orders.filter(o => {
       const d = new Date(o.date);
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear && o.status !== 'Cancelled';
    });
 
    const lastMonthOrders = orders.filter(o => {
       const d = new Date(o.date);
-      return d.getMonth() === lastMonth && d.getFullYear() === lastMonthYear;
+      return d.getMonth() === lastMonth && d.getFullYear() === lastMonthYear && o.status !== 'Cancelled';
    });
 
    // 1. Revenue
@@ -107,6 +107,8 @@ export const AnalyticsTab: React.FC = () => {
             return orderDate >= start && orderDate <= end;
          }
 
+         if (order.status === 'Cancelled') return false;
+
          return true;
       });
    }, [orders, filterType, customStartDate, customEndDate]);
@@ -150,7 +152,7 @@ export const AnalyticsTab: React.FC = () => {
          const monthlyRevenue = orders.reduce((acc, order) => {
             const orderDate = new Date(order.date);
             // Simple check assuming order.date is parseable
-            if (orderDate.getMonth() === monthIdx && orderDate.getFullYear() === year) {
+            if (orderDate.getMonth() === monthIdx && orderDate.getFullYear() === year && order.status !== 'Cancelled') {
                return acc + Number(order.total);
             }
             return acc;
