@@ -46,11 +46,13 @@ export const OrderSuccess: React.FC = () => {
           Thank you for your purchase. We have received your order and will begin processing it shortly. You will receive an email confirmation at <span className="text-white font-bold">{email}</span>.
         </p>
 
-        <div className="bg-brand-dark/20 border border-brand-dark p-6 mb-12 max-w-lg mx-auto">
-          <p className="text-sm text-white font-bold uppercase mb-2">Instrucciones de Pago</p>
-          <p className="text-xs text-neutral-400 uppercase leading-relaxed">
-            Tiene que hacer un pago al nequi al numero de <span className="text-brand-bone font-bold">3053111031</span> y que tiene que enviar el comprobante al whatsapp con el mismo numero, y que si en 24 horas no se encuentra el comprobante se le cancela manualmente la orden.
-          </p>
+        <div className="bg-brand-dark/20 border border-brand-dark p-6 mb-12 max-w-lg mx-auto text-left">
+          <p className="text-sm text-white font-bold uppercase mb-3 border-b border-brand-dark pb-2">Instrucciones de Pago</p>
+          <div className="text-xs text-neutral-400 uppercase leading-relaxed space-y-2">
+            <p>1. Realiza el pago a través de <span className="text-brand-bone font-bold">Nequi</span> al número <span className="text-white font-bold">3053111031</span>.</p>
+            <p>2. Envía el comprobante de pago a nuestro WhatsApp al mismo número.</p>
+            <p className="text-red-400/80 italic pt-2">Importante: Tienes 24 horas para enviar el comprobante o la orden será cancelada.</p>
+          </div>
         </div>
 
         {/* Dynamic Action Buttons */}

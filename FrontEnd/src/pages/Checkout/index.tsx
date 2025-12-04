@@ -244,9 +244,11 @@ export const Checkout: React.FC = () => {
                   <Lock size={16} className="text-brand-bone flex-shrink-0 mt-1" />
                   <div className="space-y-2">
                     <p className="text-sm text-white font-bold uppercase">Instrucciones de Pago</p>
-                    <p className="text-xs text-neutral-400 uppercase leading-relaxed">
-                      Tiene que hacer un pago al nequi al numero de <span className="text-brand-bone font-bold">3053111031</span> y que tiene que enviar el comprobante al whatsapp con el mismo numero, y que si en 24 horas no se encuentra el comprobante se le cancela manualmente la orden.
-                    </p>
+                    <div className="text-xs text-neutral-400 uppercase leading-relaxed space-y-2">
+                      <p>Para completar tu compra, realiza el pago a través de <span className="text-brand-bone font-bold">Nequi</span> al número <span className="text-white font-bold">3053111031</span>.</p>
+                      <p>Envía el comprobante de pago a nuestro WhatsApp al mismo número.</p>
+                      <p className="text-red-400/80 italic">Nota: Tienes 24 horas para enviar el comprobante o la orden será cancelada.</p>
+                    </div>
                   </div>
                 </div>
               </section>
