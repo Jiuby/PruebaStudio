@@ -28,7 +28,7 @@ export const MaintenancePage: React.FC = () => {
         </div>
 
         <h1 className="text-5xl font-black uppercase italic text-white tracking-tighter mb-4">
-          Goustty
+          Caramel Dye
         </h1>
 
         <h2 className="text-brand-bone uppercase tracking-[0.3em] text-sm font-bold mb-8">
@@ -42,7 +42,7 @@ export const MaintenancePage: React.FC = () => {
 
         <div className="flex flex-col gap-4">
           <div className="text-xs uppercase text-neutral-600 font-bold tracking-widest">
-            Est. 2024 • Colombia
+            Est. 2025 • Colombia
           </div>
 
           <Link

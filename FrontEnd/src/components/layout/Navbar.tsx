@@ -59,7 +59,7 @@ export const Navbar: React.FC = () => {
 
           {/* Logo */}
           <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 text-2xl font-black tracking-tighter text-white uppercase italic">
-            Goustty
+            Caramel Dye
           </Link>
 
           {/* Icons */}

@@ -13,7 +13,7 @@ export const About: React.FC = () => {
     {
       icon: PenTool,
       title: 'Concepto y Diseño',
-      desc: 'Nacido del caos de las calles. Cada pieza comienza como un boceto en nuestro estudio en Cúcuta, enfocándonos en siluetas agresivas y cortes oversize.'
+      desc: 'Nacido del caos de las calles. Cada pieza comienza como un boceto en nuestro estudio en Medellín, enfocándonos en siluetas agresivas y cortes oversize.'
     },
     {
       icon: Scissors,
@@ -28,7 +28,7 @@ export const About: React.FC = () => {
     {
       icon: Globe,
       title: 'Envíos Globales',
-      desc: 'De nuestro bloque al tuyo. Empacamos cuidadosamente cada pedido para asegurar que la experiencia GOUSTTY siga siendo auténtica, dondequiera que estés.'
+      desc: 'De nuestro bloque al tuyo. Empacamos cuidadosamente cada pedido para asegurar que la experiencia CARAMEL DYE siga siendo auténtica, dondequiera que estés.'
     }
   ];
 
@@ -42,7 +42,7 @@ export const About: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-brand-bone uppercase tracking-[0.3em] text-xs font-bold mb-6"
         >
-          El Manifiesto Goustty
+          El Manifiesto Caramel Dye
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, scale: 0.95 }}
@@ -58,7 +58,7 @@ export const About: React.FC = () => {
           transition={{ delay: 0.4 }}
           className="text-neutral-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
         >
-          Redefiniendo el paisaje urbano de Cúcuta, Colombia. Mezclamos la estética Y2K con la cultura streetwear moderna para crear piezas unisex que exigen atención.
+          Redefiniendo el paisaje urbano de Medellín, Colombia. Mezclamos la estética Y2K con la cultura streetwear moderna para crear piezas unisex que exigen atención.
         </motion.p>
       </section>
 
@@ -68,14 +68,14 @@ export const About: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <h2 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter">
-                La Estética<br />Goustty
+                La Estética<br />Caramel Dye
               </h2>
               <div className="h-1 w-20 bg-brand-bone"></div>
               <p className="text-neutral-400 leading-relaxed">
                 Creemos que la ropa no tiene género, solo actitud. Nuestras colecciones son estrictamente unisex, diseñadas para caer y fluir en cualquier tipo de cuerpo. Nos inspiramos en la energía cruda de la ciudad: texturas de concreto, luces de neón y la escena musical underground.
               </p>
               <p className="text-neutral-400 leading-relaxed">
-                Fundada en 2024, GOUSTTY comenzó como una reacción contra la ropa ajustada y aburrida. Queríamos volumen. Queríamos estructura. Queríamos piezas que se sintieran como una armadura para el explorador urbano.
+                Fundada en 2025, CARAMEL DYE comenzó como una reacción contra la ropa ajustada y aburrida. Queríamos volumen. Queríamos estructura. Queríamos piezas que se sintieran como una armadura para el explorador urbano.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">

@@ -23,8 +23,8 @@ export const FAQ: React.FC = () => {
   const faqData: Record<Category, Question[]> = {
     General: [
       {
-        q: '¿Dónde está ubicado GOUSTTY?',
-        a: 'Estamos ubicados en Cúcuta, Colombia. Todos nuestros diseños se conceptualizan aquí y fabricamos localmente para asegurar el más alto control de calidad.'
+        q: '¿Dónde está ubicado CARAMEL DYE?',
+        a: 'Estamos ubicados en Medellín, Colombia. Todos nuestros diseños se conceptualizan aquí y fabricamos localmente para asegurar el más alto control de calidad.'
       },
       {
         q: '¿Tienen tienda física?',
@@ -32,13 +32,13 @@ export const FAQ: React.FC = () => {
       },
       {
         q: '¿Cómo puedo contactar a soporte al cliente?',
-        a: 'Puedes contactarnos a través de nuestra página de Contacto o enviando un correo a support@goustty.com. Normalmente respondemos en 24-48 horas.'
+        a: 'Puedes contactarnos a través de nuestra página de Contacto o enviando un correo a support@carameldye.com. Normalmente respondemos en 24-48 horas.'
       }
     ],
     Envíos: [
       {
         q: '¿Cuánto tarda el envío?',
-        a: 'Las entregas locales en Cúcuta son el mismo día o al día siguiente. Los envíos nacionales suelen tardar de 2 a 4 días hábiles. Los pedidos internacionales varían de 5 a 10 días hábiles vía DHL.'
+        a: 'Las entregas locales en Medellín son el mismo día o al día siguiente. Los envíos nacionales suelen tardar de 2 a 4 días hábiles. Los pedidos internacionales varían de 5 a 10 días hábiles vía DHL.'
       },
       {
         q: '¿Hacen envíos internacionales?',
@@ -69,7 +69,7 @@ export const FAQ: React.FC = () => {
         a: 'La mayoría de nuestros artículos están diseñados con un ajuste oversize estilo streetwear. Si prefieres un ajuste más estándar, recomendamos elegir una talla menos. Por favor, consulta nuestra Guía de Tallas para medidas específicas.'
       },
       {
-        q: '¿Cómo debo lavar mis prendas GOUSTTY?',
+        q: '¿Cómo debo lavar mis prendas CARAMEL DYE?',
         a: 'Para preservar la calidad del algodón pesado y los estampados, recomendamos lavar en agua fría al revés y secar colgado. No planchar directamente sobre los estampados.'
       },
       {

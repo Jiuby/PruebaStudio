@@ -26,7 +26,7 @@ export const MaintenancePage: React.FC = () => {
 
                 <div className="pt-8">
                     <p className="text-neutral-600 text-sm uppercase tracking-widest">
-                        GOUSTTY | Volveremos pronto
+                        CARAMEL DYE | Volveremos pronto
                     </p>
                 </div>
             </div>

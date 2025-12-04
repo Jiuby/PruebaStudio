@@ -5,7 +5,7 @@ export const Footer: React.FC = () => (
     <footer className="bg-brand-black border-t border-brand-dark py-12 px-6">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-                <h2 className="text-3xl font-black uppercase italic text-white mb-4">Goustty</h2>
+                <h2 className="text-3xl font-black uppercase italic text-white mb-4">Caramel Dye</h2>
                 <p className="text-neutral-500 text-sm max-w-md">
                     Redefiniendo la estética urbana a través de siluetas oversize y detalles agresivos.
                     Nacido en las calles, hecho para el mundo.
@@ -31,8 +31,8 @@ export const Footer: React.FC = () => (
             </div>
         </div>
         <div className="container mx-auto mt-12 pt-8 border-t border-brand-dark flex flex-col md:flex-row justify-between items-center text-xs text-neutral-600">
-            <p>&copy; 2024 GOUSTTY. Todos los derechos reservados.</p>
-            <p className="mt-2 md:mt-0">Cúcuta, Colombia.</p>
+            <p>&copy; 2025 CARAMEL DYE. Todos los derechos reservados.</p>
+            <p className="mt-2 md:mt-0">Medellín, Colombia.</p>
         </div>
     </footer>
 );
