@@ -92,9 +92,21 @@ export const GuestOrderTracking: React.FC = () => {
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter leading-none mb-4">
             Order Status
           </h1>
-          <p className="text-neutral-500 uppercase tracking-widest text-sm">
+          <p className="text-neutral-500 uppercase tracking-widest text-sm mb-4">
             Tracking #{order.id}
           </p>
+
+          <div className="flex justify-center">
+            {order.paymentVerified ? (
+              <span className="bg-green-500/20 text-green-400 border border-green-500/50 px-3 py-1 rounded text-xs font-bold flex items-center gap-2 uppercase tracking-wider">
+                <CheckCircle size={14} /> Payment Verified
+              </span>
+            ) : (
+              <span className="bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 px-3 py-1 rounded text-xs font-bold flex items-center gap-2 uppercase tracking-wider">
+                <Clock size={14} /> Payment Pending Verification
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Timeline */}
