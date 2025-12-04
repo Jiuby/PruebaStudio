@@ -292,6 +292,20 @@ export const OrderDetails: React.FC = () => {
         </div>
       </div>
 
+      <div className="container mx-auto mb-8">
+        <div className="bg-brand-dark/20 border border-brand-dark p-6 flex items-start gap-4">
+          <div className="p-2 bg-brand-dark rounded-full text-brand-bone">
+            <CheckCircle size={20} />
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm text-white font-bold uppercase">Instrucciones de Pago</p>
+            <p className="text-xs text-neutral-400 uppercase leading-relaxed">
+              Tiene que hacer un pago al nequi al numero de <span className="text-brand-bone font-bold">3053111031</span> y que tiene que enviar el comprobante al whatsapp con el mismo numero, y que si en 24 horas no se encuentra el comprobante se le cancela manualmente la orden.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
 
         {/* Left Column: Timeline & Items */}

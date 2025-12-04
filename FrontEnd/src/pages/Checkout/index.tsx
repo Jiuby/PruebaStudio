@@ -22,10 +22,7 @@ export const Checkout: React.FC = () => {
     address: '',
     city: '',
     zip: '',
-    phone: '',
-    cardNumber: '',
-    expiry: '',
-    cvc: ''
+    phone: ''
   });
 
   // Pre-fill user data
@@ -243,52 +240,13 @@ export const Checkout: React.FC = () => {
                   03. Payment Method
                 </h2>
 
-                <div className="bg-brand-dark/20 border border-brand-dark p-6 mb-6 flex items-center gap-4">
-                  <Lock size={16} className="text-brand-bone" />
-                  <p className="text-xs text-neutral-400 uppercase">All transactions are secure and encrypted.</p>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs uppercase text-neutral-500 mb-2">Card Number</label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        name="cardNumber"
-                        required
-                        value={formData.cardNumber}
-                        onChange={handleInputChange}
-                        className="w-full bg-brand-dark/20 border border-brand-dark py-3 px-4 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors pl-12"
-                        placeholder="0000 0000 0000 0000"
-                      />
-                      <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" size={18} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs uppercase text-neutral-500 mb-2">Expiry Date</label>
-                      <input
-                        type="text"
-                        name="expiry"
-                        required
-                        value={formData.expiry}
-                        onChange={handleInputChange}
-                        className="w-full bg-brand-dark/20 border border-brand-dark py-3 px-4 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors"
-                        placeholder="MM / YY"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs uppercase text-neutral-500 mb-2">CVC</label>
-                      <input
-                        type="text"
-                        name="cvc"
-                        required
-                        value={formData.cvc}
-                        onChange={handleInputChange}
-                        className="w-full bg-brand-dark/20 border border-brand-dark py-3 px-4 text-white font-medium focus:outline-none focus:border-brand-bone transition-colors"
-                        placeholder="123"
-                      />
-                    </div>
+                <div className="bg-brand-dark/20 border border-brand-dark p-6 mb-6 flex items-start gap-4">
+                  <Lock size={16} className="text-brand-bone flex-shrink-0 mt-1" />
+                  <div className="space-y-2">
+                    <p className="text-sm text-white font-bold uppercase">Instrucciones de Pago</p>
+                    <p className="text-xs text-neutral-400 uppercase leading-relaxed">
+                      Tiene que hacer un pago al nequi al numero de <span className="text-brand-bone font-bold">3053111031</span> y que tiene que enviar el comprobante al whatsapp con el mismo numero, y que si en 24 horas no se encuentra el comprobante se le cancela manualmente la orden.
+                    </p>
                   </div>
                 </div>
               </section>
@@ -298,7 +256,7 @@ export const Checkout: React.FC = () => {
                 disabled={loading}
                 className="w-full bg-white text-black h-14 font-black uppercase tracking-[0.2em] hover:bg-brand-bone transition-all mt-8 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Processing...' : `Pay ${formatPrice(orderTotal)}`}
+                {loading ? 'Processing...' : `Confirm Order - ${formatPrice(orderTotal)}`}
               </button>
 
             </form>
