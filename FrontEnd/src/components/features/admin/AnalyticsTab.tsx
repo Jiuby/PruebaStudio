@@ -136,7 +136,7 @@ export const AnalyticsTab: React.FC = () => {
       });
    });
 
-   const topProducts = Object.values(productSales).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
+   const topProducts = Object.values(productSales).sort((a, b) => b.qty - a.qty).slice(0, 5);
 
    // --- Monthly Earnings Chart Data (Last 6 Months) ---
    const earningsChartData = useMemo(() => {

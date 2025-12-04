@@ -28,7 +28,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Metrics Calculations
-  const totalRevenue = orders.reduce((acc, order) => acc + Number(order.total), 0);
+  const totalRevenue = orders
+    .filter(o => o.status !== 'Cancelled')
+    .reduce((acc, order) => acc + Number(order.total), 0);
   const totalOrders = orders.length;
   const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
@@ -44,14 +46,14 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onQuickAdd
   const currentMonthRevenue = orders
     .filter(o => {
       const orderDate = new Date(o.date);
-      return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+      return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear && o.status !== 'Cancelled';
     })
     .reduce((acc, o) => acc + Number(o.total), 0);
 
   const previousMonthRevenue = orders
     .filter(o => {
       const orderDate = new Date(o.date);
-      return orderDate.getMonth() === previousMonth && orderDate.getFullYear() === previousYear;
+      return orderDate.getMonth() === previousMonth && orderDate.getFullYear() === previousYear && o.status !== 'Cancelled';
     })
     .reduce((acc, o) => acc + Number(o.total), 0);
 
