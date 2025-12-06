@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { PenTool, Scissors, Package, Globe, ArrowRight } from 'lucide-react';
+import aboutImg1 from '../../static/IMG/about/ImgAbout (1).png';
+import aboutImg2 from '../../static/IMG/about/ImgAbout (2).png';
+import aboutImg3 from '../../static/IMG/about/ImgAbout (3).png';
 
 export const About: React.FC = () => {
   useEffect(() => {
@@ -13,12 +16,12 @@ export const About: React.FC = () => {
     {
       icon: PenTool,
       title: 'Concepto y Diseño',
-      desc: 'Nacido del caos de las calles. Cada pieza comienza como un boceto en nuestro estudio en Medellín, enfocándonos en siluetas agresivas y cortes oversize.'
+      desc: 'Nacido del caos de las calles. Cada pieza comienza como un boceto en nuestro estudio en Medellín, enfocándonos en siluetas agresivas y cortes unicos.'
     },
     {
       icon: Scissors,
       title: 'Materiales Premium',
-      desc: 'Rechazamos las telas de moda rápida. Solo utilizamos algodones pesados (240gsm+) y denims duraderos que resisten el paso del tiempo y el uso.'
+      desc: 'Solo utilizamos algodones pesados (240gsm+) y denims duraderos que resisten el paso del tiempo y el uso.'
     },
     {
       icon: Package,
@@ -27,8 +30,8 @@ export const About: React.FC = () => {
     },
     {
       icon: Globe,
-      title: 'Envíos Globales',
-      desc: 'De nuestro bloque al tuyo. Empacamos cuidadosamente cada pedido para asegurar que la experiencia CARAMEL DYE siga siendo auténtica, dondequiera que estés.'
+      title: 'Envíos Nacionales',
+      desc: 'De nuestro bloque al tuyo. Empacamos cuidadosamente cada pedido para asegurar que la experiencia siga siendo auténtica, dondequiera que estés.'
     }
   ];
 
@@ -50,7 +53,7 @@ export const About: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl lg:text-9xl font-black text-white uppercase italic tracking-tighter leading-none mb-8"
         >
-          No Solo<br />Una Marca.<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-bone to-neutral-500">Un Movimiento.</span>
+          No Solo<br />Una Marca.<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-bone to-neutral-500">Un Cambio.</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
@@ -58,7 +61,7 @@ export const About: React.FC = () => {
           transition={{ delay: 0.4 }}
           className="text-neutral-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
         >
-          Redefiniendo el paisaje urbano de Medellín, Colombia. Mezclamos la estética Y2K con la cultura streetwear moderna para crear piezas unisex que exigen atención.
+          Redefiniendo el paisaje de Medellín, Colombia. Mezclamos la estética Y2K con la cultura emo moderna para crear piezas unisex que sean unicas y distintas.
         </motion.p>
       </section>
 
@@ -68,14 +71,14 @@ export const About: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <h2 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter">
-                La Estética<br />Caramel Dye
+                La Estética<br />Distinta
               </h2>
               <div className="h-1 w-20 bg-brand-bone"></div>
               <p className="text-neutral-400 leading-relaxed">
                 Creemos que la ropa no tiene género, solo actitud. Nuestras colecciones son estrictamente unisex, diseñadas para caer y fluir en cualquier tipo de cuerpo. Nos inspiramos en la energía cruda de la ciudad: texturas de concreto, luces de neón y la escena musical underground.
               </p>
               <p className="text-neutral-400 leading-relaxed">
-                Fundada en 2025, CARAMEL DYE comenzó como una reacción contra la ropa ajustada y aburrida. Queríamos volumen. Queríamos estructura. Queríamos piezas que se sintieran como una armadura para el explorador urbano.
+                Fundada en 2025, CARAMEL DYE comenzó como una reacción contra lo que vemos siempre en el dia a dia. Queríamos algo distinto. Queríamos algo unico. Queríamos algo que nos hiciera sentir unico en el entorno que nos rodea.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -83,19 +86,19 @@ export const About: React.FC = () => {
                 whileHover={{ scale: 1.02 }}
                 className="aspect-[3/4] bg-brand-dark overflow-hidden mt-8"
               >
-                <img src="https://picsum.photos/id/103/600/800" alt="Urban Vibe 1" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                <img src={aboutImg1} alt="Urban Vibe 1" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 className="aspect-[3/4] bg-brand-dark overflow-hidden"
               >
-                <img src="https://picsum.photos/id/338/600/800" alt="Urban Vibe 2" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                <img src={aboutImg2} alt="Urban Vibe 2" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 className="aspect-[3/4] bg-brand-dark overflow-hidden col-span-2"
               >
-                <img src="https://picsum.photos/id/249/1200/800" alt="Store Environment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                <img src={aboutImg3} alt="Store Environment" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
               </motion.div>
             </div>
           </div>

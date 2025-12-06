@@ -18,7 +18,7 @@ export const Collections: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-brand-bone uppercase tracking-[0.3em] text-xs font-bold mb-4"
         >
-          Season 01 / 2024
+          Season 01 / 2025
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, scale: 0.95 }}
@@ -26,7 +26,7 @@ export const Collections: React.FC = () => {
           transition={{ delay: 0.1 }}
           className="text-5xl md:text-7xl font-black text-white uppercase italic tracking-tighter"
         >
-          Collections
+          Colecciones
         </motion.h1>
       </div>
 
@@ -38,7 +38,7 @@ export const Collections: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 + 0.2 }}
             className={`relative group overflow-hidden bg-brand-dark ${collection.size === 'large' ? 'md:col-span-2 aspect-[21/9]' :
-                collection.size === 'small' ? 'md:col-span-2 aspect-[21/9]' : 'aspect-[4/5] md:aspect-square'
+              collection.size === 'small' ? 'md:col-span-2 aspect-[21/9]' : 'aspect-[4/5] md:aspect-square'
               }`}
           >
             <Link to={`/shop?collection=${collection.id}`} className="block w-full h-full">

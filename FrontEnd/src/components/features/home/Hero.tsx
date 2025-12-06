@@ -28,7 +28,7 @@ export const Hero: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-brand-bone uppercase tracking-[0.3em] text-xs md:text-sm font-bold mb-4"
         >
-          Est. 2024 • Colombia
+          Est. 2025 • Colombia
         </motion.p>
 
         <motion.h1
@@ -37,7 +37,7 @@ export const Hero: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-6xl md:text-8xl lg:text-9xl font-black text-white uppercase italic tracking-tighter mb-6 leading-none"
         >
-          Caos<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-bone to-white">Urbano</span>
+          Drop<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-bone to-white">Dead</span>
         </motion.h1>
 
         <motion.div
