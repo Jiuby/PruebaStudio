@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0008_orderitem_color'),
+        ("api", "0008_orderitem_color"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='is_one_of_one',
+            model_name="product",
+            name="is_one_of_one",
             field=models.BooleanField(default=False),
         ),
     ]

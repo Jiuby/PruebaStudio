@@ -3,8 +3,9 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 
+
 def send_order_confirmation_email(order):
-    subject = f'Confirmación de Orden #{order.id} - Caramel Dye'
+    subject = f"Confirmación de Orden #{order.id} - Caramel Dye"
     from_email = settings.DEFAULT_FROM_EMAIL
     to = order.customer_email
 
@@ -94,7 +95,7 @@ def send_order_confirmation_email(order):
     """
 
     text_content = strip_tags(html_content)
-    
+
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

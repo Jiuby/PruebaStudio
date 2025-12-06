@@ -6,18 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0006_userprofile'),
+        ("api", "0006_userprofile"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='collection',
-            name='image',
-            field=models.ImageField(blank=True, upload_to='collections/'),
+            model_name="collection",
+            name="image",
+            field=models.ImageField(blank=True, upload_to="collections/"),
         ),
         migrations.AlterField(
-            model_name='order',
-            name='status',
-            field=models.CharField(choices=[('Processing', 'Processing'), ('Shipped', 'Shipped'), ('Delivered', 'Delivered'), ('Cancelled', 'Cancelled')], default='Processing', max_length=20),
+            model_name="order",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("Processing", "Processing"),
+                    ("Shipped", "Shipped"),
+                    ("Delivered", "Delivered"),
+                    ("Cancelled", "Cancelled"),
+                ],
+                default="Processing",
+                max_length=20,
+            ),
         ),
     ]
