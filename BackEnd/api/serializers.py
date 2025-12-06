@@ -197,16 +197,6 @@ class ProductSerializer(serializers.ModelSerializer):
             "isOneOfOne",
         ]
 
-    def to_representation(self, instance):
-        """Override to ensure collectionId is always an integer ID or null"""
-        representation = super().to_representation(instance)
-        # Ensure collectionId is the numeric ID
-        if instance.collection:
-            representation["collectionId"] = instance.collection.id
-        else:
-            representation["collectionId"] = None
-        return representation
-
     def create(self, validated_data):
         import json
 
