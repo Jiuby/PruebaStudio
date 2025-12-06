@@ -82,7 +82,8 @@ def send_order_confirmation_email(order):
                 </p>
 
                 <div style="text-align: center;">
-                    <a href="https://prueba-studio.vercel.app/#/track-order?id={order.id}&email={order.customer_email}" class="button">Ver mi Pedido</a>
+                    <a href="https://prueba-studio.vercel.app/#/track-order?id={order.id}&email={order.customer_email}" 
+                       class="button">Ver mi Pedido</a>
                 </div>
             </div>
             <div class="footer">
