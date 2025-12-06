@@ -223,7 +223,7 @@ class ProductSerializer(serializers.ModelSerializer):
                             validated_data["available_sizes"] = value
                         else:
                             validated_data[field] = value
-                    except:
+                    except (ValueError, TypeError):
                         pass
 
         # Get gallery images from request
@@ -263,7 +263,7 @@ class ProductSerializer(serializers.ModelSerializer):
                             validated_data["available_sizes"] = value
                         else:
                             validated_data[field] = value
-                    except:
+                    except (ValueError, TypeError):
                         pass
 
         # Get gallery images from request
