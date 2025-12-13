@@ -10,7 +10,7 @@ interface OrderModalProps {
 }
 
 export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onClose }) => {
-  const { customers, updateOrderStatus, orders } = useShop();
+  const { customers, updateOrderStatus, orders, reloadOrders } = useShop();
 
   // Get the live version of the order from context to ensure updates (like status changes) are reflected immediately
   const order = orders.find(o => o.id === initialOrder?.id) || initialOrder;
@@ -163,14 +163,15 @@ export const OrderModal: React.FC<OrderModalProps> = ({ order: initialOrder, onC
                           type="checkbox"
                           className="sr-only peer"
                           checked={order.paymentVerified || false}
-                          onChange={(e) => {
+                          onChange={async (e) => {
                             const newStatus = e.target.checked;
-                            import('../../../services/api').then(api => {
-                              api.default.patch(`/orders/${order.id}/`, { paymentVerified: newStatus })
-                                .then(() => {
-                                  window.location.reload();
-                                });
-                            });
+                            try {
+                              const api = await import('../../../services/api');
+                              await api.default.patch(`/orders/${order.id}/`, { paymentVerified: newStatus });
+                              await reloadOrders();
+                            } catch (error) {
+                              console.error('Failed to update payment status:', error);
+                            }
                           }}
                         />
                         <div className="w-11 h-6 bg-black/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
