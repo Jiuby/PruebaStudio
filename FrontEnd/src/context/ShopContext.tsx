@@ -96,12 +96,13 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const loadData = async () => {
       setIsLoading(true);
       try {
-        // 1. Load Public Data (Products, Collections, Settings, Categories)
-        const [productsData, collectionsData, settingsData, categoriesData] = await Promise.all([
+        // 1. Load Public Data (Products, Collections, Settings, Categories, Kanban Columns)
+        const [productsData, collectionsData, settingsData, categoriesData, kanbanColumnsData] = await Promise.all([
           api.fetchProducts(),
           api.fetchCollections(),
           api.fetchSettings(),
-          api.fetchCategories()
+          api.fetchCategories(),
+          api.fetchKanbanColumns().catch(() => []) // Fail silently if not admin
         ]);
 
         if (!isMounted) return;
@@ -110,6 +111,11 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setCollections(collectionsData);
         if (settingsData) {
           setStoreSettings(prev => ({ ...prev, ...settingsData }));
+        }
+
+        // Set Kanban columns from backend
+        if (kanbanColumnsData && kanbanColumnsData.length > 0) {
+          setKanbanColumns(kanbanColumnsData.map((col: any) => col.name));
         }
 
         setCategoryObjects(categoriesData);
@@ -470,49 +476,71 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // --- Kanban Board Functions ---
 
-  const addKanbanColumn = (columnName: string) => {
+  const addKanbanColumn = async (columnName: string) => {
     if (!kanbanColumns.includes(columnName)) {
-      setKanbanColumns(prev => [...prev, columnName]);
+      try {
+        await api.createKanbanColumn(columnName);
+        // Reload columns from backend
+        const columnsData = await api.fetchKanbanColumns();
+        setKanbanColumns(columnsData.map((col: any) => col.name));
+      } catch (error) {
+        console.error('Failed to add Kanban column:', error);
+      }
     }
   };
 
-  const deleteKanbanColumn = (columnName: string) => {
-    // Move all orders from deleted column to first column (PROCESANDO)
-    setOrders(prev => prev.map(order =>
-      order.stage === columnName ? { ...order, stage: kanbanColumns[0] } : order
-    ));
-    setKanbanColumns(prev => prev.filter(col => col !== columnName));
+  const deleteKanbanColumn = async (columnName: string) => {
+    try {
+      // Find column ID from backend
+      const columnsData = await api.fetchKanbanColumns();
+      const column = columnsData.find((col: any) => col.name === columnName);
+      if (column) {
+        await api.deleteKanbanColumn(column.id);
+        // Reload columns and orders
+        const newColumnsData = await api.fetchKanbanColumns();
+        setKanbanColumns(newColumnsData.map((col: any) => col.name));
+        await reloadOrders();
+      }
+    } catch (error) {
+      console.error('Failed to delete Kanban column:', error);
+    }
   };
 
-  const reorderKanbanColumns = (newOrder: string[]) => {
-    setKanbanColumns(newOrder);
+  const reorderKanbanColumns = async (newOrder: string[]) => {
+    try {
+      // Get current columns with IDs
+      const columnsData = await api.fetchKanbanColumns();
+      const columnsWithPosition = newOrder.map((name, index) => {
+        const column = columnsData.find((col: any) => col.name === name);
+        return { id: column?.id || '', position: index };
+      }).filter(col => col.id);
+
+      await api.reorderKanbanColumns(columnsWithPosition);
+      setKanbanColumns(newOrder);
+    } catch (error) {
+      console.error('Failed to reorder Kanban columns:', error);
+    }
   };
 
-  const moveOrderToStage = (orderId: string, stage: string) => {
-    setOrders(prev => prev.map(order =>
-      order.id === orderId ? { ...order, stage } : order
-    ));
+  const moveOrderToStage = async (orderId: string, stage: string) => {
+    try {
+      await api.updateOrderStage(orderId, stage);
+      setOrders(prev => prev.map(order =>
+        order.id === orderId ? { ...order, stage } : order
+      ));
+    } catch (error) {
+      console.error('Failed to move order to stage:', error);
+    }
   };
 
-  const addOrderNote = (orderId: string, noteText: string) => {
-    const newNote = {
-      id: Date.now().toString(),
-      text: noteText,
-      author: user?.username || 'Admin',
-      date: new Date().toLocaleDateString('es-CO', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    };
-
-    setOrders(prev => prev.map(order =>
-      order.id === orderId
-        ? { ...order, internalNotes: [...(order.internalNotes || []), newNote] }
-        : order
-    ));
+  const addOrderNote = async (orderId: string, noteText: string) => {
+    try {
+      const newNote = await api.createOrderNote(orderId, noteText);
+      // Reload orders to get updated notes
+      await reloadOrders();
+    } catch (error) {
+      console.error('Failed to add order note:', error);
+    }
   };
 
   const cartTotal = cart.reduce((total, item) => total + Number(item.price) * Number(item.quantity), 0);

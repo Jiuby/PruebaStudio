@@ -157,4 +157,40 @@ export const trackOrder = async (id: string, email: string) => {
     return response.data;
 };
 
+// --- Kanban Board API ---
+
+export const fetchKanbanColumns = async () => {
+    const response = await api.get('/kanban-columns/');
+    return response.data;
+};
+
+export const createKanbanColumn = async (name: string) => {
+    const response = await api.post('/kanban-columns/', { name, position: 999 });
+    return response.data;
+};
+
+export const deleteKanbanColumn = async (id: string) => {
+    await api.delete(`/kanban-columns/${id}/`);
+};
+
+export const reorderKanbanColumns = async (columns: { id: string; position: number }[]) => {
+    const response = await api.post('/kanban-columns/reorder/', { columns });
+    return response.data;
+};
+
+export const updateOrderStage = async (orderId: string, stage: string) => {
+    const response = await api.patch(`/orders/${orderId}/`, { stage });
+    return response.data;
+};
+
+export const createOrderNote = async (orderId: string, text: string) => {
+    const response = await api.post('/order-notes/', { order_id: orderId, text });
+    return response.data;
+};
+
+export const fetchOrderNotes = async (orderId: string) => {
+    const response = await api.get(`/order-notes/?order_id=${orderId}`);
+    return response.data;
+};
+
 export default api;
