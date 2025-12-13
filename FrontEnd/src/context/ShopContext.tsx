@@ -525,9 +525,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const moveOrderToStage = async (orderId: string, stage: string) => {
     try {
       await api.updateOrderStage(orderId, stage);
-      setOrders(prev => prev.map(order =>
-        order.id === orderId ? { ...order, stage } : order
-      ));
+      // Reload orders to get the updated status from backend
+      await reloadOrders();
     } catch (error) {
       console.error('Failed to move order to stage:', error);
     }
