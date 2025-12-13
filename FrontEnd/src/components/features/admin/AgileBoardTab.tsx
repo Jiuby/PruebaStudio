@@ -115,7 +115,7 @@ export const AgileBoardTab: React.FC = () => {
                 <div>
                     <h2 className="text-3xl font-black uppercase italic text-white mb-2">Tablero de Gestión Ágil</h2>
                     <p className="text-neutral-500 text-xs uppercase tracking-widest">
-                        Production & Fulfillment Pipeline ({orders.length} Active Orders)
+                        Pipeline de Producción y Envíos ({orders.length} Pedidos Activos)
                     </p>
                 </div>
 
@@ -232,7 +232,7 @@ export const AgileBoardTab: React.FC = () => {
                                     ))}
                                     {columnOrders.length === 0 && (
                                         <div className="h-24 border-2 border-dashed border-brand-dark/30 flex items-center justify-center text-neutral-700 text-[10px] uppercase font-bold">
-                                            Empty Stage
+                                            Etapa Vacía
                                         </div>
                                     )}
                                 </div>
@@ -257,7 +257,7 @@ export const AgileBoardTab: React.FC = () => {
                                     <h3 className="text-white font-bold uppercase italic text-xl">Order #{activeCommentOrder.id}</h3>
                                     <div className="flex gap-4 mt-1">
                                         <p className="text-xs text-brand-bone font-bold uppercase tracking-widest">
-                                            Stage: {activeCommentOrder.stage || kanbanColumns[0]}
+                                            Etapa: {activeCommentOrder.stage || kanbanColumns[0]}
                                         </p>
                                         <p className="text-xs text-neutral-500 uppercase">
                                             Status: {activeCommentOrder.status}
@@ -281,7 +281,7 @@ export const AgileBoardTab: React.FC = () => {
                                                 <User size={14} className="text-brand-bone" /> Customer Profile
                                             </h4>
                                             <span className="bg-brand-bone text-brand-black px-2 py-0.5 text-[10px] font-bold uppercase">
-                                                Verified
+                                                Verificado
                                             </span>
                                         </div>
 
@@ -312,7 +312,7 @@ export const AgileBoardTab: React.FC = () => {
                                                     {copiedAddress ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
                                                 </button>
                                                 <p className="text-[10px] text-brand-bone font-bold uppercase mb-2 flex items-center gap-1">
-                                                    <MapPin size={10} /> Shipping Address
+                                                    <MapPin size={10} /> Dirección de Envío
                                                 </p>
                                                 <div className="text-xs text-neutral-300 font-mono leading-relaxed">
                                                     {activeCommentOrder.shippingDetails?.address || 'N/A'}<br />
@@ -362,8 +362,8 @@ export const AgileBoardTab: React.FC = () => {
                                     <div className="flex-1 overflow-y-auto space-y-3 mb-4 custom-scrollbar pr-2 min-h-[200px]">
                                         {(activeCommentOrder.internalNotes || []).length === 0 ? (
                                             <div className="h-full flex flex-col items-center justify-center text-center text-neutral-600 border-2 border-dashed border-brand-dark/30 rounded-lg p-6">
-                                                <p className="text-xs italic mb-1">No activity recorded.</p>
-                                                <p className="text-[10px]">Use this space for production notes or shipping updates.</p>
+                                                <p className="text-xs italic mb-1">No hay actividad registrada.</p>
+                                                <p className="text-[10px]">Usa este espacio para notas de producción o actualizaciones de envío.</p>
                                             </div>
                                         ) : (
                                             activeCommentOrder.internalNotes?.map((note) => (
@@ -390,7 +390,7 @@ export const AgileBoardTab: React.FC = () => {
                                             disabled={!newNoteText.trim()}
                                             className="w-full bg-brand-bone text-brand-black py-3 font-bold uppercase text-xs hover:bg-white disabled:opacity-50 transition-colors"
                                         >
-                                            Add Note
+                                            Agregar Nota
                                         </button>
                                     </form>
                                 </div>
