@@ -97,7 +97,7 @@ export const DemoAdminPage: React.FC = () => {
                 )}
 
                 {/* Demo Admin Dashboard */}
-                <div className="container mx-auto py-8 px-4">
+                <div className={`container mx-auto py-8 px-4 ${showWarning ? 'pt-4' : 'pt-8'}`}>
                     <div className="mb-6 flex justify-between items-center">
                         <div>
                             <h1 className="text-3xl font-black uppercase italic text-white mb-2">
