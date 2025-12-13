@@ -75,20 +75,20 @@ export const DemoAdminPage: React.FC = () => {
             <div className="min-h-screen bg-brand-black">
                 {/* Warning Banner */}
                 {showWarning && (
-                    <div className="bg-brand-bone text-brand-black p-4 relative">
-                        <div className="container mx-auto flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Eye size={20} />
+                    <div className="bg-brand-bone text-brand-black p-3 relative">
+                        <div className="container mx-auto flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-2">
+                                <Eye size={16} />
                                 <div>
-                                    <p className="font-bold text-sm uppercase">Modo Demo - Panel de Administración</p>
-                                    <p className="text-xs">
-                                        Estás viendo una demostración del panel admin. Los cambios no se guardarán.
+                                    <p className="font-bold text-xs uppercase">Modo Demo - Panel de Administración</p>
+                                    <p className="text-[10px]">
+                                        Los cambios no se guardarán.
                                     </p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setShowWarning(false)}
-                                className="text-brand-black hover:text-black font-bold"
+                                className="text-brand-black hover:text-black font-bold text-lg"
                             >
                                 ✕
                             </button>
@@ -97,7 +97,7 @@ export const DemoAdminPage: React.FC = () => {
                 )}
 
                 {/* Demo Admin Dashboard */}
-                <div className={`container mx-auto py-8 px-4 ${showWarning ? 'pt-4' : 'pt-8'}`}>
+                <div className="container mx-auto py-8 px-4">
                     <div className="mb-6 flex justify-between items-center">
                         <div>
                             <h1 className="text-3xl font-black uppercase italic text-white mb-2">
