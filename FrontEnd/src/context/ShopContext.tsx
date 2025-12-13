@@ -76,8 +76,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Kanban Board State
-  const [kanbanColumns, setKanbanColumns] = useState<string[]>(['Backlog', 'Corte', 'Confección', 'Empaquetado', 'Listo para Envío']);
+  // Kanban Board State - 3 fixed columns + custom columns
+  const [kanbanColumns, setKanbanColumns] = useState<string[]>(['PROCESANDO', 'EN TRÁNSITO', 'COMPLETADO']);
 
   // Auth State
   const [user, setUser] = useState<User | null>(null);
@@ -476,7 +476,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const deleteKanbanColumn = (columnName: string) => {
-    // Move all orders from deleted column to first column (backlog)
+    // Move all orders from deleted column to first column (PROCESANDO)
     setOrders(prev => prev.map(order =>
       order.stage === columnName ? { ...order, stage: kanbanColumns[0] } : order
     ));

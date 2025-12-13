@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Plus, X, MessageSquare, GripVertical, Trash2, Package, User, MapPin, Phone, Mail, Copy, Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, X, MessageSquare, GripVertical, Package, User, MapPin, Phone, Mail, Copy, Check } from 'lucide-react';
 import { useShop } from '../../../context/ShopContext';
 import { Order } from '../../../types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,11 +20,14 @@ export const AgileBoardTab: React.FC = () => {
     const [newNoteText, setNewNoteText] = useState('');
     const [copiedAddress, setCopiedAddress] = useState(false);
 
+    // Fixed columns that cannot be deleted
+    const FIXED_COLUMNS = ['PROCESANDO', 'EN TRÁNSITO', 'COMPLETADO'];
+
     // Drag Handlers
     const handleDragStart = (e: React.DragEvent, orderId: string) => {
         setDraggedOrder(orderId);
         e.dataTransfer.effectAllowed = 'move';
-        e.stopPropagation(); // Stop propagation to prevent click event
+        e.stopPropagation();
     };
 
     const handleDragOver = (e: React.DragEvent) => {
@@ -53,7 +56,6 @@ export const AgileBoardTab: React.FC = () => {
         if (activeCommentOrder && newNoteText.trim()) {
             addOrderNote(activeCommentOrder.id, newNoteText.trim());
             setNewNoteText('');
-            // Refresh active order to show new note immediately
             const updatedOrder = orders.find(o => o.id === activeCommentOrder.id);
             if (updatedOrder) setActiveCommentOrder(updatedOrder);
         }
@@ -69,7 +71,6 @@ export const AgileBoardTab: React.FC = () => {
         }
     };
 
-    // Re-sync active comment order when orders change in context
     React.useEffect(() => {
         if (activeCommentOrder) {
             const updated = orders.find(o => o.id === activeCommentOrder.id);
@@ -93,7 +94,7 @@ export const AgileBoardTab: React.FC = () => {
                         type="text"
                         value={newColumnName}
                         onChange={(e) => setNewColumnName(e.target.value)}
-                        placeholder="NEW CATEGORY NAME"
+                        placeholder="NUEVA CATEGORÍA"
                         className="bg-brand-dark/50 border border-brand-dark p-2 text-white text-xs font-bold uppercase focus:outline-none focus:border-brand-bone w-48"
                     />
                     <button
@@ -112,8 +113,9 @@ export const AgileBoardTab: React.FC = () => {
 
                     {kanbanColumns.map((column) => {
                         const columnOrders = orders.filter(o =>
-                            (o.stage === column) || (!o.stage && column === kanbanColumns[0]) // Fallback for undefined stage
+                            (o.stage === column) || (!o.stage && column === kanbanColumns[0])
                         );
+                        const isFixedColumn = FIXED_COLUMNS.includes(column);
 
                         return (
                             <div
@@ -131,11 +133,11 @@ export const AgileBoardTab: React.FC = () => {
                                             {columnOrders.length}
                                         </span>
                                     </div>
-                                    {/* Prevent deleting the first column to ensure safety */}
-                                    {column !== kanbanColumns[0] && (
+                                    {/* Only show delete button for custom columns */}
+                                    {!isFixedColumn && (
                                         <button
                                             onClick={() => {
-                                                if (confirm(`Delete column "${column}"? Orders will move to the backlog.`)) {
+                                                if (confirm(`¿Eliminar columna "${column}"? Los pedidos se moverán a PROCESANDO.`)) {
                                                     deleteKanbanColumn(column);
                                                 }
                                             }}
@@ -230,7 +232,7 @@ export const AgileBoardTab: React.FC = () => {
                                 {/* LEFT: Product Information & Customer Details */}
                                 <div className="w-full md:w-3/5 overflow-y-auto border-b md:border-b-0 md:border-r border-brand-dark custom-scrollbar bg-brand-black flex flex-col">
 
-                                    {/* 1. Customer Details Section (Enhanced) */}
+                                    {/* 1. Customer Details Section */}
                                     <div className="p-6 bg-brand-dark/10 border-b border-brand-dark">
                                         <div className="flex justify-between items-center mb-4">
                                             <h4 className="text-white font-bold uppercase text-xs tracking-widest flex items-center gap-2">
@@ -258,7 +260,7 @@ export const AgileBoardTab: React.FC = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Shipping Label Look */}
+                                            {/* Shipping Label */}
                                             <div className="relative bg-brand-bone/10 border border-brand-bone/30 p-3 rounded-sm group">
                                                 <button
                                                     onClick={handleCopyAddress}
@@ -309,7 +311,7 @@ export const AgileBoardTab: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* RIGHT: Notes & Specifications Feed */}
+                                {/* RIGHT: Notes Feed */}
                                 <div className="w-full md:w-2/5 p-6 flex flex-col bg-brand-dark/5">
                                     <h4 className="text-white font-bold uppercase text-xs tracking-widest mb-4 flex items-center gap-2">
                                         <MessageSquare size={14} className="text-brand-bone" /> Internal Comms
