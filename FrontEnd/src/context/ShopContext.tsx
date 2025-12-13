@@ -77,8 +77,8 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Kanban Board State - 3 fixed columns + custom columns
-  const [kanbanColumns, setKanbanColumns] = useState<string[]>(['PROCESANDO', 'EN TRÁNSITO', 'COMPLETADO']);
+  // Kanban Board State - 4 fixed columns + custom columns
+  const [kanbanColumns, setKanbanColumns] = useState<string[]>(['PEDIDOS SIN PAGAR', 'PROCESANDO', 'EN TRÁNSITO', 'COMPLETADO']);
 
   // Auth State
   const [user, setUser] = useState<User | null>(null);

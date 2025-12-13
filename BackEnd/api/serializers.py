@@ -11,6 +11,8 @@ from .models import (
     StoreSettings,
     Category,
     UserProfile,
+    OrderNote,
+    KanbanColumn,
 )
 
 # ===== Authentication Serializers =====
@@ -337,6 +339,22 @@ class CollectionSerializer(serializers.ModelSerializer):
         return data
 
 
+# ===== Order Serializers =====
+
+
+class OrderNoteSerializer(serializers.ModelSerializer):
+    """Serializer for internal order notes"""
+    date = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = OrderNote
+        fields = ['id', 'text', 'author', 'date']
+        read_only_fields = ['id', 'author', 'date']
+    
+    def get_date(self, obj):
+        return obj.created_at.strftime('%Y-%m-%d %H:%M')
+
+
 class OrderItemSerializer(serializers.ModelSerializer):
     productId = serializers.PrimaryKeyRelatedField(
         source="product",
@@ -360,6 +378,8 @@ class OrderSerializer(serializers.ModelSerializer):
     paymentVerified = serializers.BooleanField(
         source="payment_verified", required=False
     )
+    stage = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    internalNotes = OrderNoteSerializer(source="internal_notes", many=True, read_only=True)
 
     class Meta:
         model = Order
@@ -373,6 +393,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "customerName",
             "customerEmail",
             "shippingDetails",
+            "stage",
+            "internalNotes",
         ]
 
     def create(self, validated_data):
@@ -381,6 +403,13 @@ class OrderSerializer(serializers.ModelSerializer):
         # Ensure payment_verified is set (default to False if missing)
         if "payment_verified" not in validated_data:
             validated_data["payment_verified"] = False
+        
+        # Set initial stage based on payment status
+        if "stage" not in validated_data or not validated_data.get("stage"):
+            if validated_data.get("payment_verified"):
+                validated_data["stage"] = "PROCESANDO"
+            else:
+                validated_data["stage"] = "PEDIDOS SIN PAGAR"
 
         order = Order.objects.create(**validated_data)
 
@@ -389,6 +418,33 @@ class OrderSerializer(serializers.ModelSerializer):
             OrderItem.objects.create(order=order, **item_data)
 
         return order
+    
+    def update(self, instance, validated_data):
+        """Update order and sync stage with status changes"""
+        # Remove items if present (we don't update items through this serializer)
+        validated_data.pop("items", None)
+        
+        # Check if status is being updated
+        new_status = validated_data.get("status", instance.status)
+        payment_verified = validated_data.get("payment_verified", instance.payment_verified)
+        
+        # Auto-sync stage based on status and payment if stage not explicitly provided
+        if "stage" not in validated_data:
+            if not payment_verified:
+                validated_data["stage"] = "PEDIDOS SIN PAGAR"
+            elif new_status == "Shipped":
+                validated_data["stage"] = "EN TRÁNSITO"
+            elif new_status == "Delivered":
+                validated_data["stage"] = "COMPLETADO"
+            elif new_status in ["Processing", "Cancelled"]:
+                validated_data["stage"] = "PROCESANDO"
+        
+        # Update all fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        return instance
 
 
 class StoreSettingsSerializer(serializers.ModelSerializer):
@@ -417,3 +473,22 @@ class StoreSettingsSerializer(serializers.ModelSerializer):
 
     def get_socialLinks(self, obj):
         return {"instagram": obj.instagram_url, "tiktok": obj.tiktok_url}
+
+
+# ===== Agile Board Serializers =====
+
+
+class KanbanColumnSerializer(serializers.ModelSerializer):
+    """Serializer for Kanban columns"""
+    
+    class Meta:
+        model = KanbanColumn
+        fields = ['id', 'name', 'position', 'is_fixed']
+        read_only_fields = ['id']
+    
+    def validate(self, data):
+        # Prevent modification of fixed columns
+        if self.instance and self.instance.is_fixed:
+            if 'name' in data and data['name'] != self.instance.name:
+                raise serializers.ValidationError("Cannot modify fixed column names")
+        return data

@@ -96,6 +96,9 @@ class Order(models.Model):
 
     # Storing shipping details as JSON
     shipping_details = models.JSONField(default=dict, blank=True)
+    
+    # Kanban board stage
+    stage = models.CharField(max_length=100, blank=True, null=True, default="PEDIDOS SIN PAGAR")
 
     def __str__(self):
         return f"Order {self.id} - {self.customer_email}"
@@ -151,3 +154,31 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
+
+
+class OrderNote(models.Model):
+    """Internal notes for orders in the Agile Board"""
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="internal_notes")
+    text = models.TextField()
+    author = models.CharField(max_length=100, default="Admin")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Note for Order {self.order.id} by {self.author}"
+
+
+class KanbanColumn(models.Model):
+    """Custom Kanban columns for the Agile Board"""
+    name = models.CharField(max_length=100, unique=True)
+    position = models.IntegerField(default=0)
+    is_fixed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['position']
+    
+    def __str__(self):
+        return self.name

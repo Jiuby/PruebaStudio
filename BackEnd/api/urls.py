@@ -10,6 +10,8 @@ router.register(
     r"orders", views.OrderViewSet, basename="order"
 )  # Explicit basename required due to get_queryset
 router.register(r"settings", views.StoreSettingsViewSet, basename="settings")
+router.register(r"kanban-columns", views.KanbanColumnViewSet, basename="kanban-column")
+router.register(r"order-notes", views.OrderNoteViewSet, basename="order-note")
 
 urlpatterns = [
     path("", include(router.urls)),

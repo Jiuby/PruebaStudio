@@ -23,7 +23,7 @@ export const AgileBoardTab: React.FC = () => {
     const [copiedAddress, setCopiedAddress] = useState(false);
 
     // Fixed columns that cannot be deleted
-    const FIXED_COLUMNS = ['PROCESANDO', 'EN TRÁNSITO', 'COMPLETADO'];
+    const FIXED_COLUMNS = ['PEDIDOS SIN PAGAR', 'PROCESANDO', 'EN TRÁNSITO', 'COMPLETADO'];
 
     // Order Drag Handlers
     const handleDragStart = (e: React.DragEvent, orderId: string) => {
@@ -176,7 +176,7 @@ export const AgileBoardTab: React.FC = () => {
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                if (confirm(`¿Eliminar columna "${column}"? Los pedidos se moverán a PROCESANDO.`)) {
+                                                if (confirm(`¿Eliminar columna "${column}"? Los pedidos se moverán a PEDIDOS SIN PAGAR.`)) {
                                                     deleteKanbanColumn(column);
                                                 }
                                             }}
