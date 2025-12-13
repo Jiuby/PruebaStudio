@@ -19,7 +19,7 @@ export const Footer: React.FC = () => (
                     <li><Link to="/size-guide" className="hover:text-brand-bone">Guía de Tallas</Link></li>
                     <li><Link to="/contact" className="hover:text-brand-bone">Contáctanos</Link></li>
                     <li><Link to="/faq" className="hover:text-brand-bone">Preguntas Frecuentes</Link></li>
-                    {/* Admin Link added for development */}
+                    <li><Link to="/demo-admin" className="hover:text-brand-bone text-brand-bone/70 font-bold">🎨 Demo Admin</Link></li>
                 </ul>
             </div>
             <div>

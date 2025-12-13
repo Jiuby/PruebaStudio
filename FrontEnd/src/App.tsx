@@ -23,6 +23,7 @@ import { SizeGuide } from './pages/Info/SizeGuide';
 import { ContactUs } from './pages/Info/ContactUs';
 import { FAQ } from './pages/Info/FAQ';
 import { MaintenancePage } from './pages/Info/Maintenance';
+import { DemoAdminPage } from './pages/DemoAdminPage';
 import { ShopProvider, useShop } from './context/ShopContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -98,6 +99,9 @@ const AppRoutes = () => {
             <Route path="/size-guide" element={<SizeGuide />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/faq" element={<FAQ />} />
+
+            {/* Demo Admin Route (no authentication required) */}
+            <Route path="/demo-admin" element={<DemoAdminPage />} />
 
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
