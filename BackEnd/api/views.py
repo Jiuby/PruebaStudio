@@ -4,7 +4,16 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from .models import Product, Collection, Order, StoreSettings, Category, UserProfile, KanbanColumn, OrderNote
+from .models import (
+    Product,
+    Collection,
+    Order,
+    StoreSettings,
+    Category,
+    UserProfile,
+    KanbanColumn,
+    OrderNote,
+)
 from .permissions import IsAdminOrReadOnly
 from .serializers import (
     ProductSerializer,
@@ -267,85 +276,88 @@ class StoreSettingsViewSet(viewsets.ViewSet):
 
 class KanbanColumnViewSet(viewsets.ModelViewSet):
     """ViewSet for managing Kanban columns"""
-    queryset = KanbanColumn.objects.all().order_by('position')
+
+    queryset = KanbanColumn.objects.all().order_by("position")
     serializer_class = KanbanColumnSerializer
     permission_classes = [IsAdminUser]
-    
+
     def destroy(self, request, *args, **kwargs):
         """Prevent deletion of fixed columns"""
         instance = self.get_object()
         if instance.is_fixed:
             return Response(
                 {"error": "Cannot delete fixed columns"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         # Move orders from deleted column to first column
         from .models import Order
-        first_column = KanbanColumn.objects.filter(is_fixed=True).order_by('position').first()
+
+        first_column = (
+            KanbanColumn.objects.filter(is_fixed=True).order_by("position").first()
+        )
         if first_column:
             Order.objects.filter(stage=instance.name).update(stage=first_column.name)
-        
+
         return super().destroy(request, *args, **kwargs)
-    
-    @action(detail=False, methods=['post'])
+
+    @action(detail=False, methods=["post"])
     def reorder(self, request):
         """Bulk update column positions"""
-        columns_data = request.data.get('columns', [])
-        
+        columns_data = request.data.get("columns", [])
+
         for col_data in columns_data:
             try:
-                column = KanbanColumn.objects.get(id=col_data['id'])
-                column.position = col_data['position']
+                column = KanbanColumn.objects.get(id=col_data["id"])
+                column.position = col_data["position"]
                 column.save()
             except KanbanColumn.DoesNotExist:
                 pass
-        
+
         serializer = self.get_serializer(
-            KanbanColumn.objects.all().order_by('position'),
-            many=True
+            KanbanColumn.objects.all().order_by("position"), many=True
         )
         return Response(serializer.data)
 
 
 class OrderNoteViewSet(viewsets.ModelViewSet):
     """ViewSet for managing order notes"""
+
     serializer_class = OrderNoteSerializer
     permission_classes = [IsAdminUser]
-    
+
     def get_queryset(self):
         """Filter notes by order if order_id is provided"""
-        order_id = self.request.query_params.get('order_id')
+        order_id = self.request.query_params.get("order_id")
         if order_id:
             return OrderNote.objects.filter(order_id=order_id)
         return OrderNote.objects.all()
-    
+
     def create(self, request, *args, **kwargs):
         """Create a new note for an order"""
         from .models import Order
-        
-        order_id = request.data.get('order_id')
-        text = request.data.get('text')
-        
+
+        order_id = request.data.get("order_id")
+        text = request.data.get("text")
+
         if not order_id or not text:
             return Response(
                 {"error": "order_id and text are required"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         try:
             order = Order.objects.get(id=order_id)
         except Order.DoesNotExist:
             return Response(
-                {"error": "Order not found"},
-                status=status.HTTP_404_NOT_FOUND
+                {"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND
             )
-        
+
         note = OrderNote.objects.create(
             order=order,
             text=text,
-            author=request.user.username if request.user.is_authenticated else "Admin"
+            author=request.user.username if request.user.is_authenticated else "Admin",
         )
-        
+
         serializer = self.get_serializer(note)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

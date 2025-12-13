@@ -164,12 +164,8 @@ class ProductSerializer(serializers.ModelSerializer):
         write_only=True,
     )
     isNew = serializers.BooleanField(source="is_new", required=False)
-    inStock = serializers.BooleanField(
-        source="in_stock", required=False
-    )
-    isOneOfOne = serializers.BooleanField(
-        source="is_one_of_one", required=False
-    )
+    inStock = serializers.BooleanField(source="in_stock", required=False)
+    isOneOfOne = serializers.BooleanField(source="is_one_of_one", required=False)
     availableSizes = serializers.JSONField(
         source="available_sizes", required=False, write_only=True
     )
@@ -344,15 +340,16 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 class OrderNoteSerializer(serializers.ModelSerializer):
     """Serializer for internal order notes"""
+
     date = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = OrderNote
-        fields = ['id', 'text', 'author', 'date']
-        read_only_fields = ['id', 'author', 'date']
-    
+        fields = ["id", "text", "author", "date"]
+        read_only_fields = ["id", "author", "date"]
+
     def get_date(self, obj):
-        return obj.created_at.strftime('%Y-%m-%d %H:%M')
+        return obj.created_at.strftime("%Y-%m-%d %H:%M")
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -379,7 +376,9 @@ class OrderSerializer(serializers.ModelSerializer):
         source="payment_verified", required=False
     )
     stage = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    internalNotes = OrderNoteSerializer(source="internal_notes", many=True, read_only=True)
+    internalNotes = OrderNoteSerializer(
+        source="internal_notes", many=True, read_only=True
+    )
 
     class Meta:
         model = Order
@@ -403,7 +402,7 @@ class OrderSerializer(serializers.ModelSerializer):
         # Ensure payment_verified is set (default to False if missing)
         if "payment_verified" not in validated_data:
             validated_data["payment_verified"] = False
-        
+
         # Set initial stage based on payment status
         if "stage" not in validated_data or not validated_data.get("stage"):
             if validated_data.get("payment_verified"):
@@ -418,17 +417,19 @@ class OrderSerializer(serializers.ModelSerializer):
             OrderItem.objects.create(order=order, **item_data)
 
         return order
-    
+
     def update(self, instance, validated_data):
         """Update order and sync stage with status changes"""
         # Remove items if present (we don't update items through this serializer)
         validated_data.pop("items", None)
-        
+
         # Get new values or keep existing
         new_status = validated_data.get("status", instance.status)
-        new_payment_verified = validated_data.get("payment_verified", instance.payment_verified)
+        new_payment_verified = validated_data.get(
+            "payment_verified", instance.payment_verified
+        )
         new_stage = validated_data.get("stage", instance.stage)
-        
+
         # BIDIRECTIONAL SYNC: Stage → Status (when dragging in Agile Board)
         if "stage" in validated_data and "status" not in validated_data:
             # User manually changed stage, sync status
@@ -439,7 +440,7 @@ class OrderSerializer(serializers.ModelSerializer):
             elif new_stage == "PROCESANDO":
                 validated_data["status"] = "Processing"
             # PEDIDOS SIN PAGAR doesn't change status, just marks unpaid
-        
+
         # BIDIRECTIONAL SYNC: Status/Payment → Stage (when updating in admin panel)
         elif "status" in validated_data or "payment_verified" in validated_data:
             if "stage" not in validated_data:
@@ -470,11 +471,11 @@ class OrderSerializer(serializers.ModelSerializer):
                             validated_data["stage"] = "PROCESANDO"
                     else:
                         validated_data["stage"] = "PEDIDOS SIN PAGAR"
-        
+
         # Update all fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
+
         instance.save()
         return instance
 
@@ -512,15 +513,15 @@ class StoreSettingsSerializer(serializers.ModelSerializer):
 
 class KanbanColumnSerializer(serializers.ModelSerializer):
     """Serializer for Kanban columns"""
-    
+
     class Meta:
         model = KanbanColumn
-        fields = ['id', 'name', 'position', 'is_fixed']
-        read_only_fields = ['id']
-    
+        fields = ["id", "name", "position", "is_fixed"]
+        read_only_fields = ["id"]
+
     def validate(self, data):
         # Prevent modification of fixed columns
         if self.instance and self.instance.is_fixed:
-            if 'name' in data and data['name'] != self.instance.name:
+            if "name" in data and data["name"] != self.instance.name:
                 raise serializers.ValidationError("Cannot modify fixed column names")
         return data

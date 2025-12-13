@@ -5,36 +5,36 @@ from django.db import migrations
 
 def create_fixed_columns(apps, schema_editor):
     """Create the 4 fixed Kanban columns"""
-    KanbanColumn = apps.get_model('api', 'KanbanColumn')
-    Order = apps.get_model('api', 'Order')
-    
+    KanbanColumn = apps.get_model("api", "KanbanColumn")
+    Order = apps.get_model("api", "Order")
+
     # Create fixed columns
     columns = [
-        {'name': 'PEDIDOS SIN PAGAR', 'position': 0, 'is_fixed': True},
-        {'name': 'PROCESANDO', 'position': 1, 'is_fixed': True},
-        {'name': 'EN TRÁNSITO', 'position': 2, 'is_fixed': True},
-        {'name': 'COMPLETADO', 'position': 3, 'is_fixed': True},
+        {"name": "PEDIDOS SIN PAGAR", "position": 0, "is_fixed": True},
+        {"name": "PROCESANDO", "position": 1, "is_fixed": True},
+        {"name": "EN TRÁNSITO", "position": 2, "is_fixed": True},
+        {"name": "COMPLETADO", "position": 3, "is_fixed": True},
     ]
-    
+
     for col_data in columns:
         KanbanColumn.objects.get_or_create(**col_data)
-    
+
     # Update existing orders based on their status and payment status
     for order in Order.objects.all():
         if not order.payment_verified:
-            order.stage = 'PEDIDOS SIN PAGAR'
-        elif order.status == 'Shipped':
-            order.stage = 'EN TRÁNSITO'
-        elif order.status == 'Delivered':
-            order.stage = 'COMPLETADO'
+            order.stage = "PEDIDOS SIN PAGAR"
+        elif order.status == "Shipped":
+            order.stage = "EN TRÁNSITO"
+        elif order.status == "Delivered":
+            order.stage = "COMPLETADO"
         else:  # Processing or Cancelled
-            order.stage = 'PROCESANDO'
+            order.stage = "PROCESANDO"
         order.save()
 
 
 def reverse_migration(apps, schema_editor):
     """Remove fixed columns"""
-    KanbanColumn = apps.get_model('api', 'KanbanColumn')
+    KanbanColumn = apps.get_model("api", "KanbanColumn")
     KanbanColumn.objects.filter(is_fixed=True).delete()
 
 
