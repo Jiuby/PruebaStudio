@@ -427,36 +427,49 @@ class OrderSerializer(serializers.ModelSerializer):
         # Get new values or keep existing
         new_status = validated_data.get("status", instance.status)
         new_payment_verified = validated_data.get("payment_verified", instance.payment_verified)
+        new_stage = validated_data.get("stage", instance.stage)
         
-        # Auto-sync stage based on status and payment if stage not explicitly provided
-        if "stage" not in validated_data:
-            # Cancelled orders should not appear in the board (set to None or special value)
-            if new_status == "Cancelled":
-                validated_data["stage"] = None  # Will be filtered out in frontend
-            # Payment verification changed
-            elif "payment_verified" in validated_data:
-                if new_payment_verified:
-                    # Payment verified, move to appropriate stage based on status
-                    if new_status == "Shipped":
-                        validated_data["stage"] = "EN TRÁNSITO"
-                    elif new_status == "Delivered":
-                        validated_data["stage"] = "COMPLETADO"
+        # BIDIRECTIONAL SYNC: Stage → Status (when dragging in Agile Board)
+        if "stage" in validated_data and "status" not in validated_data:
+            # User manually changed stage, sync status
+            if new_stage == "EN TRÁNSITO":
+                validated_data["status"] = "Shipped"
+            elif new_stage == "COMPLETADO":
+                validated_data["status"] = "Delivered"
+            elif new_stage == "PROCESANDO":
+                validated_data["status"] = "Processing"
+            # PEDIDOS SIN PAGAR doesn't change status, just marks unpaid
+        
+        # BIDIRECTIONAL SYNC: Status/Payment → Stage (when updating in admin panel)
+        elif "status" in validated_data or "payment_verified" in validated_data:
+            if "stage" not in validated_data:
+                # Cancelled orders should not appear in the board
+                if new_status == "Cancelled":
+                    validated_data["stage"] = None
+                # Payment verification changed
+                elif "payment_verified" in validated_data:
+                    if new_payment_verified:
+                        # Payment verified, move to appropriate stage based on status
+                        if new_status == "Shipped":
+                            validated_data["stage"] = "EN TRÁNSITO"
+                        elif new_status == "Delivered":
+                            validated_data["stage"] = "COMPLETADO"
+                        else:
+                            validated_data["stage"] = "PROCESANDO"
                     else:
-                        validated_data["stage"] = "PROCESANDO"
-                else:
-                    # Payment not verified
-                    validated_data["stage"] = "PEDIDOS SIN PAGAR"
-            # Status changed
-            elif "status" in validated_data:
-                if new_payment_verified:
-                    if new_status == "Shipped":
-                        validated_data["stage"] = "EN TRÁNSITO"
-                    elif new_status == "Delivered":
-                        validated_data["stage"] = "COMPLETADO"
-                    elif new_status == "Processing":
-                        validated_data["stage"] = "PROCESANDO"
-                else:
-                    validated_data["stage"] = "PEDIDOS SIN PAGAR"
+                        # Payment not verified
+                        validated_data["stage"] = "PEDIDOS SIN PAGAR"
+                # Status changed
+                elif "status" in validated_data:
+                    if new_payment_verified:
+                        if new_status == "Shipped":
+                            validated_data["stage"] = "EN TRÁNSITO"
+                        elif new_status == "Delivered":
+                            validated_data["stage"] = "COMPLETADO"
+                        elif new_status == "Processing":
+                            validated_data["stage"] = "PROCESANDO"
+                    else:
+                        validated_data["stage"] = "PEDIDOS SIN PAGAR"
         
         # Update all fields
         for attr, value in validated_data.items():
