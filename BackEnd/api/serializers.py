@@ -161,12 +161,12 @@ class ProductSerializer(serializers.ModelSerializer):
         allow_null=True,
         write_only=True,
     )
-    isNew = serializers.BooleanField(source="is_new", required=False, write_only=True)
+    isNew = serializers.BooleanField(source="is_new", required=False)
     inStock = serializers.BooleanField(
-        source="in_stock", required=False, write_only=True
+        source="in_stock", required=False
     )
     isOneOfOne = serializers.BooleanField(
-        source="is_one_of_one", required=False, write_only=True
+        source="is_one_of_one", required=False
     )
     availableSizes = serializers.JSONField(
         source="available_sizes", required=False, write_only=True
