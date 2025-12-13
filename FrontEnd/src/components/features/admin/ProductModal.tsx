@@ -287,7 +287,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, pro
         delete productData.image;
         delete productData.secondaryImage;
         delete productData.images;
-        updateProduct(productData);
+        updateProduct(productToEdit.id, productData);
       } else {
         addProduct(productData);
       }

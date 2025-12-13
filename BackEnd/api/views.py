@@ -158,6 +158,13 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
 
+        # Handle stock depletion for 1/1 (unique) items
+        for order_item in order.items.all():
+            if order_item.product and order_item.product.is_one_of_one:
+                # Mark unique items as out of stock after purchase
+                order_item.product.in_stock = False
+                order_item.product.save()
+
         # Check if customer email matches a registered user
         customer_email = order.customer_email
         if customer_email:
