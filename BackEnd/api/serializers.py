@@ -424,20 +424,39 @@ class OrderSerializer(serializers.ModelSerializer):
         # Remove items if present (we don't update items through this serializer)
         validated_data.pop("items", None)
         
-        # Check if status is being updated
+        # Get new values or keep existing
         new_status = validated_data.get("status", instance.status)
-        payment_verified = validated_data.get("payment_verified", instance.payment_verified)
+        new_payment_verified = validated_data.get("payment_verified", instance.payment_verified)
         
         # Auto-sync stage based on status and payment if stage not explicitly provided
         if "stage" not in validated_data:
-            if not payment_verified:
-                validated_data["stage"] = "PEDIDOS SIN PAGAR"
-            elif new_status == "Shipped":
-                validated_data["stage"] = "EN TRÁNSITO"
-            elif new_status == "Delivered":
-                validated_data["stage"] = "COMPLETADO"
-            elif new_status in ["Processing", "Cancelled"]:
-                validated_data["stage"] = "PROCESANDO"
+            # Cancelled orders should not appear in the board (set to None or special value)
+            if new_status == "Cancelled":
+                validated_data["stage"] = None  # Will be filtered out in frontend
+            # Payment verification changed
+            elif "payment_verified" in validated_data:
+                if new_payment_verified:
+                    # Payment verified, move to appropriate stage based on status
+                    if new_status == "Shipped":
+                        validated_data["stage"] = "EN TRÁNSITO"
+                    elif new_status == "Delivered":
+                        validated_data["stage"] = "COMPLETADO"
+                    else:
+                        validated_data["stage"] = "PROCESANDO"
+                else:
+                    # Payment not verified
+                    validated_data["stage"] = "PEDIDOS SIN PAGAR"
+            # Status changed
+            elif "status" in validated_data:
+                if new_payment_verified:
+                    if new_status == "Shipped":
+                        validated_data["stage"] = "EN TRÁNSITO"
+                    elif new_status == "Delivered":
+                        validated_data["stage"] = "COMPLETADO"
+                    elif new_status == "Processing":
+                        validated_data["stage"] = "PROCESANDO"
+                else:
+                    validated_data["stage"] = "PEDIDOS SIN PAGAR"
         
         # Update all fields
         for attr, value in validated_data.items():

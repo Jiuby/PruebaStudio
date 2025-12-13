@@ -143,9 +143,12 @@ export const AgileBoardTab: React.FC = () => {
                 <div className="flex gap-6 h-full min-w-max">
 
                     {kanbanColumns.map((column) => {
-                        const columnOrders = orders.filter(o =>
-                            (o.stage === column) || (!o.stage && column === kanbanColumns[0])
-                        );
+                        const columnOrders = orders.filter(o => {
+                            // Filter out cancelled orders
+                            if (o.status === 'Cancelled') return false;
+                            // Match by stage or default to first column if no stage
+                            return (o.stage === column) || (!o.stage && column === kanbanColumns[0]);
+                        });
                         const isFixedColumn = FIXED_COLUMNS.includes(column);
 
                         return (
