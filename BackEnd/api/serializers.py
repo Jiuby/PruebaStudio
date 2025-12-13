@@ -311,6 +311,7 @@ class ProductSerializer(serializers.ModelSerializer):
         data["originalPrice"] = instance.original_price
         data["isNew"] = instance.is_new
         data["inStock"] = instance.in_stock
+        data["isOneOfOne"] = instance.is_one_of_one
         data["availableSizes"] = instance.available_sizes
 
         # Handle image URLs - always provide absolute URLs
