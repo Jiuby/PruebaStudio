@@ -10,12 +10,14 @@ export const AgileBoardTab: React.FC = () => {
         kanbanColumns,
         addKanbanColumn,
         deleteKanbanColumn,
+        reorderKanbanColumns,
         moveOrderToStage,
         addOrderNote
     } = useShop();
 
     const [newColumnName, setNewColumnName] = useState('');
     const [draggedOrder, setDraggedOrder] = useState<string | null>(null);
+    const [draggedColumn, setDraggedColumn] = useState<string | null>(null);
     const [activeCommentOrder, setActiveCommentOrder] = useState<Order | null>(null);
     const [newNoteText, setNewNoteText] = useState('');
     const [copiedAddress, setCopiedAddress] = useState(false);
@@ -23,7 +25,7 @@ export const AgileBoardTab: React.FC = () => {
     // Fixed columns that cannot be deleted
     const FIXED_COLUMNS = ['PROCESANDO', 'EN TRÁNSITO', 'COMPLETADO'];
 
-    // Drag Handlers
+    // Order Drag Handlers
     const handleDragStart = (e: React.DragEvent, orderId: string) => {
         setDraggedOrder(orderId);
         e.dataTransfer.effectAllowed = 'move';
@@ -41,6 +43,35 @@ export const AgileBoardTab: React.FC = () => {
             moveOrderToStage(draggedOrder, stage);
             setDraggedOrder(null);
         }
+    };
+
+    // Column Drag Handlers
+    const handleColumnDragStart = (e: React.DragEvent, columnName: string) => {
+        setDraggedColumn(columnName);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleColumnDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    };
+
+    const handleColumnDrop = (e: React.DragEvent, targetColumn: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (draggedColumn && draggedColumn !== targetColumn) {
+            const currentIndex = kanbanColumns.indexOf(draggedColumn);
+            const targetIndex = kanbanColumns.indexOf(targetColumn);
+
+            if (currentIndex !== -1 && targetIndex !== -1) {
+                const newColumns = [...kanbanColumns];
+                newColumns.splice(currentIndex, 1);
+                newColumns.splice(targetIndex, 0, draggedColumn);
+                reorderKanbanColumns(newColumns);
+            }
+        }
+        setDraggedColumn(null);
     };
 
     const handleAddColumn = (e: React.FormEvent) => {
@@ -120,13 +151,20 @@ export const AgileBoardTab: React.FC = () => {
                         return (
                             <div
                                 key={column}
-                                onDragOver={handleDragOver}
-                                onDrop={(e) => handleDrop(e, column)}
-                                className="w-80 bg-brand-dark/10 border border-brand-dark flex flex-col h-full flex-shrink-0"
+                                draggable
+                                onDragStart={(e) => handleColumnDragStart(e, column)}
+                                onDragOver={handleColumnDragOver}
+                                onDrop={(e) => {
+                                    handleColumnDrop(e, column);
+                                    handleDrop(e, column); // Also handle order drops
+                                }}
+                                className={`w-80 bg-brand-dark/10 border-2 flex flex-col h-full flex-shrink-0 transition-all ${draggedColumn === column ? 'opacity-50 border-brand-bone' : 'border-brand-dark'
+                                    }`}
                             >
                                 {/* Column Header */}
-                                <div className="p-4 border-b border-brand-dark bg-brand-dark/20 flex justify-between items-center group">
+                                <div className="p-4 border-b border-brand-dark bg-brand-dark/20 flex justify-between items-center group cursor-move">
                                     <div className="flex items-center gap-2">
+                                        <GripVertical size={14} className="text-neutral-600" />
                                         <span className="w-2 h-2 rounded-full bg-brand-bone"></span>
                                         <h3 className="text-white font-bold uppercase text-xs tracking-widest">{column}</h3>
                                         <span className="bg-brand-dark text-neutral-400 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
@@ -136,7 +174,8 @@ export const AgileBoardTab: React.FC = () => {
                                     {/* Only show delete button for custom columns */}
                                     {!isFixedColumn && (
                                         <button
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                                e.stopPropagation();
                                                 if (confirm(`¿Eliminar columna "${column}"? Los pedidos se moverán a PROCESANDO.`)) {
                                                     deleteKanbanColumn(column);
                                                 }

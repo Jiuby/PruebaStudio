@@ -50,6 +50,7 @@ interface ShopContextType {
   kanbanColumns: string[];
   addKanbanColumn: (columnName: string) => void;
   deleteKanbanColumn: (columnName: string) => void;
+  reorderKanbanColumns: (newOrder: string[]) => void;
   moveOrderToStage: (orderId: string, stage: string) => void;
   addOrderNote: (orderId: string, noteText: string) => void;
 }
@@ -483,6 +484,10 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setKanbanColumns(prev => prev.filter(col => col !== columnName));
   };
 
+  const reorderKanbanColumns = (newOrder: string[]) => {
+    setKanbanColumns(newOrder);
+  };
+
   const moveOrderToStage = (orderId: string, stage: string) => {
     setOrders(prev => prev.map(order =>
       order.id === orderId ? { ...order, stage } : order
@@ -561,6 +566,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         kanbanColumns,
         addKanbanColumn,
         deleteKanbanColumn,
+        reorderKanbanColumns,
         moveOrderToStage,
         addOrderNote
       }}
