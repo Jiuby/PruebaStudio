@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   LayoutDashboard,
@@ -9,12 +8,13 @@ import {
   ShoppingBag,
   Users,
   Settings,
-  LogOut
+  LogOut,
+  Kanban
 } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-export type AdminTab = 'dashboard' | 'analytics' | 'products' | 'orders' | 'customers' | 'categories' | 'collections' | 'settings';
+export type AdminTab = 'dashboard' | 'analytics' | 'agile' | 'products' | 'orders' | 'customers' | 'categories' | 'collections' | 'settings';
 
 interface AdminSidebarProps {
   activeTab: AdminTab;
@@ -33,6 +33,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
   const navItems = [
     { id: 'dashboard', label: 'Panel', icon: LayoutDashboard },
     { id: 'analytics', label: 'Analíticas', icon: BarChart3 },
+    { id: 'agile', label: 'Agile Board', icon: Kanban },
     { id: 'products', label: 'Productos', icon: Package },
     { id: 'categories', label: 'Categorías', icon: Tag },
     { id: 'collections', label: 'Colecciones', icon: Layers },

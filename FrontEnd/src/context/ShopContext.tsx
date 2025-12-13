@@ -46,6 +46,12 @@ interface ShopContextType {
   deleteCollection: (id: string) => void;
   deleteCustomer: (id: string) => void;
   updateStoreSettings: (settings: StoreSettings) => void;
+  // Kanban Board
+  kanbanColumns: string[];
+  addKanbanColumn: (columnName: string) => void;
+  deleteKanbanColumn: (columnName: string) => void;
+  moveOrderToStage: (orderId: string, stage: string) => void;
+  addOrderNote: (orderId: string, noteText: string) => void;
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
@@ -69,6 +75,9 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Kanban Board State
+  const [kanbanColumns, setKanbanColumns] = useState<string[]>(['Backlog', 'Corte', 'Confección', 'Empaquetado', 'Listo para Envío']);
 
   // Auth State
   const [user, setUser] = useState<User | null>(null);
@@ -458,6 +467,49 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  // --- Kanban Board Functions ---
+
+  const addKanbanColumn = (columnName: string) => {
+    if (!kanbanColumns.includes(columnName)) {
+      setKanbanColumns(prev => [...prev, columnName]);
+    }
+  };
+
+  const deleteKanbanColumn = (columnName: string) => {
+    // Move all orders from deleted column to first column (backlog)
+    setOrders(prev => prev.map(order =>
+      order.stage === columnName ? { ...order, stage: kanbanColumns[0] } : order
+    ));
+    setKanbanColumns(prev => prev.filter(col => col !== columnName));
+  };
+
+  const moveOrderToStage = (orderId: string, stage: string) => {
+    setOrders(prev => prev.map(order =>
+      order.id === orderId ? { ...order, stage } : order
+    ));
+  };
+
+  const addOrderNote = (orderId: string, noteText: string) => {
+    const newNote = {
+      id: Date.now().toString(),
+      text: noteText,
+      author: user?.username || 'Admin',
+      date: new Date().toLocaleDateString('es-CO', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    };
+
+    setOrders(prev => prev.map(order =>
+      order.id === orderId
+        ? { ...order, internalNotes: [...(order.internalNotes || []), newNote] }
+        : order
+    ));
+  };
+
   const cartTotal = cart.reduce((total, item) => total + Number(item.price) * Number(item.quantity), 0);
   const cartCount = cart.reduce((count, item) => count + Number(item.quantity), 0);
 
@@ -505,7 +557,12 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updateCollection,
         deleteCollection,
         deleteCustomer,
-        updateStoreSettings
+        updateStoreSettings,
+        kanbanColumns,
+        addKanbanColumn,
+        deleteKanbanColumn,
+        moveOrderToStage,
+        addOrderNote
       }}
     >
       {children}

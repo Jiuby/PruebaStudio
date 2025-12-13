@@ -63,6 +63,7 @@ export interface OrderItem {
   price: number;
   quantity: number;
   size: string;
+  color?: string;
 }
 
 export interface OrderShippingDetails {
@@ -72,6 +73,13 @@ export interface OrderShippingDetails {
   city: string;
   zip: string;
   phone: string;
+}
+
+export interface OrderNote {
+  id: string;
+  text: string;
+  author: string;
+  date: string;
 }
 
 export interface Order {
@@ -84,4 +92,6 @@ export interface Order {
   customerName?: string;
   customerEmail?: string;
   shippingDetails?: OrderShippingDetails;
+  stage?: string;
+  internalNotes?: OrderNote[];
 }
