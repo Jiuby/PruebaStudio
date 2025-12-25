@@ -1,5 +1,4 @@
-name: Backend&Scrapper CI Verificacion de integridad
-# anelt maricon 
+name: Backend CI 
 
 on:
   push:
